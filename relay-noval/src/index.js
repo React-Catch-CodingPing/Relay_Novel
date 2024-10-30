@@ -14,3 +14,7 @@ root.render(
         </Provider>
     </React.StrictMode>
 );
+
+
+
+// 신민금 깃허브 연습 왔다감 ㅋㅋ
