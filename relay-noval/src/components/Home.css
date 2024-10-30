@@ -1,0 +1,64 @@
+/* src/components/Home.css */
+.home {
+    text-align: center;
+    padding: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+    color: #fff;
+}
+
+.navbar nav a {
+    margin-left: 15px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar nav a:hover {
+    text-decoration: underline;
+}
+
+.novel-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.novel-card {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border: 1px solid #ddd;
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.novel-card h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.novel-card p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.novel-card button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.novel-card button:hover {
+    background-color: #0056b3;
+}
