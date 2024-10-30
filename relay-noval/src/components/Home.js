@@ -3,10 +3,22 @@
 
 // src/components/Home.js
 import React from "react";
-import { Link } from "react-router-dom";
-import "./Home.css"; // 스타일링 파일 추가
+import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
+import { useSelector, useDispatch } from "react-redux"; // useDispatch 추가
+import { signOut } from "../store/authSlice"; // signOut 액션 import
+import "./Home.css";
 
 const Home = () => {
+    const { user } = useSelector((state) => state.auth); // auth에서 user 상태 가져오기
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // 로그아웃 기능
+    const handleLogout = () => {
+        dispatch(signOut()); // 로그아웃 액션 디스패치
+        navigate("/"); // 로그아웃 후 홈으로 리디렉션
+    };
+
     // 예제 소설 항목 데이터
     const novels = [
         { id: 1, title: "Novel 1", description: "A fascinating story" },
@@ -18,11 +30,22 @@ const Home = () => {
         <div className="home">
             {/* 상단 네비게이션 */}
             <header className="navbar">
-                <h1>소설 창작 홈페이지</h1>
+                <h1> 모두의 릴레이 소설 </h1>
                 <nav>
-                    <Link to="/login">로그인</Link>
-                    <Link to="/signup">회원가입</Link>
-                    <Link to="/my-novels">내 소설</Link>
+                    {/* 로그인 여부에 따른 버튼 표시 */}
+                    {user ? (
+                        <>
+                            <span onClick={handleLogout} style={{cursor: "pointer"}}>
+                                로그아웃
+                            </span>
+                            <Link to="/my-novels">{user.email}의 소설</Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login">로그인</Link>
+                            <Link to="/signup">회원가입</Link>
+                        </>
+                    )}
                 </nav>
             </header>
 

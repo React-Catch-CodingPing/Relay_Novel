@@ -9,7 +9,7 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.auth);
+    const { loading, error, user } = useSelector((state) => state.auth); // user 추가
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,6 +25,7 @@ const SignUp = () => {
                 <button type="submit" disabled={loading}>회원가입</button>
             </form>
             {error && <p>{error}</p>}
+            {user && <p>{user.email} 님 회원가입 성공입니다!</p>} {/* 회원가입 성공 메시지 */}
         </div>
     );
 };

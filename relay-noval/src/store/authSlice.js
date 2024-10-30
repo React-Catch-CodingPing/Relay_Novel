@@ -3,13 +3,14 @@
 // src/store/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "../firebase/firebase"; // Firebase 인증 모듈
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut } from "firebase/auth";
 
 // 회원가입 비동기 액션
 export const signUp = createAsyncThunk(
     "auth/signUp",
     async ({ email, password }, { rejectWithValue }) => {
         try {
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password); //
             return userCredential.user;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -22,7 +23,7 @@ export const signIn = createAsyncThunk(
     "auth/signIn",
     async ({ email, password }, { rejectWithValue }) => {
         try {
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password); //
             return userCredential.user;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -33,7 +34,7 @@ export const signIn = createAsyncThunk(
 // 로그아웃 액션
 export const signOut = createAsyncThunk("auth/signOut", async (_, { rejectWithValue }) => {
     try {
-        await auth.signOut();
+        await firebaseSignOut(auth); //
     } catch (error) {
         return rejectWithValue(error.message);
     }

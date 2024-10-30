@@ -10,7 +10,7 @@ const firebaseConfig = {
     projectId: "relay-novel-webproject",
     storageBucket: "relay-novel-webproject.appspot.com",
     messagingSenderId: "791727970618",
-    appId: "1:791727970618:web:09b9db3b1ad3f74860d803",
+    appId: "1:791727970618:web:09b9db3b1ad3f74860d803"
 };
 
 // Firebase 초기화
