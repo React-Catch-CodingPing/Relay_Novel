@@ -4,7 +4,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../../store/authSlice";
-import { useNavigate } from "react-router-dom"; // 리디렉션 기능
+import { useNavigate, Link } from "react-router-dom"; // 리디렉션 기능
+import "./SignIn.css"; // 스타일링 파일
+
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -25,14 +27,30 @@ const SignIn = () => {
     }
 
     return (
-        <div>
-            <h2>로그인</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
-                <button type="submit" disabled={loading}>로그인</button>
-            </form>
-            {error && <p>{error}</p>}
+        <div className="signin-wrapper">
+            <div className="signin-container">
+                <h2>로그인</h2>
+                <form onSubmit={handleSubmit} className="signin-form">
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="이메일"
+                        required
+                    />
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="비밀번호"
+                        required
+                    />
+                    <button type="submit" disabled={loading}>로그인</button>
+                </form>
+                {error && <p className="error-message">{error}</p>}
+                {/* 회원가입 링크 추가 */}
+                <Link to="/signup" className="signup-link">회원가입</Link>
+            </div>
         </div>
     );
 };

@@ -1,6 +1,5 @@
 // 제일 처음으로 접근 가능한 메인 페이지.
 
-
 // src/components/Home.js
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
@@ -18,6 +17,13 @@ const Home = () => {
         dispatch(signOut()); // 로그아웃 액션 디스패치
         navigate("/"); // 로그아웃 후 홈으로 리디렉션
     };
+
+    // 회원가입, 프로필에서 선택한 표시할 이름 결정
+    const displayName = user
+        ? user.useNickname
+            ? user.nickname || user.email // 닉네임이 설정된 경우 사용
+            : user.name || user.email // 이름이 설정된 경우 사용
+        : "";
 
     // 예제 소설 항목 데이터
     const novels = [
@@ -38,7 +44,7 @@ const Home = () => {
                             <span onClick={handleLogout} style={{cursor: "pointer"}}>
                                 로그아웃
                             </span>
-                            <Link to="/my-novels">{user.email}의 소설</Link>
+                            <Link to="/my-novels">{displayName}의 소설</Link>
                         </>
                     ) : (
                         <>
