@@ -1,6 +1,6 @@
 // src/firebase/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence  } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 // Firebase 설정
@@ -20,3 +20,17 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);          // getAuth 함수로 인증 객체 가져오기
 export const firestore = getFirestore(app); // getFirestore 함수로 Firestore 가져오기
 export default app;
+
+
+// 세션 지속성을 로컬로 설정
+setPersistence(auth, browserLocalPersistence)
+    .catch((error) => {
+        console.error("Error setting session persistence:", error);
+    });
+
+// 인증 상태 변경을 감지하는 함수
+export const monitorAuthState = (callback) => {
+    onAuthStateChanged(auth, (user) => {
+        callback(user);
+    });
+};

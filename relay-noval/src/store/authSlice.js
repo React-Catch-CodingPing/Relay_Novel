@@ -22,8 +22,7 @@ export const signUp = createAsyncThunk(
                 email,
             });
 
-            return { ...user, name, nickname, useNickname }; // 추가 정보 반환
-
+            return { ...user, displayName: name || nickname, name, nickname, useNickname };
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -56,7 +55,8 @@ export const signIn = createAsyncThunk(
 // 로그아웃 액션
 export const signOut = createAsyncThunk("auth/signOut", async (_, { rejectWithValue }) => {
     try {
-        await firebaseSignOut(auth); //
+        await firebaseSignOut(auth); //Firebase 인증에서 로그아웃 수행
+        console.log("User successfully logged out.");
     } catch (error) {
         return rejectWithValue(error.message);
     }
@@ -69,7 +69,12 @@ const authSlice = createSlice({
         loading: false,
         error: null,
     },
-    reducers: {},
+    reducers: {
+        // setUser 액션을 추가하여 외부에서 상태를 업데이트할 수 있도록 함
+        setUser: (state, action) => {
+            state.user = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             // 회원가입
@@ -100,9 +105,10 @@ const authSlice = createSlice({
             })
             // 로그아웃
             .addCase(signOut.fulfilled, (state) => {
-                state.user = null;
+                state.user = null; // 상태에서 사용자 정보 초기화
             });
     },
 });
 
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

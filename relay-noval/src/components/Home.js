@@ -19,11 +19,8 @@ const Home = () => {
     };
 
     // 회원가입, 프로필에서 선택한 표시할 이름 결정
-    const displayName = user
-        ? user.useNickname
-            ? user.nickname || user.email // 닉네임이 설정된 경우 사용
-            : user.name || user.email // 이름이 설정된 경우 사용
-        : "";
+    const displayName = user ? (user.useNickname ? user.nickname : user.name) : "";
+
 
     // 예제 소설 항목 데이터
     const novels = [
