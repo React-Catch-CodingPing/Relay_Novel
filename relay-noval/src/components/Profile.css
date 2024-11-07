@@ -1,0 +1,81 @@
+/* src/components/Profile.css */
+/* 프로필 카드 전체를 감싸는 메인 컨테이너 */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* 프로필 카드 박스 */
+.profile-card {
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    text-align: center;
+}
+
+/* 프로필 이미지 스타일 */
+.profile-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+/* 프로필 정보 섹션 */
+.profile-info {
+    margin-bottom: 16px;
+}
+
+/* 각 프로필 정보 필드 */
+.profile-field {
+    margin-bottom: 8px;
+}
+
+/* 각 필드의 라벨 스타일 */
+.profile-label {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+/* 각 필드의 값 스타일 */
+.profile-value {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* 버튼 컨테이너 */
+.profile-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 프로필 편집 버튼 스타일 */
+.edit-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-button:hover,
+.logout-button:hover {
+    opacity: 0.8;
+}
