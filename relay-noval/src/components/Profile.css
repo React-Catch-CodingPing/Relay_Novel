@@ -1,81 +1,135 @@
 /* src/components/Profile.css */
-/* 프로필 카드 전체를 감싸는 메인 컨테이너 */
+/* 프로필 전체를 감싸는 메인 컨테이너로, 화면 중앙에 배치 */
 .profile-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    padding: 20px;
+    height: 100vh; /* 화면 전체 높이로 설정하여 세로 중앙에 배치 */
+    background-color: #f8f9fa; /* 배경색 설정 */
 }
 
-/* 프로필 카드 박스 */
+/* 프로필 카드 스타일 */
 .profile-card {
-    width: 300px;
+    width: 320px;
     background-color: #fff;
-    border: 1px solid #ddd;
+    padding: 24px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
     text-align: center;
 }
 
 /* 프로필 이미지 스타일 */
 .profile-image {
-    width: 100%;
+    width: 100%; /* 이미지가 카드의 너비에 맞춰져 꽉 차도록 설정 */
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 16px;
+    border-radius: 8px; /* 이미지 모서리를 둥글게 처리 */
+    margin-bottom: 16px; /* 이미지와 아래 텍스트 사이의 간격 */
 }
 
-/* 프로필 정보 섹션 */
-.profile-info {
+/* 편집 모드에서 입력 필드 스타일 */
+.profile-input {
+    width: 100%; /* 입력 필드가 카드의 너비에 맞도록 설정 */
+    padding: 8px;
+    margin-top: 4px;
     margin-bottom: 16px;
+    border: 1px solid #ddd; /* 테두리 설정 */
+    border-radius: 4px; /* 모서리 둥글게 처리 */
+    font-size: 1rem;
 }
 
-/* 각 프로필 정보 필드 */
+/* 개별 프로필 정보 필드의 컨테이너 */
 .profile-field {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
-/* 각 필드의 라벨 스타일 */
+/* 필드 라벨 스타일 (닉네임, 이름 등) */
 .profile-label {
-    font-weight: bold;
-    margin-right: 8px;
+    font-weight: bold; /* 텍스트를 굵게 표시 */
+    display: block;
+    margin-bottom: 4px; /* 라벨과 값 또는 입력 필드 사이 간격 */
 }
 
-/* 각 필드의 값 스타일 */
+/* 일반 텍스트 값 스타일 (편집 모드가 아닐 때 표시되는 값) */
 .profile-value {
     font-size: 1rem;
     color: #333;
 }
 
-/* 버튼 컨테이너 */
+/* 버튼들 컨테이너 */
 .profile-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* 버튼들이 양쪽 끝으로 배치되도록 설정 */
+    margin-top: 16px; /* 상단에 여백 추가 */
 }
 
 /* 프로필 편집 버튼 스타일 */
 .edit-button {
-    background-color: #e0e0e0;
-    color: #333;
+    background-color: #e0e0e0; /* 회색 배경 */
+    color: #333; /* 어두운 글자색 */
     border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 16px; /* 버튼 내부 여백 설정 */
+    border-radius: 4px; /* 모서리를 둥글게 */
+    font-size: 1rem; /* 글자 크기 설정 */
     cursor: pointer;
+    width: 48%; /* 버튼 크기 통일을 위해 너비 설정 */
+    text-align: center;
 }
 
-/* 로그아웃 버튼 스타일 */
-.logout-button {
-    background-color: #333;
+.edit-button:hover {
+    background-color: #0056b3; /* 마우스 오버 시 색상 변경 */
+}
+
+/* 저장 버튼 스타일 */
+.save-button {
+    background-color: #28a745; /* 초록색 배경 */
     color: #fff;
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: 8px; /* 버튼 사이 간격 */
+}
+
+.save-button:hover {
+    background-color: #218838; /* 마우스 오버 시 색상 변경 */
+}
+
+/* 취소 버튼 스타일 */
+.cancel-button {
+    background-color: #6c757d; /* 회색 배경 */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 1rem;
     cursor: pointer;
 }
 
-.edit-button:hover,
+.cancel-button:hover {
+    background-color: #5a6268; /* 마우스 오버 시 색상 변경 */
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-button {
+    background-color: #333; /* 검은색 배경 */
+    color: #fff; /* 흰색 글자 */
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 48%; /* 버튼 크기 통일을 위해 너비 설정 */
+    text-align: center;
+}
+
+/* 마우스 오버 시 효과 */
+.edit-button:hover {
+    opacity: 0.9; /* 살짝 투명해지도록 설정 */
+    background-color: #d0d0d0; /* 약간 더 어두운 회색으로 변경 */
+}
+
 .logout-button:hover {
-    opacity: 0.8;
+    opacity: 0.9; /* 살짝 투명해지도록 설정 */
+    background-color: #2b2b2b; /* 약간 더 어두운 검은색으로 변경 */
 }
