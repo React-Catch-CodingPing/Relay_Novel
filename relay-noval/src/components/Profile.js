@@ -8,35 +8,44 @@ import './Profile.css';
 function Profile() {
     const navigate = useNavigate();
 
+    // 초기 프로필 정보 상태 (기존 값)
+    const initialProfile = {
+        profileImage: '',
+        nickname: '에몽가',
+        name: '포켓몬',
+        email: '12345@hansung.ac.kr',
+    };
+
+    // 현재 프로필 정보를 위한 상태
+    const [profile, setProfile] = useState(initialProfile);
+
+    // 편집 모드에서 임시로 값을 저장하는 상태
+    const [editProfile, setEditProfile] = useState(initialProfile);
+
     // 편집 모드 상태
     const [editMode, setEditMode] = useState(false);
-
-    // 각 필드의 상태
-    const [profileImage, setProfileImage] = useState(''); // 프로필 사진 URL
-    const [nickname, setNickname] = useState('에몽가'); // 닉네임 초기값
-    const [name, setName] = useState('포켓몬'); // 이름 초기값
-    const [email, setEmail] = useState('12345@hansung.ac.kr'); // 이메일 초기값
 
     // 로그아웃 페이지로 이동하는 함수
     const goToSignOut = () => {
         navigate('/signout');
     };
 
-    // 편집 모드로 전환하는 함수
+    // 편집 모드 시작 시 기존 값을 임시 상태에 복사
     const handleEdit = () => {
+        setEditProfile(profile); // 현재 값을 임시 상태에 저장
         setEditMode(true);
     };
 
     // 변경 사항 저장 후 편집 모드 종료
     const handleSave = () => {
+        setProfile(editProfile); // 임시 상태의 값을 실제 상태에 저장
         setEditMode(false);
-        // 여기에서 서버나 데이터베이스로 저장하는 로직 추가 가능
     };
 
-    // 편집 취소 후 원래 상태로 돌아가기
+    // 편집 취소 시 임시 상태를 초기화하고 편집 모드 종료
     const handleCancel = () => {
+        setEditProfile(profile); // 임시 상태를 원래 값으로 되돌림
         setEditMode(false);
-        // 취소 시 초기 상태로 되돌리려면 추가 로직 필요
     };
 
     return (
@@ -47,14 +56,14 @@ function Profile() {
                 {editMode ? (
                     <input
                         type="text"
-                        value={profileImage}
-                        onChange={(e) => setProfileImage(e.target.value)}
+                        value={editProfile.profileImage}
+                        onChange={(e) => setEditProfile({ ...editProfile, profileImage: e.target.value })}
                         placeholder="프로필 이미지 URL을 입력하세요"
                         className="profile-input"
                     />
                 ) : (
                     <img
-                        src={profileImage || 'https://example.com/default-image.jpg'}
+                        src={profile.profileImage || 'https://example.com/default-image.jpg'}
                         alt="Profile"
                         className="profile-image"
                     />
@@ -69,12 +78,12 @@ function Profile() {
                         {editMode ? (
                             <input
                                 type="text"
-                                value={nickname}
-                                onChange={(e) => setNickname(e.target.value)}
+                                value={editProfile.nickname}
+                                onChange={(e) => setEditProfile({ ...editProfile, nickname: e.target.value })}
                                 className="profile-input"
                             />
                         ) : (
-                            <span className="profile-value">{nickname}</span>
+                            <span className="profile-value">{profile.nickname}</span>
                         )}
                     </div>
 
@@ -84,12 +93,12 @@ function Profile() {
                         {editMode ? (
                             <input
                                 type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={editProfile.name}
+                                onChange={(e) => setEditProfile({ ...editProfile, name: e.target.value })}
                                 className="profile-input"
                             />
                         ) : (
-                            <span className="profile-value">{name}</span>
+                            <span className="profile-value">{profile.name}</span>
                         )}
                     </div>
 
@@ -99,12 +108,12 @@ function Profile() {
                         {editMode ? (
                             <input
                                 type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={editProfile.email}
+                                onChange={(e) => setEditProfile({ ...editProfile, email: e.target.value })}
                                 className="profile-input"
                             />
                         ) : (
-                            <span className="profile-value">{email}</span>
+                            <span className="profile-value">{profile.email}</span>
                         )}
                     </div>
 
