@@ -42,6 +42,7 @@ function WorksSection() {
                         description={work.description}
                         image={work.image}
                         link={`/works/${work.id}`} // 작품 상세 페이지 링크
+                        buttonText="참여하기"
                     />
                 ))}
             </div>

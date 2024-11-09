@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Card.css';
 
-function Card({ title, description, image, link }) {
+function Card({ title, description, image, link, buttonText }) {
     return (
         <div className="card">
             <img src={image} alt={title} className="card-image" />
@@ -11,7 +11,7 @@ function Card({ title, description, image, link }) {
                 <h3>{title}</h3>
                 <p>{description}</p>
                 <Link to={link}>
-                    <button className="view-button">보기</button>
+                    <button className="view-button">{buttonText}</button>
                 </Link>
             </div>
         </div>

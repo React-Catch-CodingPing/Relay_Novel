@@ -33,6 +33,7 @@ function AuthorsSection() {
                         description={`오늘 참여한 소설: ${author.novels}`}
                         image={author.image}
                         link={`/authors/${author.id}`} // 저자 상세 페이지 링크
+                        buttonText="프로필보기"
                     />
                 ))}
             </div>
