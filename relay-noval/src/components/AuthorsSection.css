@@ -1,0 +1,23 @@
+/* src/components/AuthorsSection.css */
+.authors-section {
+    padding: 20px;
+}
+
+.authors-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: left; /* 왼쪽 정렬로 변경 */
+}
+
+.authors-section p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: left; /* 왼쪽 정렬로 변경 */
+}
+
+.authors-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}

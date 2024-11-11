@@ -1,0 +1,21 @@
+/* 부모 컨테이너인 header 스타일 설정 */
+.header {
+    width: 100%; /* 전체 너비 */
+    height: 500px; /* 원하는 높이 설정 */
+    display: flex;
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    overflow: hidden;
+    background-color: #ffffff; /* 배경을 흰색으로 설정 */
+    margin: 0;
+}
+
+/* 반응형 이미지 스타일 */
+.header-image {
+    max-width: 50%; /* 이미지의 최대 너비를 전체의 50%로 제한 */
+    height: auto; /* 이미지 비율 유지 */
+    object-fit: contain; /* 이미지 비율을 유지하며 컨테이너에 맞춤 */
+    display: block;
+    margin: 0 auto; /* 이미지 가로 가운데 정렬 */
+}
+
