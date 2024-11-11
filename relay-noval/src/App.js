@@ -83,6 +83,7 @@ const App = () => {
                     <Route path="/authors" element={<Authors />} />
                     <Route path="/community" element={<Community />} />
                     <Route path="/start-novel" element={<StartNovel />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </div>
         </Router>
