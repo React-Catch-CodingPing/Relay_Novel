@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { setUser } from "./store/authSlice";
 import { auth, firestore } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 
 // 기존에 추가된 컴포넌트들
 import Home from "./components/Home";
@@ -14,8 +13,6 @@ import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
 import {doc, getDoc} from "firebase/firestore";
 import SignOut from "./components/Auth/SignOut";
-import Community from "./components/Community";
-
 
 // 새로 추가된 컴포넌트들
 import Navbar from "./components/Navbar";
