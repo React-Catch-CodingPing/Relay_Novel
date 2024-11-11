@@ -9,8 +9,13 @@ import { doc, getDoc } from "firebase/firestore";
 
 // 기존에 추가된 컴포넌트들
 import Home from "./components/Home";
+import Profile from "./components/Profile";
 import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
+import {doc, getDoc} from "firebase/firestore";
+import SignOut from "./components/Auth/SignOut";
+import Community from "./components/Community";
+
 
 // 새로 추가된 컴포넌트들
 import Navbar from "./components/Navbar";
@@ -73,6 +78,7 @@ const App = () => {
                     {/* 회원가입 및 로그인 페이지 */}
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<SignIn />} />
+                    <Route path="/signout" element={<SignOut />} />
 
                     {/* 추가된 메뉴 페이지 */}
                     <Route path="/hall-of-fame" element={<HallOfFame />} />
