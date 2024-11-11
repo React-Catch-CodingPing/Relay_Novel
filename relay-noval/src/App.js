@@ -12,6 +12,7 @@ import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
 import {doc, getDoc} from "firebase/firestore";
 import SignOut from "./components/Auth/SignOut";
+import Community from "./components/Community";
 
 const App = () => {
 
@@ -47,8 +48,9 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/signout" element={<SignOut />} />
+
           {/* 추가할 경로들을 여기에 정의 */}
-          <Route path="/profile" element={<Profile />} />
+
         </Routes>
       </Router>
   );

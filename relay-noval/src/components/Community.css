@@ -1,0 +1,158 @@
+/* 커뮤니티 페이지 전체 컨테이너 */
+.community-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+/* 헤더 스타일 */
+.community-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-bottom: 1px solid #ddd;
+}
+
+.community-header h1 {
+    font-size: 24px;
+}
+
+/* 네비게이션 버튼 스타일 */
+.community-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.community-nav button {
+    margin: 0;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.community-nav button:hover {
+    color: #ff69b4;
+}
+
+.user-icon {
+    font-size: 24px;
+}
+
+/* 게시물 리스트 영역 */
+.community-main {
+    width: 80%;
+    margin-top: 32px;
+}
+
+.community-main h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+/* 게시물 카드 그리드 설정 */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 카드 */
+    gap: 16px; /* 카드 간의 간격 */
+}
+
+.post-card {
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.post-card h3 {
+    font-size: 18px;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.author-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.pagination-button {
+    background: none;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 선택된 페이지네이션 버튼 스타일 */
+.pagination-button.active {
+    background-color: #333;
+    color: #fff;
+}
+
+.pagination-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* 푸터 스타일 */
+.community-footer {
+    width: 100%;
+    padding: 32px;
+    background-color: #f8f8f8;
+    text-align: center;
+    margin-top: 32px;
+}
+
+.footer-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.footer-links p {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin: 4px 0;
+    cursor: pointer;
+}
+
+.footer-links li:hover {
+    color: #ff69b4;
+}
+
+.social-icons {
+    display: flex;
+    gap: 8px;
+    font-size: 24px;
+    margin-top: 16px;
+}
