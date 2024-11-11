@@ -1,0 +1,148 @@
+/* src/components/Genres.css */
+
+.genres-container {
+    display: flex;
+    padding: 20px;
+}
+
+.sidebar {
+    width: 400px !important;
+    padding-right: 20px;
+    border-right: 1px solid #ddd;
+}
+
+
+
+.sidebar h2 {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-direction: row;
+}
+
+.filter-container {
+    width: 100%; /* 원하는 너비로 조정하세요 */
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.filter-item {
+    width: 100%; /* 필터 아이템이 전체 칸에 맞추어지도록 설정 */
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #f0f0f0;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.tag {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.tag.selected {
+    background-color: #007bff; /* 선택된 항목 배경색 */
+    color: white; /* 선택된 항목 글자색 */
+}
+
+.slider {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.main-content {
+    flex: 1;
+    padding-left: 20px;
+    max-width: 80%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 1.5em;
+}
+
+.sort-options {
+    display: flex;
+    gap: 10px;
+}
+
+.sort-button {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    transition: background-color 0.3s;
+}
+
+.sort-button.active, .sort-button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.novels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개씩 정렬 */
+    gap: 20px;
+}
+
+.novel-card {
+    text-decoration: none;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.novel-card:hover {
+    transform: scale(1.05);
+}
+
+.novel-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.novel-info {
+    padding: 10px;
+    text-align: center;
+}
+
+.novel-info h3 {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.novel-info p {
+    color: #666;
+    font-size: 0.9em;
+}
+

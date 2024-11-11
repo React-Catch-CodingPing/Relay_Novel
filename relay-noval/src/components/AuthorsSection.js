@@ -1,20 +1,18 @@
 // src/components/AuthorsSection.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from './Card';
+import ProfileCard from './ProfileCard';
 import './AuthorsSection.css';
 
 function AuthorsSection() {
     const [authors, setAuthors] = useState([]);
 
     useEffect(() => {
-        // API 요청: 나중에 백엔드와 연결 예정
         axios.get('/api/authors')
             .then(response => setAuthors(response.data))
             .catch(error => console.error("Error fetching authors:", error));
     }, []);
 
-    // 임시 데이터 (백엔드 연결 전 사용)
     const placeholderData = [
         { id: 1, name: '부끄핑', novels: 13, image: '/path/to/bukkeuping.png' },
         { id: 2, name: '차나핑', novels: 10, image: '/path/to/chanaping.png' },
@@ -24,16 +22,14 @@ function AuthorsSection() {
     return (
         <section className="authors-section">
             <h2>오늘의 저자</h2>
-            <p>TOP {authors.length || placeholderData.length}</p>
             <div className="authors-list">
                 {(authors.length > 0 ? authors : placeholderData).map(author => (
-                    <Card
+                    <ProfileCard
                         key={author.id}
-                        title={author.name}
-                        description={`오늘 참여한 소설: ${author.novels}`}
+                        name={author.name}
+                        novels={author.novels}
                         image={author.image}
-                        link={`/authors/${author.id}`} // 저자 상세 페이지 링크
-                        buttonText="프로필보기"
+                        link={`/authors/${author.id}`}
                     />
                 ))}
             </div>

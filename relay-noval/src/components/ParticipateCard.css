@@ -1,0 +1,47 @@
+/* src/components/ParticipateCard.css */
+
+.participate-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 20px;
+    text-align: center;
+}
+
+.participate-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.participate-card-content {
+    padding: 16px;
+}
+
+.participate-card-content h3 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.participate-card-content p {
+    color: #555;
+    font-size: 1em;
+    margin: 12px 0;
+}
+
+.participate-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.participate-button:hover {
+    background-color: #0056b3;
+}

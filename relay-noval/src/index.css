@@ -39,6 +39,12 @@ code {
   display: flex;
   gap: 1.5rem;
   list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-menu li {
+  display: inline-block;
 }
 
 .navbar-menu li a {
@@ -65,3 +71,4 @@ code {
   background-color: #555;
   color: #fff;
 }
+
