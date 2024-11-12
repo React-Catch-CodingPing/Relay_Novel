@@ -1,17 +1,19 @@
 /* src/components/Footer.css */
+
 .footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* 상단 정렬 */
     padding: 20px;
+    margin-top: 120px;
     background-color: #f9f9f9;
     border-top: 1px solid #ddd;
 }
 
 .footer-icons {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    align-items: flex-start; /* 아이콘을 상단 정렬 */
+    gap: 10px;
 }
 
 .heart-icon {
@@ -19,18 +21,15 @@
     color: #ff69b4; /* 하트 아이콘 색상 */
 }
 
-.icon {
-    font-size: 24px;
-    color: #000;
-    cursor: pointer;
-}
-
+/* 하트 아이콘 바로 오른쪽에 footer-contact 배치 */
 .footer-contact {
-    text-align: left;
+    margin-left: 20px; /* 하트 아이콘과의 간격 */
+    text-align: center;
 }
 
 .footer-contact h3 {
     font-size: 16px;
+    font-weight: bold; /* 진한 글씨 */
     margin-bottom: 10px;
 }
 
@@ -50,7 +49,13 @@
     color: inherit;
 }
 
+/* 오른쪽에 위치할 social links */
+.footer-social-links {
+    text-align: right; /* 오른쪽 정렬 */
+}
+
 .footer-social-links p {
     font-size: 14px;
+    font-weight: bold; /* 진한 글씨 */
     color: #333;
 }

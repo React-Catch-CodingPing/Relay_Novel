@@ -6,7 +6,7 @@
     justify-content: center; /* 가로 가운데 정렬 */
     align-items: center; /* 세로 가운데 정렬 */
     overflow: hidden;
-    background-color: #ffffff; /* 배경을 흰색으로 설정 */
+    background-color: rgba(245, 245, 245, 0.75); /* 배경을 회색 설정 */
     margin: 0;
 }
 

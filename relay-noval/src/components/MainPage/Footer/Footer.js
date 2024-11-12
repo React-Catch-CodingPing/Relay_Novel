@@ -21,7 +21,7 @@ function Footer() {
                 </ul>
             </div>
             <div className="footer-social-links">
-                <p>Contact: info@example.com</p>
+                <p>info@example.com</p>
             </div>
         </footer>
     );

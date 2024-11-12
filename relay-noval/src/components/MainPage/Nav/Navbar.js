@@ -2,33 +2,34 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { signOut } from '../../../store/authSlice';
-import "./Navbar.css"; // 스타일 파일 추가 (필요한 경우)
+import { signOut } from '../../../store/authSlice'; // 로그아웃 액션 import
+import "./Navbar.css"; // 스타일 파일 import
 
 function Navbar() {
-    const { user } = useSelector((state) => state.auth); // Redux에서 user 상태 가져오기
+    // Redux에서 사용자 로그인 상태 정보(user) 가져오기
+    const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // 로그아웃 핸들러
+    // 로그아웃을 처리하는 함수
     const handleLogout = () => {
-        dispatch(signOut());
+        dispatch(signOut()); // 로그아웃 액션 디스패치
         navigate("/"); // 로그아웃 후 메인 페이지로 리디렉션
     };
 
-// 로그인한 사용자 표시 이름 결정
+    // 표시할 사용자 이름 결정: useNickname 값에 따라 닉네임 또는 이름 선택
     const displayName = user ? (user.useNickname ? user.nickname : user.name) : "";
 
     return (
         <nav className="navbar">
-            {/* 왼쪽 로고 */}
+            {/* 왼쪽: 홈으로 이동하는 로고 아이콘 */}
             <div className="navbar-left">
                 <Link to="/" className="navbar-logo">
-                    <i className="home-icon">🏠</i> {/* 홈 아이콘 */}
+                    <img src="/images/home-icon.png" alt="홈 아이콘" className="home-icon" /> {/* 홈 아이콘 이미지 */}
                 </Link>
             </div>
 
-            {/* 중간 메뉴 */}
+            {/* 중앙 메뉴: 커뮤니티, 명예의 전당 등 각 페이지로의 링크 */}
             <ul className="navbar-menu">
                 <li><Link to="/community">커뮤니티</Link></li>
                 <li><Link to="/hall-of-fame">명예의 전당</Link></li>
@@ -37,18 +38,26 @@ function Navbar() {
                 <li><Link to="/start-novel">소설 시작하기</Link></li>
             </ul>
 
-            {/* 오른쪽 로그인/회원가입 또는 로그아웃 */}
+            {/* 오른쪽: 로그인/회원가입 또는 로그아웃/프로필 버튼 */}
             <div className="navbar-right">
                 {user ? (
+                    // 로그인한 경우: 사용자 이름과 로그아웃, 프로필 버튼 표시
                     <>
                         <span>{displayName}님</span>
                         <button onClick={handleLogout} className="logout-button">로그아웃</button>
-                        <Link to="/profile"><button className="profile-button">프로필</button></Link>
+                        <Link to="/profile">
+                            <button className="profile-button">프로필</button>
+                        </Link>
                     </>
                 ) : (
+                    // 비로그인 상태: 로그인 및 회원가입 버튼 표시
                     <>
-                        <Link to="/login"><button className="login-button">로그인</button></Link>
-                        <Link to="/signup"><button className="signup-button">회원가입</button></Link>
+                        <Link to="/login">
+                            <button className="login-button">로그인</button>
+                        </Link>
+                        <Link to="/signup">
+                            <button className="signup-button">회원가입</button>
+                        </Link>
                     </>
                 )}
             </div>
