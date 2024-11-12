@@ -43,7 +43,7 @@ function Navbar() {
                 {user ? (
                     // 로그인한 경우: 사용자 이름과 로그아웃, 프로필 버튼 표시
                     <>
-                        <span>{displayName}님</span>
+                        <span className="display-name">{displayName}님</span>
                         <button onClick={handleLogout} className="logout-button">로그아웃</button>
                         <Link to="/profile">
                             <button className="profile-button">프로필</button>

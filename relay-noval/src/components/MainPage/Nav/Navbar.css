@@ -48,9 +48,17 @@
 /* 오른쪽 버튼 스타일 */
 .navbar-right {
     display: flex;
+    white-space: nowrap; /* 한 줄에 표시 */
     align-items: center; /* 수직 가운데 정렬 */
     gap: 10px; /* 버튼 간격 */
 }
+
+/* displayName 스타일 */
+.display-name {
+    color: rgba(245, 245, 245, 0.75); /* 글자 색상 설정 */
+    font-weight: bold; /* 굵은 글씨 */
+}
+
 
 /* 공통 버튼 스타일 */
 .logout-button, .profile-button, .login-button, .signup-button {
