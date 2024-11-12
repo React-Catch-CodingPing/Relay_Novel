@@ -7,26 +7,26 @@ import { auth, firestore } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 // 기존에 추가된 컴포넌트들
-import Home from "./components/Home";
-import Profile from "./components/Profile";
+import Home from "./components/MainPage/Home";
+import Profile from "./components/Profile/Profile";
 import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
 import {doc, getDoc} from "firebase/firestore";
 import SignOut from "./components/Auth/SignOut";
 
 // 새로 추가된 컴포넌트들
-import Navbar from "./components/Navbar";
-import Header from "./components/Header";
-import WorksSection from "./components/WorksSection";
-import AuthorsSection from "./components/AuthorsSection";
-import Footer from "./components/Footer";
+import Navbar from "./components/MainPage/Nav/Navbar";
+import Header from "./components/MainPage/Header/Header";
+import WorksSection from "./components/MainPage/WorksSection/WorksSection";
+import AuthorsSection from "./components/MainPage/AuthorsSection/AuthorsSection";
+import Footer from "./components/MainPage/Footer/Footer";
 
 // 추가한 페이지 컴포넌트들
-import HallOfFame from "./components/HallOfFame";
-import Genres from "./components/Genres";
-import Authors from "./components/Authors";
-import Community from "./components/Community";
-import StartNovel from "./components/StartNovel";
+import HallOfFame from "./components/HallOfFame/HallOfFame";
+import Genres from "./components/Genres/Genres";
+import Authors from "./components/Authors/Authors";
+import Community from "./components/Community/Community";
+import StartNovel from "./components/StartNovel/StartNovel";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const App = () => {
                 <Navbar />
 
                 <Routes>
-                    {/* Home 페이지 */}
+                    {/* MainPage 페이지 */}
                     <Route
                         path="/"
                         element={

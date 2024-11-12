@@ -1,7 +1,7 @@
 // src/components/AuthorsSection.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProfileCard from './ProfileCard';
+import ProfileCard from '../ProfileCards/ProfileCard';
 import './AuthorsSection.css';
 
 function AuthorsSection() {

@@ -21,7 +21,7 @@ const SignIn = () => {
         dispatch(signIn({ email, password }));
     };
 
-    // 로그인 성공 시 Home 페이지로 이동
+    // 로그인 성공 시 MainPage 페이지로 이동
     if (user) {
         navigate("/"); // 로그인 후 홈 페이지로 리디렉션
     }

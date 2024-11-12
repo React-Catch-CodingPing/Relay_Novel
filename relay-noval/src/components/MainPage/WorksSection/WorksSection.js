@@ -1,7 +1,7 @@
 // src/components/WorksSection.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ParticipateCard from './ParticipateCard';
+import ParticipateCard from '../ParticipateCard/ParticipateCard';
 import './WorksSection.css';
 
 function WorksSection() {

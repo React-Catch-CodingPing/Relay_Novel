@@ -1,10 +1,10 @@
 // 제일 처음으로 접근 가능한 메인 페이지.
 
-// src/components/Home.js
+// src/components/MainPage.js
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
 import { useSelector, useDispatch } from "react-redux"; // useDispatch 추가
-import { signOut } from "../store/authSlice"; // signOut 액션 import
+import { signOut } from "../../store/authSlice"; // signOut 액션 import
 import "./Home.css";
 
 const Home = () => {
