@@ -76,6 +76,10 @@ const App = () => {
                     <Route path="/community" element={<Community />} />
                     <Route path="/start-novel" element={<StartNovel />} />
                 </Routes>
+
+                {/* 푸터 영역 */}
+                {/* 하단 Footer */}
+                <Footer />
             </div>
         </Router>
     );

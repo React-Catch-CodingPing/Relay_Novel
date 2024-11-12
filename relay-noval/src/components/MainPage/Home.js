@@ -37,8 +37,6 @@ const Home = () => {
                 <AuthorsSection />
             </div>
 
-            {/* 하단 Footer */}
-            <Footer />
         </div>
     );
 };

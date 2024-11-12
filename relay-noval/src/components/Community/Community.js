@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './Community.css';
 import { useNavigate } from 'react-router-dom';
 import { FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import Footer from "../MainPage/Footer/Footer";
 
 function Community() {
     const navigate = useNavigate();
@@ -34,15 +35,7 @@ function Community() {
         <div className="community-container">
             {/* 헤더 영역 */}
             <header className="community-header">
-                <h1>커뮤니티</h1>
-                <nav className="community-nav">
-                    <button onClick={() => handleNavClick('/hall-of-fame')}>명예의 전당</button>
-                    <button onClick={() => handleNavClick('/genres')}>장르별 모아보기</button>
-                    <button onClick={() => handleNavClick('/authors')}>저자별 모아보기</button>
-                    <button onClick={() => handleNavClick('/community')}>커뮤니티</button>
-                    <button onClick={() => handleNavClick('/start-novel')}>소설 시작하기</button>
-                    <div className="user-icon">👤</div>
-                </nav>
+                커뮤니티 페이지
             </header>
 
             {/* 게시물 리스트 영역 */}
@@ -77,24 +70,6 @@ function Community() {
                 ))}
             </div>
 
-            {/* 푸터 영역 */}
-            <footer className="community-footer">
-                <div className="footer-icon">💗</div>
-                <div className="footer-links">
-                    <p>Contact</p>
-                    <ul>
-                        <li>인스타그램</li>
-                        <li>유튜브</li>
-                        <li>페이스북</li>
-                        <li>고객센터</li>
-                    </ul>
-                    <div className="social-icons">
-                        <FaTwitter />
-                        <FaInstagram />
-                        <FaYoutube />
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 }
