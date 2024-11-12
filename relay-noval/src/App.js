@@ -56,34 +56,25 @@ const App = () => {
         <Router>
             <div className="App">
                 {/* 공통 네비게이션 바 */}
-                <Navbar />
+                <Navbar/>
 
                 <Routes>
                     {/* MainPage 페이지 */}
-                    <Route
-                        path="/"
-                        element={
-                            <>
-                                <Header />
-                                <WorksSection />
-                                <AuthorsSection />
-                                <Footer />
-                            </>
-                        }
-                    />
+                    {/* Home 페이지 */}
+                    <Route path="/" element={<Home />} />
 
                     {/* 회원가입 및 로그인 페이지 */}
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<SignIn />} />
                     <Route path="/signout" element={<SignOut />} />
 
-                    {/* 추가된 메뉴 페이지 */}
+                    {/* 추가된 페이지들 */}
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/hall-of-fame" element={<HallOfFame />} />
                     <Route path="/genres" element={<Genres />} />
                     <Route path="/authors" element={<Authors />} />
                     <Route path="/community" element={<Community />} />
                     <Route path="/start-novel" element={<StartNovel />} />
-                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </div>
         </Router>
