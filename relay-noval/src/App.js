@@ -28,6 +28,8 @@ import Authors from "./components/Authors/Authors";
 import Community from "./components/Community/Community";
 import StartNovel from "./components/StartNovel/StartNovel";
 
+import AuthorProfile from "./components/MainPage/AuthorProfile/AuthorProfile";
+
 const App = () => {
     const dispatch = useDispatch();
 
@@ -75,6 +77,13 @@ const App = () => {
                     <Route path="/authors" element={<Authors />} />
                     <Route path="/community" element={<Community />} />
                     <Route path="/start-novel" element={<StartNovel />} />
+
+                    {/* /authors 경로로 저자 목록 페이지 설정 */}
+                    <Route path="/authors" element={<AuthorsSection />} />
+
+                    {/* /authors/:id 경로로 개별 저자 프로필 페이지 설정 */}
+                    <Route path="/authors/:id" element={<AuthorProfile />} />
+
                 </Routes>
 
                 {/* 푸터 영역 */}
