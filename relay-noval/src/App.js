@@ -29,6 +29,7 @@ import Community from "./components/Community/Community";
 import StartNovel from "./components/StartNovel/StartNovel";
 
 import AuthorProfile from "./components/MainPage/AuthorProfile/AuthorProfile";
+import WritingGuide from "./components/WritingGuide/WritingGuide";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -77,6 +78,8 @@ const App = () => {
                     <Route path="/authors" element={<Authors />} />
                     <Route path="/community" element={<Community />} />
                     <Route path="/start-novel" element={<StartNovel />} />
+
+                    <Route path="/writing-guide" element={<WritingGuide />} />
 
                     {/* /authors 경로로 저자 목록 페이지 설정 */}
                     <Route path="/authors" element={<AuthorsSection />} />

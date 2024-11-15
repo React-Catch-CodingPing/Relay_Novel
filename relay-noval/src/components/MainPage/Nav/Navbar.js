@@ -36,6 +36,7 @@ function Navbar() {
                 <li><Link to="/authors">저자별 모아보기</Link></li>
                 <li><Link to="/genres">소설 모아보기</Link></li>
                 <li><Link to="/start-novel">소설 시작하기</Link></li>
+                <li><Link to="/writing-guide">창작 가이드</Link></li>
             </ul>
 
             {/* 오른쪽: 로그인/회원가입 또는 로그아웃/프로필 버튼 */}

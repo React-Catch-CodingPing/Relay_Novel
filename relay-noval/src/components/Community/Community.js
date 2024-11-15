@@ -8,6 +8,13 @@ import Footer from "../MainPage/Footer/Footer";
 function Community() {
     const navigate = useNavigate();
 
+    // 현재 날짜를 가져와서 "YYYY.MM.DD" 형식으로 변환
+    const today = new Date().toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
+
     // 페이지네이션 현재 페이지 상태
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -40,7 +47,7 @@ function Community() {
 
             {/* 게시물 리스트 영역 */}
             <main className="community-main">
-                <h2>2024.10.??</h2>
+                <h2>{today}</h2>
                 <div className="posts-grid">
                     {posts.map(post => (
                         <div key={post.id} className="post-card">
