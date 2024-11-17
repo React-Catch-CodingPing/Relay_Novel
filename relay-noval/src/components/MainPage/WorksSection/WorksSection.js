@@ -1,6 +1,7 @@
 // src/components/WorksSection.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase/firebase';
 import ParticipateCard from '../ParticipateCard/ParticipateCard';
 import './WorksSection.css';
 
@@ -8,9 +9,21 @@ function WorksSection() {
     const [works, setWorks] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/works')
-            .then(response => setWorks(response.data))
-            .catch(error => console.error("Error fetching works:", error));
+        const fetchWorks = async () => {
+            try {
+                // Firestore의 "novels" 컬렉션에서 데이터 가져오기
+                const querySnapshot = await getDocs(collection(firestore, 'novels'));
+                const worksData = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setWorks(worksData);
+            } catch (error) {
+                console.error("Error fetching works:", error);
+            }
+        };
+
+        fetchWorks();
     }, []);
 
     const placeholderData = [
@@ -22,14 +35,11 @@ function WorksSection() {
         <section className="works-section">
             <h2>오늘의 작품</h2>
             <div className="works-list">
-                {(works.length > 0 ? works : placeholderData).map(work => (
-                    <ParticipateCard
-                        key={work.id}
-                        title={work.title}
-                        description={work.description}
-                        image={work.image}
-                        link={`/works/${work.id}`}
-                    />
+                {works.map(work => (
+                    <div key={work.id} className="work-card">
+                        <h3>{work.title}</h3>
+                        <p>{work.description}</p>
+                    </div>
                 ))}
             </div>
         </section>

@@ -26,7 +26,11 @@ import HallOfFame from "./components/HallOfFame/HallOfFame";
 import Genres from "./components/Genres/Genres";
 import Authors from "./components/Authors/Authors";
 import Community from "./components/Community/Community";
-import StartNovel from "./components/StartNovel/StartNovel";
+import NovelCreate from "./components/Novel/NovelCreate";
+import NovelList from "./components/Novel/NovelList";
+import NovelDetail from "./components/Novel/NovelDetail";
+
+
 
 const App = () => {
     const dispatch = useDispatch();
@@ -57,25 +61,30 @@ const App = () => {
             <div className="App">
                 {/* 공통 네비게이션 바 */}
                 <Navbar/>
+                <div className="main-content">
+                    <Routes>
+                        {/* MainPage 페이지 */}
+                        {/* Home 페이지 */}
+                        <Route path="/" element={<Home />} />
 
-                <Routes>
-                    {/* MainPage 페이지 */}
-                    {/* Home 페이지 */}
-                    <Route path="/" element={<Home />} />
+                        {/* 회원가입 및 로그인 페이지 */}
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/login" element={<SignIn />} />
+                        <Route path="/signout" element={<SignOut />} />
 
-                    {/* 회원가입 및 로그인 페이지 */}
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/login" element={<SignIn />} />
-                    <Route path="/signout" element={<SignOut />} />
+                        {/* 추가된 페이지들 */}
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/hall-of-fame" element={<HallOfFame />} />
+                        <Route path="/genres" element={<Genres />} />
+                        <Route path="/authors" element={<Authors />} />
+                        <Route path="/community" element={<Community />} />
+                        <Route path="/novel-create" element={<NovelCreate />} />
+                        <Route path="/novel-list" element={<NovelList />} />
+                        <Route path="/novels/:novelId" element={<NovelDetail />} />
 
-                    {/* 추가된 페이지들 */}
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/hall-of-fame" element={<HallOfFame />} />
-                    <Route path="/genres" element={<Genres />} />
-                    <Route path="/authors" element={<Authors />} />
-                    <Route path="/community" element={<Community />} />
-                    <Route path="/start-novel" element={<StartNovel />} />
-                </Routes>
+
+                    </Routes>
+                </div>
 
                 {/* 푸터 영역 */}
                 {/* 하단 Footer */}

@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence  } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
 
 // Firebase 설정
 const firebaseConfig = {
@@ -20,6 +22,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);          // getAuth 함수로 인증 객체 가져오기
 export const firestore = getFirestore(app); // getFirestore 함수로 Firestore 가져오기
 export default app;
+export const storage = getStorage();
 
 
 // 세션 지속성을 로컬로 설정

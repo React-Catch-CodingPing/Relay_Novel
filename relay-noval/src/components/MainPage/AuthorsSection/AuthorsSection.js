@@ -1,16 +1,30 @@
 // src/components/AuthorsSection.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getAuthors } from '../../../firebase/firestoreService';
 import ProfileCard from '../ProfileCards/ProfileCard';
-import './AuthorsSection.css';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase/firebase';
+import "./AuthorsSection.css";
+
 
 function AuthorsSection() {
     const [authors, setAuthors] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/authors')
-            .then(response => setAuthors(response.data))
-            .catch(error => console.error("Error fetching authors:", error));
+        const fetchAuthors = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(firestore, 'users'))
+                const authorsData = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setAuthors(authorsData);
+            } catch (error) {
+                console.error("Error fetching authors:", error);
+            }
+        };
+
+        fetchAuthors();
     }, []);
 
     const placeholderData = [
