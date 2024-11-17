@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './Community.css';
 import { useNavigate } from 'react-router-dom';
 import { FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
-import Footer from "../MainPage/Footer/Footer";
+import Footer from "../../HomePage/Footer/Footer";
 
 function Community() {
     const navigate = useNavigate();

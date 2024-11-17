@@ -1,0 +1,11 @@
+/* src/components/HomePage.css */
+.home {
+    text-align: center;
+    padding: 20px;
+    /*display: flex; !* 플렉스 박스 *!*/
+    /*flex-direction: column; !* 세로 정렬 *!*/
+    /*justify-content: space-between; !* 요소 간 공간 분배 *!*/
+    /*overflow-y: auto; !* 스크롤 활성화 *!*/
+}
+
+

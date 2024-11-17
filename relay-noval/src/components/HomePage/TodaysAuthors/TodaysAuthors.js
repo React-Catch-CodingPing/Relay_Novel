@@ -1,13 +1,12 @@
-// src/components/AuthorsSection.js
+// src/components/TodaysAuthors.js
 import React, { useEffect, useState } from 'react';
-import { getAuthors } from '../../../firebase/firestoreService';
 import ProfileCard from '../ProfileCards/ProfileCard';
 import { collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../../../firebase/firebase';
-import "./AuthorsSection.css";
+import "./TodaysAuthors.css";
 
 
-function AuthorsSection() {
+function TodaysAuthors() {
     const [authors, setAuthors] = useState([]);
 
     useEffect(() => {
@@ -51,4 +50,4 @@ function AuthorsSection() {
     );
 }
 
-export default AuthorsSection;
+export default TodaysAuthors;

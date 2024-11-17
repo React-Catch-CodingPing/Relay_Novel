@@ -1,7 +1,6 @@
-// src/components/MainPage/AuthorProfile/AuthorProfile.js
+// src/components/HomePage/AuthorProfile/AuthorProfile.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import './AuthorProfile.css';
 
 function AuthorProfile() {
