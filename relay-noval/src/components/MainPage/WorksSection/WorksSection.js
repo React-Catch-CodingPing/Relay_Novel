@@ -1,7 +1,6 @@
-// src/components/WorksSection.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ParticipateCard from '../ParticipateCard/ParticipateCard';
+import ParticipateCard from '../ParticipateCard/ParticipateCard'; // 정확한 상대 경로 확인
 import './WorksSection.css';
 
 function WorksSection() {
