@@ -27,10 +27,11 @@ import Authors from "./components/Authors/Authors";
 import Community from "./components/Community/Community";
 import StartNovel from "./components/StartNovel/StartNovel";
 
+import AuthorProfile from "./components/MainPage/AuthorProfile/AuthorProfile";
+import WritingGuide from "./components/WritingGuide/WritingGuide";
 
-
-// 추가된 WorkDetail 컴포넌트
 import WorkDetail from "./components/WorkDetail/WorkDetail";
+
 
 const App = () => {
     const dispatch = useDispatch();
@@ -80,10 +81,15 @@ const App = () => {
                     <Route path="/start-novel" element={<StartNovel />} />
 
 
+                    <Route path="/writing-guide" element={<WritingGuide />} />
+
+
                     {/* /authors 경로로 저자 목록 페이지 설정 */}
                     <Route path="/authors" element={<AuthorsSection />} />
 
-                  >
+                    {/* /authors/:id 경로로 개별 저자 프로필 페이지 설정 */}
+                    <Route path="/authors/:id" element={<AuthorProfile />} />
+
 
                     {/* /works/:id 경로로 작품 상세 페이지 설정 */}
                     <Route path="/works/:id" element={<WorkDetail />} />

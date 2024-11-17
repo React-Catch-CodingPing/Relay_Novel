@@ -24,6 +24,7 @@
     height: auto;
     border-radius: 8px; /* 이미지 모서리를 둥글게 처리 */
     margin-bottom: 16px; /* 이미지와 아래 텍스트 사이의 간격 */
+    background-color: #e9ecef; /* 이미지가 없을 때 표시되는 배경색 */
 }
 
 /* 편집 모드에서 입력 필드 스타일 */

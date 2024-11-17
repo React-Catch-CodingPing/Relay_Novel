@@ -1,0 +1,58 @@
+/* src/components/WritingGuide/WritingGuide.css */
+
+/* 페이지 전체를 감싸는 컨테이너 스타일 */
+.writing-guide-container {
+    padding: 40px;
+    text-align: center;
+    background-color: #f9fafb; /* 밝은 배경색 */
+}
+
+/* 페이지 제목 스타일 */
+.writing-guide-container h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 페이지 설명 텍스트 스타일 */
+.writing-guide-container p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* 가이드 카드 그리드 레이아웃 */
+.guide-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* 각 가이드 카드 스타일 */
+.guide-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 카드 그림자 효과 */
+    transition: transform 0.2s ease;
+}
+
+/* 카드 제목 스타일 */
+.guide-card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 카드 설명 텍스트 스타일 */
+.guide-card p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* 카드 마우스 오버 시 확대 효과 */
+.guide-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
