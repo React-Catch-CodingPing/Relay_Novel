@@ -79,8 +79,8 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 12px;
 }
+
 
 button:disabled {
     background-color: #999;

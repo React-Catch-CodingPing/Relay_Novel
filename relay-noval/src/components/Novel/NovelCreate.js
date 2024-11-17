@@ -6,7 +6,7 @@ import { addNovelLine } from "../../firebase/firestoreService";
 import { addLineToNovel } from "../../firebase/firestoreService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Firebase Storage 관련 메서드 추가
 import { storage } from "../../firebase/firebase"; // Storage 객체 가져오기
-import styles from "./NovelCreate.module.css";
+import styles from "./NovelCreateModule.css";
 
 
 const NovelCreate = () => {

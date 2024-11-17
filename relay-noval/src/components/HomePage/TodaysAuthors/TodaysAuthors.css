@@ -18,6 +18,11 @@
 
 .authors-list {
     display: flex;
-    justify-content: space-around;
+    justify-content: center; /* 좌우 대칭으로 중앙에 정렬 */
     gap: 20px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    width: auto; /* 내용에 맞게 조정 */
+    flex-wrap: wrap; /* 화면 크기가 작아지면 줄바꿈 */
+    padding: 10px; /* 카드와 가장자리 여백 추가 */
 }

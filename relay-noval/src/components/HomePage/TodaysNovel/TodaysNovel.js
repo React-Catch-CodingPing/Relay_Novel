@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../../../firebase/firebase';
-import axios from 'axios';
-import ParticipateCard from '../ParticipateCard/ParticipateCard'; // 정확한 상대 경로 확인
 import './TodaysNovel.css';
 
 function TodaysNovel() {

@@ -5,9 +5,15 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 300px; /* 기본 카드 너비 */
+    max-width: 100%; /* 화면 크기 초과 방지 */
     margin: 20px;
     text-align: center;
+    transition: transform 0.3s; /* 마우스 오버 효과 */
+}
+
+.profile-card:hover {
+    transform: scale(1.05); /* 마우스 오버 시 살짝 확대 */
 }
 
 .profile-card-image {
@@ -31,6 +37,7 @@
     margin: 12px 0;
 }
 
+/* 버튼 스타일 */
 .profile-button {
     background-color: #28a745;
     color: white;

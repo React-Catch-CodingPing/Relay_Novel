@@ -32,7 +32,7 @@ import NovelDetail from "./components/Novel/NovelDetail";
 
 
 import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
-import WritingGuide from "./components/WritingGuide/WritingGuide";
+import WritingGuide from "./components/MenuContents/WritingGuide/WritingGuide";
 
 import WorkDetail from "./components/WorkDetail/WorkDetail";
 
