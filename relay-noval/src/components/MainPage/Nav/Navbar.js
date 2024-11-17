@@ -29,14 +29,16 @@
                     </Link>
                 </div>
 
-                {/* 중앙 메뉴: 커뮤니티, 명예의 전당 등 각 페이지로의 링크 */}
-                <ul className="navbar-menu">
-                    <li><Link to="/community">커뮤니티</Link></li>
-                    <li><Link to="/hall-of-fame">명예의 전당</Link></li>
-                    <li><Link to="/authors">저자별 모아보기</Link></li>
-                    <li><Link to="/genres">소설 모아보기</Link></li>
-                    <li><Link to="/novel-create">소설 시작하기</Link></li>
-                </ul>
+            {/* 중앙 메뉴: 커뮤니티, 명예의 전당 등 각 페이지로의 링크 */}
+            <ul className="navbar-menu">
+                <li><Link to="/community">커뮤니티</Link></li>
+                <li><Link to="/hall-of-fame">명예의 전당</Link></li>
+                <li><Link to="/authors">저자별 모아보기</Link></li>
+                <li><Link to="/genres">소설 모아보기</Link></li>
+                <li><Link to="/novel-create">소설 시작하기</Link></li>
+                <li><Link to="/writing-guide">창작 가이드</Link></li>
+            </ul>
+
 
                 {/* 오른쪽: 로그인/회원가입 또는 로그아웃/프로필 버튼 */}
                 <div className="navbar-right">

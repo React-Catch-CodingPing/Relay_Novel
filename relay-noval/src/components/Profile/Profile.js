@@ -1,51 +1,64 @@
 // 사용자 정보 및 로그아웃 기능을 제공하는 프로필 페이지.
 
-// src/components/Profile.js
+// src/components/Profile/Profile.js
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { doc, updateDoc } from 'firebase/firestore';
+import { auth, firestore } from '../../firebase/firebase';
+import { setUser } from '../../store/authSlice'; // Redux의 setUser 액션을 사용하여 상태 업데이트
 import './Profile.css';
 
 function Profile() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    // 초기 프로필 정보 상태 (기존 값)
-    const initialProfile = {
-        profileImage: '',
-        nickname: '에몽가',
-        name: '포켓몬',
-        email: '12345@hansung.ac.kr',
-    };
+    // Redux에서 현재 사용자 정보 가져오기
+    const user = useSelector((state) => state.auth.user);
 
     // 현재 프로필 정보를 위한 상태
-    const [profile, setProfile] = useState(initialProfile);
-
-    // 편집 모드에서 임시로 값을 저장하는 상태
-    const [editProfile, setEditProfile] = useState(initialProfile);
-
-    // 편집 모드 상태
-    const [editMode, setEditMode] = useState(false);
+    const [profile, setProfile] = useState(user);
+    const [editProfile, setEditProfile] = useState(user); // 편집 모드에서 임시로 사용하는 상태
+    const [editMode, setEditMode] = useState(false); // 편집 모드 상태
 
     // 로그아웃 페이지로 이동하는 함수
     const goToSignOut = () => {
         navigate('/signout');
     };
 
-    // 편집 모드 시작 시 기존 값을 임시 상태에 복사
+    // 프로필 편집 모드 시작
     const handleEdit = () => {
-        setEditProfile(profile); // 현재 값을 임시 상태에 저장
+        setEditProfile(profile); // 현재 프로필 값을 임시 상태에 저장
         setEditMode(true);
     };
 
-    // 변경 사항 저장 후 편집 모드 종료
-    const handleSave = () => {
-        setProfile(editProfile); // 임시 상태의 값을 실제 상태에 저장
-        setEditMode(false);
+    // 변경 사항 저장 후 Firebase에 업데이트
+    const handleSave = async () => {
+        try {
+            // Firebase Firestore에 사용자 프로필 업데이트
+            const userRef = doc(firestore, 'users', auth.currentUser.uid);
+            await updateDoc(userRef, {
+                profileImage: editProfile.profileImage,
+                nickname: editProfile.nickname,
+                name: editProfile.name,
+                email: editProfile.email,
+            });
+
+            // 상태 업데이트 및 Redux에 반영
+            setProfile(editProfile); // 임시 상태의 값을 실제 프로필 상태에 저장
+            dispatch(setUser(editProfile)); // Redux 상태에 저장하여 전체 앱에서 업데이트
+            setEditMode(false); // 편집 모드 종료
+
+        } catch (error) {
+            console.error('프로필 업데이트 실패:', error);
+            alert('프로필 업데이트에 실패했습니다. 다시 시도해주세요.');
+        }
     };
 
     // 편집 취소 시 임시 상태를 초기화하고 편집 모드 종료
     const handleCancel = () => {
-        setEditProfile(profile); // 임시 상태를 원래 값으로 되돌림
-        setEditMode(false);
+        setEditProfile(profile); // 임시 상태를 원래 프로필 값으로 되돌림
+        setEditMode(false); // 편집 모드 종료
     };
 
     return (

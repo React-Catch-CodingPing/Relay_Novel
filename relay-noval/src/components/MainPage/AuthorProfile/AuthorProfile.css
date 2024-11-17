@@ -1,0 +1,65 @@
+/* src/components/MainPage/AuthorProfile/AuthorProfile.css */
+
+/* 프로필 카드 전체를 감싸는 컨테이너로, 화면 중앙에 배치 */
+.author-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* 저자 프로필 카드 스타일 */
+.author-profile-card {
+    width: 320px;
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 프로필 이미지 스타일 */
+.author-profile-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    background-color: #e9ecef;
+}
+
+/* 개별 프로필 정보 필드의 컨테이너 */
+.profile-field {
+    margin-bottom: 12px;
+}
+
+/* 필드 라벨 스타일 (닉네임, 이메일 등) */
+.profile-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* 일반 텍스트 값 스타일 */
+.profile-value {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* 친구 추가 버튼 스타일 */
+.add-friend-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    margin-top: 16px;
+}
+
+.add-friend-button:hover {
+    background-color: #d0d0d0;
+}

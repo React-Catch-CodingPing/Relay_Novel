@@ -5,21 +5,20 @@ import { useDispatch } from "react-redux";
 import { setUser } from "./store/authSlice";
 import { auth, firestore } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 // 기존에 추가된 컴포넌트들
 import Home from "./components/MainPage/Home";
 import Profile from "./components/Profile/Profile";
 import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
-import {doc, getDoc} from "firebase/firestore";
 import SignOut from "./components/Auth/SignOut";
 
 // 새로 추가된 컴포넌트들
 import Navbar from "./components/MainPage/Nav/Navbar";
-import Header from "./components/MainPage/Header/Header";
+import Footer from "./components/MainPage/Footer/Footer";
 import WorksSection from "./components/MainPage/WorksSection/WorksSection";
 import AuthorsSection from "./components/MainPage/AuthorsSection/AuthorsSection";
-import Footer from "./components/MainPage/Footer/Footer";
 
 // 추가한 페이지 컴포넌트들
 import HallOfFame from "./components/HallOfFame/HallOfFame";
@@ -30,6 +29,12 @@ import NovelCreate from "./components/Novel/NovelCreate";
 import NovelList from "./components/Novel/NovelList";
 import NovelDetail from "./components/Novel/NovelDetail";
 
+
+
+import AuthorProfile from "./components/MainPage/AuthorProfile/AuthorProfile";
+import WritingGuide from "./components/WritingGuide/WritingGuide";
+
+import WorkDetail from "./components/WorkDetail/WorkDetail";
 
 
 const App = () => {
@@ -76,17 +81,29 @@ const App = () => {
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/hall-of-fame" element={<HallOfFame />} />
                         <Route path="/genres" element={<Genres />} />
-                        <Route path="/authors" element={<Authors />} />
+                        //<Route path="/authors" element={<Authors />} />
                         <Route path="/community" element={<Community />} />
                         <Route path="/novel-create" element={<NovelCreate />} />
                         <Route path="/novel-list" element={<NovelList />} />
                         <Route path="/novels/:novelId" element={<NovelDetail />} />
+                        <Route path="/writing-guide" element={<WritingGuide />} />
+                //</div>
+
+                    {/* 추가된 페이지들 */}
+                 
+                    //<Route path="/start-novel" element={<StartNovel />} />
+
+                    {/* /authors 경로로 저자 목록 페이지 설정 */}
+                    <Route path="/authors" element={<AuthorsSection />} />
+
+                    {/* /authors/:id 경로로 개별 저자 프로필 페이지 설정 */}
+                    <Route path="/authors/:id" element={<AuthorProfile />} />
 
 
-                    </Routes>
-                </div>
+                    {/* /works/:id 경로로 작품 상세 페이지 설정 */}
+                    <Route path="/works/:id" element={<WorkDetail />} />
+                </Routes>
 
-                {/* 푸터 영역 */}
                 {/* 하단 Footer */}
                 <Footer />
             </div>
