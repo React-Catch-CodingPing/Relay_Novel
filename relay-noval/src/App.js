@@ -5,21 +5,20 @@ import { useDispatch } from "react-redux";
 import { setUser } from "./store/authSlice";
 import { auth, firestore } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 // 기존에 추가된 컴포넌트들
 import Home from "./components/MainPage/Home";
 import Profile from "./components/Profile/Profile";
 import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
-import {doc, getDoc} from "firebase/firestore";
 import SignOut from "./components/Auth/SignOut";
 
 // 새로 추가된 컴포넌트들
 import Navbar from "./components/MainPage/Nav/Navbar";
-import Header from "./components/MainPage/Header/Header";
+import Footer from "./components/MainPage/Footer/Footer";
 import WorksSection from "./components/MainPage/WorksSection/WorksSection";
 import AuthorsSection from "./components/MainPage/AuthorsSection/AuthorsSection";
-import Footer from "./components/MainPage/Footer/Footer";
 
 // 추가한 페이지 컴포넌트들
 import HallOfFame from "./components/HallOfFame/HallOfFame";
@@ -27,6 +26,11 @@ import Genres from "./components/Genres/Genres";
 import Authors from "./components/Authors/Authors";
 import Community from "./components/Community/Community";
 import StartNovel from "./components/StartNovel/StartNovel";
+
+
+
+// 추가된 WorkDetail 컴포넌트
+import WorkDetail from "./components/WorkDetail/WorkDetail";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -56,11 +60,10 @@ const App = () => {
         <Router>
             <div className="App">
                 {/* 공통 네비게이션 바 */}
-                <Navbar/>
+                <Navbar />
 
                 <Routes>
                     {/* MainPage 페이지 */}
-                    {/* Home 페이지 */}
                     <Route path="/" element={<Home />} />
 
                     {/* 회원가입 및 로그인 페이지 */}
@@ -75,9 +78,17 @@ const App = () => {
                     <Route path="/authors" element={<Authors />} />
                     <Route path="/community" element={<Community />} />
                     <Route path="/start-novel" element={<StartNovel />} />
+
+
+                    {/* /authors 경로로 저자 목록 페이지 설정 */}
+                    <Route path="/authors" element={<AuthorsSection />} />
+
+                  >
+
+                    {/* /works/:id 경로로 작품 상세 페이지 설정 */}
+                    <Route path="/works/:id" element={<WorkDetail />} />
                 </Routes>
 
-                {/* 푸터 영역 */}
                 {/* 하단 Footer */}
                 <Footer />
             </div>
