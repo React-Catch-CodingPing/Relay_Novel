@@ -33,6 +33,7 @@ import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
 import WritingGuide from "./components/NavbarContents/WritingGuide/WritingGuide";
 
 import WritePost from "./components/NavbarContents/Community/WritePost";
+import PostDetail from "./components/NavbarContents/Community/PostDetail";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -92,6 +93,7 @@ const App = () => {
                         <Route path="/novels/:novelId" element={<NovelDetail />} />
 
                         <Route path="/community/write" element={<WritePost />} />
+                        <Route path="/community/:id" element={<PostDetail />} />
 
                 </Routes>
                 </div>
