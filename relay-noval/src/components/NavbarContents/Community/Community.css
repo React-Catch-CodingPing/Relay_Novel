@@ -8,42 +8,39 @@
 
 /* 헤더 스타일 */
 .community-header {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 32px;
-    border-bottom: 1px solid #ddd;
+    display: flex; /* 플렉스 컨테이너로 설정 */
+    justify-content: space-between; /* 제목과 버튼 사이에 공간 배분 */
+    align-items: center; /* 세로 중앙 정렬 */
+    height: 80px; /* 헤더 높이 */
+    padding: 0 20px; /* 좌우 여백 */
+    background-color: #f8f9fa; /* 배경색 */
+    font-size: 1.5rem; /* 제목 글자 크기 */
+    font-weight: bold; /* 제목 굵게 설정 */
+    border-bottom: 1px solid #ddd; /* 하단 경계선 추가 */
 }
 
+/* 헤더 내부 제목 */
 .community-header h1 {
-    font-size: 24px;
+    flex-grow: 1; /* 제목이 남은 공간을 채우도록 설정 */
+    text-align: center; /* 제목을 중앙 정렬 */
+    margin: 0; /* 여백 제거 */
 }
 
-/* 네비게이션 버튼 스타일 */
-.community-nav {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.community-nav button {
-    margin: 0;
-    background: none;
+/* 글쓰기 버튼 스타일 */
+.write-button {
+    position: absolute; /* 버튼의 위치를 헤더 기준으로 설정 */
+    right: 20px; /* 오른쪽에서 20px 떨어지도록 설정 */
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
-    padding: 8px 12px;
-    color: #333;
-    transition: color 0.3s ease;
+    font-size: 1rem;
 }
 
-.community-nav button:hover {
-    color: #ff69b4;
-}
-
-.user-icon {
-    font-size: 24px;
+.write-button:hover {
+    background-color: #218838; /* 마우스 오버 시 색상 변경 */
 }
 
 /* 게시물 리스트 영역 */
@@ -64,22 +61,41 @@
     gap: 16px; /* 카드 간의 간격 */
 }
 
+/* 게시물 카드 스타일 */
 .post-card {
     padding: 16px;
+    margin: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fff;
-    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 제목 스타일 */
 .post-card h3 {
-    font-size: 18px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 12px; /* 제목과 아래 내용 사이의 간격 */
 }
 
+/* 작성자와 내용 사이의 간격 */
 .post-author {
     display: flex;
-    align-items: center;
-    margin-top: 8px;
+    flex-direction: column; /* 세로로 정렬 */
+    gap: 10px; /* 작성자와 내용 간의 간격 */
+}
+
+.post-author p {
+    margin: 0; /* 기본 마진 제거 */
+    line-height: 1.5; /* 줄 간격 추가 */
+    color: #333;
 }
 
 .author-image {
