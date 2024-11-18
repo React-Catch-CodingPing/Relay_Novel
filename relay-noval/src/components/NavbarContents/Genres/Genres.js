@@ -1,4 +1,3 @@
-// src/components/Genres.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllNovels } from '../../../firebase/firestoreService'; // Firebase에서 소설 데이터를 가져오는 함수
@@ -9,6 +8,8 @@ function Genres() {
     const [filteredNovels, setFilteredNovels] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [sortOption, setSortOption] = useState('조회순'); // 기본 정렬 옵션
+    const [likedNovels, setLikedNovels] = useState(new Set()); // 하트 클릭 상태 관리
+    const [recommendedNovels, setRecommendedNovels] = useState(new Set()); // 따봉 클릭 상태 관리
 
     useEffect(() => {
         // 백엔드 API 연동 후 소설 데이터를 가져올 예정
@@ -21,7 +22,6 @@ function Genres() {
             { id: 6, title: '소설 F', genre: '판타지', progress: '30줄 진행 중', views: 250, likes: 150, recommendations: 120, image: '/path/to/image6.png' },
             // 초기화 기본 데이터
         ];
-
 
         const fetchNovels = async () => {
             try {
@@ -45,11 +45,7 @@ function Genres() {
             }
         };
 
-        // setNovels(placeholderData);
-        // setFilteredNovels(placeholderData); // 초기 데이터 설정
-
         fetchNovels();
-
     }, []);
 
     // 장르 필터 토글 함수
@@ -81,8 +77,36 @@ function Genres() {
 
     // 정렬 옵션 변경 핸들러
     const handleSortChange = (option) => {
-        setSortOption(option);
-        setFilteredNovels(sortNovels(filteredNovels, option));
+        // 이미 선택된 옵션이 눌리면 취소
+        if (sortOption === option) {
+            setSortOption(null); // 정렬 옵션을 null로 설정하여 취소
+            setFilteredNovels(novels); // 필터링된 소설을 초기화
+        } else {
+            setSortOption(option);
+            setFilteredNovels(sortNovels(filteredNovels, option));
+        }
+    };
+
+    // 하트 클릭 처리
+    const handleHeartClick = (authorId) => {
+        const newLikedNovels = new Set(likedNovels);
+        if (newLikedNovels.has(authorId)) {
+            newLikedNovels.delete(authorId); // 하트 취소
+        } else {
+            newLikedNovels.add(authorId); // 하트 추가
+        }
+        setLikedNovels(newLikedNovels);
+    };
+
+    // 따봉 클릭 처리
+    const handleThumbsUpClick = (authorId) => {
+        const newRecommendedNovels = new Set(recommendedNovels);
+        if (newRecommendedNovels.has(authorId)) {
+            newRecommendedNovels.delete(authorId); // 따봉 취소
+        } else {
+            newRecommendedNovels.add(authorId); // 따봉 추가
+        }
+        setRecommendedNovels(newRecommendedNovels);
     };
 
     return (
@@ -126,6 +150,31 @@ function Genres() {
                             <div className="novel-info">
                                 <h3>{novel.title}</h3>
                                 <p>{novel.progress}</p>
+                            </div>
+                            <div className="card-buttons">
+                                <button className="button">프로필 보기</button>
+
+                                {/* 하트 버튼 */}
+                                <div className="interaction">
+                                    <button
+                                        className="heart-button"
+                                        onClick={() => handleHeartClick(novel.id)}
+                                    >
+                                        {likedNovels.has(novel.id) ? '❤️' : '🤍'}
+                                    </button>
+                                    <span className="count">{likedNovels.has(novel.id) ? 1 : 0}</span>
+                                </div>
+
+                                {/* 따봉 버튼 */}
+                                <div className="interaction">
+                                    <button
+                                        className="thumbs-up-button"
+                                        onClick={() => handleThumbsUpClick(novel.id)}
+                                    >
+                                        {recommendedNovels.has(novel.id) ? '👍' : '👍'}
+                                    </button>
+                                    <span className="count">{recommendedNovels.has(novel.id) ? 1 : 0}</span>
+                                </div>
                             </div>
                         </Link>
                     ))}

@@ -1,5 +1,14 @@
 /* src/components/Genres.css */
 
+.main-content {
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+    margin-top: 0; /* 위쪽 여백을 0으로 설정 */
+    padding: 0; /* 상단 padding 제거 */
+    width: 100%;
+}
+
 .genres-container {
     display: flex;
 }
@@ -99,9 +108,11 @@
 }
 
 .novels-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개씩 정렬 */
-    gap: 20px;
+    display: flex; /* flexbox 사용 */
+    flex-wrap: wrap; /* 아이템이 넘칠 때 줄 바꿈 */
+    gap: 20px; /* 카드 간 간격 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: flex-start; /* 수직으로 위 정렬 */
 }
 
 .novel-card {
@@ -112,6 +123,9 @@
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
+    width: 350px; /* 카드 가로 크기 증가 */
+    height: 300px; /* 카드 높이 증가 */
+    margin: 20px; /* 카드 간격 */
 }
 
 .novel-card:hover {
@@ -125,8 +139,9 @@
 }
 
 .novel-info {
-    padding: 10px;
+    padding: 15px; /* 텍스트 영역 패딩 증가 */
     text-align: center;
+    height: 40%; /* 정보 부분 높이 설정 */
 }
 
 .novel-info h3 {
@@ -139,3 +154,44 @@
     font-size: 0.9em;
 }
 
+
+/* 하트와 따봉 버튼 컨테이너 */
+.interaction {
+    display: flex;
+    flex-direction: row; /* 아이콘과 숫자를 가로로 배치 */
+    align-items: center;
+    gap: 10px; /* 아이콘과 숫자 사이 간격 */
+}
+
+/* 하트 버튼 스타일 */
+.heart-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.3s; /* 눌렀을 때 애니메이션 효과 추가 */
+}
+
+.heart-button:hover {
+    transform: scale(1.2); /* 호버 시 크기 확대 */
+}
+
+/* 따봉 버튼 스타일 */
+.thumbs-up-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.thumbs-up-button:hover {
+    transform: scale(1.2); /* 호버 시 크기 확대 */
+}
+
+/* 숫자 스타일 */
+.count {
+    font-size: 1rem;
+    color: #555;
+    margin-left: 5px; /* 숫자와 아이콘 사이 간격 */
+}
