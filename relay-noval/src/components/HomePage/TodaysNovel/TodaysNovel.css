@@ -1,16 +1,16 @@
 /* src/components/TodaysNovel.css */
-.works-section {
+.novels-section {
     padding: 20px;
 }
 
-.works-list {
+.novels-list {
     display: flex;            /* 가로 정렬 */
     gap: 20px;                /* 카드 간격 */
     flex-wrap: wrap;          /* 화면 너비에 따라 줄바꿈 */
     justify-content: space-around;
 }
 
-.work-card {
+.novel-card {
     border: 1px solid #ddd;
     width: 200px;
     border-radius: 8px;
@@ -18,4 +18,29 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
+    overflow: hidden; /* 이미지 오버플로 방지 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s; /* 마우스 오버 효과 */
+    margin-bottom: 20px;
+}
+
+.novel-card:hover {
+    transform: scale(1.05); /* 마우스 오버 시 확대 */
+}
+
+/* 참여하기 버튼 스타일 추가 */
+.participate-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.participate-button:hover {
+    background-color: #218838;
 }

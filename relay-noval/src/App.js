@@ -27,15 +27,12 @@ import Authors from "./components/MenuContents/Authors/Authors";
 import Community from "./components/MenuContents/Community/Community";
 import NovelCreate from "./components/Novel/NovelCreate";
 import NovelList from "./components/Novel/NovelList";
-import NovelDetail from "./components/Novel/NovelDetail";
+import NovelDetail from "./components/Novel/NovelDetails/NovelDetail";
 
 
 
 import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
 import WritingGuide from "./components/MenuContents/WritingGuide/WritingGuide";
-
-import WorkDetail from "./components/WorkDetail/WorkDetail";
-
 
 const App = () => {
     const dispatch = useDispatch();
@@ -85,19 +82,14 @@ const App = () => {
                         <Route path="/community" element={<Community />} />
                         <Route path="/novel-create" element={<NovelCreate />} />
                         <Route path="/novel-list" element={<NovelList />} />
-                        <Route path="/novels/:novelId" element={<NovelDetail />} />
                         <Route path="/writing-guide" element={<WritingGuide />} />
 
+                        <Route path="/authors-section" element={<TodaysAuthors />} />
+                        <Route path="/authors/:id" element={<AuthorProfile />} />
 
-                    {/* /authors 경로로 저자 목록 페이지 설정 */}
-                    <Route path="/authors-section" element={<TodaysAuthors />} />
+                        <Route path="/novels-section" element={<TodaysNovel />} />
+                        <Route path="/novels/:novelId" element={<NovelDetail />} />
 
-                    {/* /authors/:id 경로로 개별 저자 프로필 페이지 설정 */}
-                    <Route path="/authors/:id" element={<AuthorProfile />} />
-
-
-                    {/* /works/:id 경로로 작품 상세 페이지 설정 */}
-                    <Route path="/works/:id" element={<WorkDetail />} />
                 </Routes>
                 </div>
                 {/* 하단 Footer */}

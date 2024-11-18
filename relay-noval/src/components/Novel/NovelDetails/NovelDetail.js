@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { firestore, auth } from "../../firebase/firebase";
-import { addLineToNovel, getLinesFromNovel } from "../../firebase/firestoreService";
+import { firestore, auth } from "../../../firebase/firebase";
+import { addLineToNovel, getLinesFromNovel } from "../../../firebase/firestoreService";
 import "./NovelDetail.css";
 
 const NovelDetail = () => {
@@ -17,12 +17,13 @@ const NovelDetail = () => {
     useEffect(() => {
         const fetchNovel = async () => {
             try {
+                // Firestore에서 소설 정보 가져오기
                 const docRef = doc(firestore, "novels", novelId);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     setNovel({ id: docSnap.id, ...docSnap.data() });
                 } else {
-                    console.error("No such document!");
+                    console.error("소설 정보를 찾을 수 없습니다.");
                 }
             } catch (error) {
                 console.error("Error fetching novel:", error);
@@ -51,7 +52,7 @@ const NovelDetail = () => {
         setIsSubmitting(true);
 
         try {
-            // Firestore에서 nickname 가져오기
+            // Firestore에서 사용자 nickname 가져오기
             const userDoc = doc(firestore, "users", user.uid);
             const userSnap = await getDoc(userDoc);
 
@@ -60,14 +61,14 @@ const NovelDetail = () => {
                 nickname = userSnap.data().nickname || "익명 작성자";
             }
 
-            const lineData = {
+            const newLineData = {
                 content: newLine,
                 createdBy: nickname,
                 createdAt: new Date(),
             };
 
-            await addLineToNovel(novelId, lineData); // Firestore에 줄 추가
-            setLines([...lines, lineData]); // UI 업데이트
+            await addLineToNovel(novelId, newLineData); // Firestore에 줄 추가
+            setLines([...lines, newLineData]); // UI 업데이트
             setNewLine(""); // 입력 필드 초기화
         } catch (error) {
             console.error("Error adding line:", error);
@@ -77,23 +78,23 @@ const NovelDetail = () => {
     };
 
     if (!novel) {
-        return <p>Loading...</p>;
+        return <p>소설을 불러오는 중입니다...</p>;
     }
 
     return (
         <div className="novel-detail">
-            {/* 상단: 소설 제목 및 기본 정보 */}
-            <div className="novel-header">
+            {/* 상단: 소설 기본 정보 */}
+            <div className="novel-detail-container">
+                <img src={novel.imageUrl || "/placeholder-image.png"} alt={novel.title} className="novel-image"/>
                 <h1 className="novel-title">{novel.title}</h1>
-                <div className="novel-info">
-                    <p>장르: {novel.genre}</p>
-                    <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>
-                </div>
+                <p>장르: {novel.genre || "미정"}</p>
+                <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>
+                <hr className="divider"/>
             </div>
 
-            {/* 중단: 소설 내용 목록 */}
-            <div className="novel-lines">
-                <h2>릴레이 소설 내용</h2>
+            {/* 중단: 소설 줄거리 표시 */}
+            <div className="novel-content-area">
+                <h2>소설 내용</h2>
                 <ul className="lines-list">
                     {lines.map((line, index) => (
                         <li key={index} className="line-item">
@@ -113,14 +114,15 @@ const NovelDetail = () => {
             {/* 하단: 이어쓰기 영역 */}
             <div className="add-line">
                 <textarea
-                    placeholder="추가할 내용을 입력하세요..."
                     className="add-line-input"
                     value={newLine}
                     onChange={(e) => setNewLine(e.target.value)}
+                    placeholder="새로 추가할 문장을 입력하세요..."
+                    rows="2"
                     disabled={isSubmitting}
                 ></textarea>
                 <button className="add-line-button" onClick={handleAddLine} disabled={isSubmitting}>
-                    {isSubmitting ? "추가 중..." : "1줄 내용 추가"}
+                    {isSubmitting ? "추가 중..." : "내용 추가"}
                 </button>
             </div>
         </div>

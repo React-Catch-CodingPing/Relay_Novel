@@ -1,6 +1,7 @@
 // src/components/Genres.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getAllNovels } from '../../../firebase/firestoreService'; // Firebase에서 소설 데이터를 가져오는 함수
 import './Genres.css';
 
 function Genres() {
@@ -18,10 +19,37 @@ function Genres() {
             { id: 4, title: '소설 D', genre: '액션', progress: '15줄 진행 중', views: 150, likes: 70, recommendations: 50, image: '/path/to/image4.png' },
             { id: 5, title: '소설 E', genre: '스릴러', progress: '18줄 진행 중', views: 180, likes: 100, recommendations: 80, image: '/path/to/image5.png' },
             { id: 6, title: '소설 F', genre: '판타지', progress: '30줄 진행 중', views: 250, likes: 150, recommendations: 120, image: '/path/to/image6.png' },
-            // 추가 데이터
+            // 초기화 기본 데이터
         ];
-        setNovels(placeholderData);
-        setFilteredNovels(placeholderData); // 초기 데이터 설정
+
+
+        const fetchNovels = async () => {
+            try {
+                // Firebase에서 소설 데이터 가져오기
+                const fetchedNovels = await getAllNovels();
+                const processedNovels = fetchedNovels.map((novel) => ({
+                    id: novel.id,
+                    title: novel.title || "제목 없음",
+                    genre: novel.genre || "장르 미정",
+                    progress: `${novel.lineCount || 0}줄 진행 중`,
+                    views: novel.views || 0,
+                    likes: novel.likes || 0,
+                    recommendations: novel.recommendations || 0,
+                    image: novel.imageUrl || '/placeholder-image.png', // 기본 이미지
+                }));
+
+                setNovels(processedNovels); // 전체 데이터 저장
+                setFilteredNovels(processedNovels); // 필터링 데이터 초기화
+            } catch (error) {
+                console.error("Error fetching novels:", error);
+            }
+        };
+
+        // setNovels(placeholderData);
+        // setFilteredNovels(placeholderData); // 초기 데이터 설정
+
+        fetchNovels();
+
     }, []);
 
     // 장르 필터 토글 함수
