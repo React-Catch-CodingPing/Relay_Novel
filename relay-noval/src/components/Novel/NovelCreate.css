@@ -1,4 +1,4 @@
-/* src/components/Novel/NovelCreateModule.css */
+/* src/components/Novel/NovelCreate.css */
 
 .container {
     max-width: 800px;
@@ -67,7 +67,7 @@
     margin-bottom: 15px;
 }
 
-.button {
+.start-button {
     padding: 12px;
     background-color: #333;
     color: #fff;
@@ -78,6 +78,6 @@
     transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.start-button:hover {
     background-color: #555;
 }

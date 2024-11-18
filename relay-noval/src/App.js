@@ -21,10 +21,10 @@ import TodaysNovel from "./components/HomePage/TodaysNovel/TodaysNovel";
 import TodaysAuthors from "./components/HomePage/TodaysAuthors/TodaysAuthors";
 
 // 추가한 페이지 컴포넌트들
-import HallOfFame from "./components/MenuContents/HallOfFame/HallOfFame";
-import Genres from "./components/MenuContents/Genres/Genres";
-import Authors from "./components/MenuContents/Authors/Authors";
-import Community from "./components/MenuContents/Community/Community";
+import HallOfFame from "./components/NavbarContents/HallOfFame/HallOfFame";
+import Genres from "./components/NavbarContents/Genres/Genres";
+import Authors from "./components/NavbarContents/Authors/Authors";
+import Community from "./components/NavbarContents/Community/Community";
 import NovelCreate from "./components/Novel/NovelCreate";
 import NovelList from "./components/Novel/NovelList";
 import NovelDetail from "./components/Novel/NovelDetails/NovelDetail";
@@ -32,7 +32,7 @@ import NovelDetail from "./components/Novel/NovelDetails/NovelDetail";
 
 
 import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
-import WritingGuide from "./components/MenuContents/WritingGuide/WritingGuide";
+import WritingGuide from "./components/NavbarContents/WritingGuide/WritingGuide";
 
 const App = () => {
     const dispatch = useDispatch();

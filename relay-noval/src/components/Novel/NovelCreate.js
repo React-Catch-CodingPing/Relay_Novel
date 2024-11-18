@@ -6,8 +6,7 @@ import { addNovelLine } from "../../firebase/firestoreService";
 import { addLineToNovel } from "../../firebase/firestoreService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Firebase Storage 관련 메서드 추가
 import { storage } from "../../firebase/firebase"; // Storage 객체 가져오기
-import styles from "./NovelCreateModule.css";
-
+import "./NovelCreate.css"; // 일반 CSS 파일로 변경
 
 const NovelCreate = () => {
     const [title, setTitle] = useState("");
@@ -90,11 +89,12 @@ const NovelCreate = () => {
    };
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>소설 시작하기</h1>
-            <p className={styles.date}>{getCurrentDate()} 시작</p>
+        <div className="container">
+            <h1 className="title">소설 시작하기</h1>
+            <p className="date">{getCurrentDate()} 시작</p>
 
-            <div className={styles.imageUpload}>
+
+            <div className="imageUpload">
                 <label htmlFor="coverImage">작품 표지</label>
                 <input
                     type="file"
@@ -106,21 +106,21 @@ const NovelCreate = () => {
                     <img
                         src={imagePreview}
                         alt="미리보기"
-                        className={styles.imagePreview}
+                        className="imagePreview"
                     />
                 )}
             </div>
 
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <form onSubmit={handleSubmit} className="form">
                 <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="작품 제목"
                     required
-                    className={styles.input}
+                    className="input"
                 />
-                <select value={genre} onChange={(e) => setGenre(e.target.value)} className={styles.select}>
+                <select value={genre} onChange={(e) => setGenre(e.target.value)} className="select">
                     <option value="로맨스">로맨스</option>
                     <option value="판타지">판타지</option>
                     <option value="일상">일상</option>
@@ -132,9 +132,9 @@ const NovelCreate = () => {
                     onChange={(e) => setFirstLine(e.target.value)}
                     placeholder="첫 줄거리"
                     required
-                    className={styles.textarea}
+                    className="textarea"
                 />
-                <label className={styles.label}>
+                <label className="label">
                     <input
                         type="checkbox"
                         checked={lineLimit}
@@ -142,7 +142,7 @@ const NovelCreate = () => {
                     />
                     100줄 제한
                 </label>
-                <button type="submit" className={styles.button}>집필 시작</button>
+                <button type="submit" className="start-button">집필 시작</button>
             </form>
         </div>
     );
