@@ -38,7 +38,7 @@ function Profile() {
             // Firebase Firestore에 사용자 프로필 업데이트
             const userRef = doc(firestore, 'users', auth.currentUser.uid);
             await updateDoc(userRef, {
-                profileImage: editProfile.profileImage,
+                profileImage: editProfile.profileImage || 'https://example.com/default-image.jpg',
                 nickname: editProfile.nickname,
                 name: editProfile.name,
                 email: editProfile.email,

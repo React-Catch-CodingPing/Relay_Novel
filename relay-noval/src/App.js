@@ -29,8 +29,6 @@ import NovelCreate from "./components/Novel/NovelCreate";
 import NovelList from "./components/Novel/NovelList";
 import NovelDetail from "./components/Novel/NovelDetails/NovelDetail";
 
-
-
 import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
 import WritingGuide from "./components/NavbarContents/WritingGuide/WritingGuide";
 
@@ -68,6 +66,7 @@ const App = () => {
                         {/* HomePage 페이지 */}
                         {/* Home 페이지 */}
                         <Route path="/" element={<Home />} />
+                        <Route path="/home" element={<Home />} />
 
                         {/* 회원가입 및 로그인 페이지 */}
                         <Route path="/signup" element={<SignUp />} />

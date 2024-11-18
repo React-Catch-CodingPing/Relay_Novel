@@ -9,7 +9,6 @@ import "./Home.css";
 
 const Home = () => {
 
-
     return (
         <div className="home">
             {/* 상단 헤더 */}
