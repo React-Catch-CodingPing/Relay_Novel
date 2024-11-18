@@ -59,3 +59,20 @@
     font-weight: bold; /* 진한 글씨 */
     color: #333;
 }
+
+.footer {
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.report-link {
+    color: #ff5555;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.report-link:hover {
+    text-decoration: underline;
+}
