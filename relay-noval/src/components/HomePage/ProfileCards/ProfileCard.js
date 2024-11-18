@@ -11,7 +11,7 @@ function ProfileCard({ name, novels, image, link }) {
                 <h3>{name}</h3>
                 <p>오늘 참여한 소설: {novels}</p>
                 <Link to={link}>
-                    <button className="profile-button">프로필보기</button>
+                    <button className="profile-button-forPrCard">프로필보기</button>
                 </Link>
             </div>
         </div>

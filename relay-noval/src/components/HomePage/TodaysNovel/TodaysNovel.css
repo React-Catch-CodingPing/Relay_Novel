@@ -9,3 +9,13 @@
     flex-wrap: wrap;          /* 화면 너비에 따라 줄바꿈 */
     justify-content: space-around;
 }
+
+.work-card {
+    border: 1px solid #ddd;
+    width: 200px;
+    border-radius: 8px;
+    text-align: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}

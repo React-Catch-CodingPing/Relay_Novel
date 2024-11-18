@@ -150,7 +150,7 @@ function Profile() {
                     ) : (
                         <>
                             <button className="edit-button" onClick={handleEdit}>프로필 편집</button>
-                            <button className="logout-button" onClick={goToSignOut}>로그아웃</button>
+                            <button className="logout-button-forPr" onClick={goToSignOut}>로그아웃</button>
                         </>
                     )}
                 </div>

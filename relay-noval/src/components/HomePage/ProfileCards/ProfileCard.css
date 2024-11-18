@@ -38,7 +38,7 @@
 }
 
 /* 버튼 스타일 */
-.profile-button {
+.profile-button-forPrCard {
     background-color: #28a745;
     color: white;
     border: none;
@@ -49,6 +49,6 @@
     transition: background-color 0.3s;
 }
 
-.profile-button:hover {
+.profile-button-forPrCard:hover {
     background-color: #218838;
 }
