@@ -45,7 +45,7 @@ const SignIn = () => {
                         placeholder="비밀번호"
                         required
                     />
-                    <button type="submit" disabled={loading}>로그인</button>
+                    <button type="submit" className="login-btn" disabled={loading}>로그인</button>
                 </form>
                 {error && <p className="error-message">{error}</p>}
                 {/* 회원가입 링크 추가 */}

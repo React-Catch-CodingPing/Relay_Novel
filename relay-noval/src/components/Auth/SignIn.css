@@ -34,7 +34,7 @@
     box-sizing: border-box;
 }
 
-button {
+.login-btn {
     width: 100%;
     padding: 10px;
     background-color: #333;
@@ -42,11 +42,12 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 12px;
 }
 
 
 
-button:disabled {
+.login-btn:disabled {
     background-color: #999;
 }
 
