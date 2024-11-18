@@ -100,6 +100,8 @@ const App = () => {
 
                         <Route path="/novels-section" element={<TodaysNovel />} />
                         <Route path="/novels/:novelId" element={<NovelDetail />} />
+                        {/* 신고 게시판 라우트 */}
+                        <Route path="/report" element={<ReportBoard />} />
 
                     </Routes>
                 </div>
