@@ -10,6 +10,9 @@ function Genres() {
     const [sortOption, setSortOption] = useState(null);
     const [likedNovels, setLikedNovels] = useState(new Set());
     const [recommendedNovels, setRecommendedNovels] = useState(new Set());
+    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+    const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
+    const pagesPerGroup = 4; // 한 그룹에 표시할 페이지 수
 
     useEffect(() => {
         const fetchNovels = async () => {
@@ -69,10 +72,9 @@ function Genres() {
 
     const handleSortChange = (option) => {
         setSortOption(option); // 정렬 옵션 상태 업데이트
-        const sortedNovels = sortNovels(novels, option); // 정렬된 데이터 가져오기
+        const sortedNovels = sortNovels(filteredNovels, option); // 정렬된 데이터 가져오기
         setFilteredNovels(sortedNovels); // 상태에 반영
     };
-
 
     const handleHeartClick = (event, novelId) => {
         event.stopPropagation();
@@ -100,7 +102,7 @@ function Genres() {
         event.preventDefault();
         setNovels((prevNovels) => {
             const updatedNovels = prevNovels.map((novel) =>
-                novel.id === novelId ? {...novel, views: novel.views + 1} : novel
+                novel.id === novelId ? { ...novel, views: novel.views + 1 } : novel
             );
             localStorage.setItem('novels', JSON.stringify(updatedNovels));
             return updatedNovels;
@@ -108,11 +110,37 @@ function Genres() {
 
         setFilteredNovels((prevFilteredNovels) =>
             prevFilteredNovels.map((novel) =>
-                novel.id === novelId ? {...novel, views: novel.views + 1} : novel
+                novel.id === novelId ? { ...novel, views: novel.views + 1 } : novel
             )
         );
 
         window.location.href = `/novels/${novelId}`;
+    };
+
+    // 페이지네이션 관련 변수
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredNovels.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredNovels.length / itemsPerPage);
+    const currentGroup = Math.ceil(currentPage / pagesPerGroup);
+    const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+    const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+    const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleNextGroup = () => {
+        if (endPage < totalPages) {
+            setCurrentPage(endPage + 1);
+        }
+    };
+
+    const handlePreviousGroup = () => {
+        if (startPage > 1) {
+            setCurrentPage(startPage - pagesPerGroup);
+        }
     };
 
     return (
@@ -128,8 +156,8 @@ function Genres() {
                                 className={`tag ${selectedGenres.includes(genre) ? 'selected' : ''}`}
                                 onClick={() => toggleGenre(genre)}
                             >
-                            {genre}
-                        </span>
+                                {genre}
+                            </span>
                         ))}
                     </div>
                 </div>
@@ -150,30 +178,22 @@ function Genres() {
                     </div>
                 </div>
                 <div className="genres-novels-grid">
-                    {filteredNovels.map((novel) => (
+                    {currentItems.map((novel) => (
                         <div key={novel.id} className="genres-novel-card">
-                            {/* 조회수  */}
                             <div className="view-count">조회수: {novel.views}</div>
-
-                            {/* 소설 이미지와 정보 */}
                             <Link
                                 to={`/novels/${novel.id}`}
                                 className="novel-link"
                                 onClick={(event) => handleViewCount(event, novel.id)}
                             >
-                                <img src={novel.image} alt={novel.title} className="novel-image"/>
+                                <img src={novel.image} alt={novel.title} className="novel-image" />
                                 <div className="novel-info">
                                     <h3>{novel.title}</h3>
                                     <p>{novel.progress}</p>
                                 </div>
                             </Link>
-
-                            {/* 참여하기, 하트, 따봉 버튼 */}
                             <div className="genres-actions-container">
-                                {/* 참여하기 버튼 */}
                                 <button className="genres-participate-button">참여하기</button>
-
-                                {/* 하트 버튼 */}
                                 <div>
                                     <button
                                         className="genres-heart-button"
@@ -183,8 +203,6 @@ function Genres() {
                                     </button>
                                     <span className="count">{likedNovels.has(novel.id) ? 1 : 0}</span>
                                 </div>
-
-                                {/* 따봉 버튼 */}
                                 <div>
                                     <button
                                         className="genres-thumbs-up-button"
@@ -198,9 +216,30 @@ function Genres() {
                         </div>
                     ))}
                 </div>
+                <div className="genres-pagination">
+                    {startPage > 1 && (
+                        <button onClick={handlePreviousGroup} className="genres-pagination-button">
+                            이전
+                        </button>
+                    )}
+                    {pageNumbers.map((number) => (
+                        <button
+                            key={number}
+                            className={`genres-pagination-button ${number === currentPage ? 'active' : ''}`}
+                            onClick={() => handlePageChange(number)}
+                        >
+                            {number}
+                        </button>
+                    ))}
+                    {endPage < totalPages && (
+                        <button onClick={handleNextGroup} className="genres-pagination-button">
+                            다음
+                        </button>
+                    )}
+                </div>
             </main>
         </div>
     );
 }
 
-    export default Genres;
+export default Genres;
