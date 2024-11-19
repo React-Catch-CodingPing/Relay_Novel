@@ -46,20 +46,20 @@
     color: #333;
 }
 
-/* 친구 추가 버튼 스타일 */
-.add-friend-button {
-    background-color: #e0e0e0;
-    color: #333;
+/* 좋아요 하트 버튼 스타일 */
+.like-button {
+    font-size: 24px;
+    background: none;
     border: none;
-    padding: 10px 16px;
-    border-radius: 4px;
-    font-size: 1rem;
     cursor: pointer;
-    width: 100%;
-    text-align: center;
-    margin-top: 16px;
+    transition: transform 0.2s ease-in-out;
 }
 
-.add-friend-button:hover {
-    background-color: #d0d0d0;
+.like-button.liked {
+    color: #ff0000; /* 좋아요를 누르면 빨간색 하트 */
+    transform: scale(1.2); /* 하트가 살짝 커짐 */
+}
+
+.like-button:hover {
+    transform: scale(1.1);
 }
