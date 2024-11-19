@@ -1,57 +1,160 @@
-// src/components/NavbarContents/Community/PostDetail.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "../../../firebase/firebase";
+import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { auth, firestore } from "../../../firebase/firebase";
 import "./PostDetail.css";
 
 function PostDetail() {
-    const { id } = useParams(); // URL에서 글 ID를 가져옵니다.
-    const navigate = useNavigate(); // 뒤로 가기 버튼을 위한 네비게이션
-    const [post, setPost] = useState(null); // 글 데이터를 저장할 상태
-    const [loading, setLoading] = useState(true); // 로딩 상태 관리
+    const { id } = useParams(); // URL에서 글 ID를 가져옴
+    const navigate = useNavigate();
+    const [post, setPost] = useState(null); // 현재 글 정보
+    const [isOwner, setIsOwner] = useState(false); // 수정/삭제 권한 여부
+    const [editMode, setEditMode] = useState(false); // 수정 모드
+    const [updatedContent, setUpdatedContent] = useState(""); // 수정 중인 내용 상태
 
+    // Firestore에서 글 가져오기
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const docRef = doc(firestore, "communityPosts", id); // Firestore에서 글 ID로 문서 참조
+                const docRef = doc(firestore, "communityPosts", id);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
-                    setPost(docSnap.data()); // 문서 데이터를 상태에 저장
+                    const postData = docSnap.data();
+                    setPost(postData);
+
+                    // 현재 로그인한 사용자 정보 가져오기
+                    const currentUser = auth.currentUser;
+                    if (currentUser) {
+                        const fetchUserDetails = async () => {
+                            try {
+                                const userDocRef = doc(firestore, "users", currentUser.uid);
+                                const userDocSnap = await getDoc(userDocRef);
+
+                                if (userDocSnap.exists()) {
+                                    const userData = userDocSnap.data();
+
+                                    // Firestore의 author와 users의 name 또는 nickname 비교
+                                    if (
+                                        postData.author === userData.name ||
+                                        postData.author === userData.nickname
+                                    ) {
+                                        setIsOwner(true); // 권한 부여
+                                    }
+                                } else {
+                                    console.error("User document does not exist in Firestore.");
+                                }
+                            } catch (error) {
+                                console.error("Error fetching user details:", error);
+                            }
+                        };
+
+                        fetchUserDetails();
+                    }
                 } else {
-                    console.error("해당 글을 찾을 수 없습니다.");
+                    console.error("No such document!");
+                    navigate("/community"); // 문서가 없으면 커뮤니티로 리다이렉트
                 }
             } catch (error) {
-                console.error("글 데이터를 불러오는 중 오류가 발생했습니다:", error);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching post:", error);
             }
         };
 
         fetchPost();
-    }, [id]);
+    }, [id, navigate]);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    // 삭제 버튼 클릭 시 Firestore에서 문서를 삭제
+    const handleDelete = async () => {
+        try {
+            const confirmDelete = window.confirm("정말로 이 글을 삭제하시겠습니까?");
+            if (!confirmDelete) return;
 
-    if (!post) {
-        return <p>글 데이터를 찾을 수 없습니다.</p>;
-    }
+            const docRef = doc(firestore, "communityPosts", id);
+            await deleteDoc(docRef);
+            alert("글이 삭제되었습니다.");
+            navigate("/community");
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("글 삭제에 실패했습니다.");
+        }
+    };
+
+    // 수정 버튼 클릭 시 수정 모드 활성화
+    const handleEdit = () => {
+        setEditMode(true);
+        setUpdatedContent(post.content);
+    };
+
+    // 수정 저장 버튼 클릭 시 Firestore에 업데이트
+    const handleSave = async () => {
+        try {
+            const docRef = doc(firestore, "communityPosts", id);
+            await updateDoc(docRef, {
+                content: updatedContent,
+                updatedAt: new Date(),
+            });
+            setPost((prev) => ({ ...prev, content: updatedContent }));
+            setEditMode(false);
+            alert("글이 수정되었습니다.");
+        } catch (error) {
+            console.error("Error updating post:", error);
+            alert("글 수정에 실패했습니다.");
+        }
+    };
+
+    // 수정 취소 버튼 클릭 시 수정 모드 종료
+    const handleCancel = () => {
+        setEditMode(false);
+        setUpdatedContent("");
+    };
+
+    if (!post) return <p>Loading...</p>;
 
     return (
         <div className="post-detail-container">
-            <h1 className="post-title">{post.title}</h1>
-            <div className="post-meta">
-                <p><strong>작성자:</strong> {post.author}</p>
+            <div className="post-detail-card">
+                <h2>{post.title}</h2>
+                <p>작성자: {post.author}</p>
+
+                {editMode ? (
+                    <textarea
+                        value={updatedContent}
+                        onChange={(e) => setUpdatedContent(e.target.value)}
+                        className="edit-textarea"
+                    />
+                ) : (
+                    <p>{post.content}</p>
+                )}
+
+                {/* 수정/삭제 권한 여부에 따라 버튼 표시 */}
+                {isOwner && (
+                    <div className="owner-actions">
+                        {editMode ? (
+                            <>
+                                <button className="save-button" onClick={handleSave}>
+                                    저장
+                                </button>
+                                <button className="cancel-button" onClick={handleCancel}>
+                                    취소
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button className="edit-button" onClick={handleEdit}>
+                                    수정
+                                </button>
+                                <button className="delete-button" onClick={handleDelete}>
+                                    삭제
+                                </button>
+                            </>
+                        )}
+                    </div>
+                )}
+
+                <button className="back-button" onClick={() => navigate("/community")}>
+                    뒤로 가기
+                </button>
             </div>
-            <div className="post-content">
-                <p>{post.content}</p>
-            </div>
-            <button className="back-button" onClick={() => navigate(-1)}>
-                뒤로 가기
-            </button>
         </div>
     );
 }
