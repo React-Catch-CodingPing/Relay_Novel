@@ -1,10 +1,9 @@
 .genres-main-content {
     display: flex;
     flex-direction: column; /* 세로로 배치 */
-    align-items: flex-start; /* 왼쪽 정렬 */
     margin-top: 0; /* 위쪽 여백을 0으로 설정 */
     padding: 0; /* 상단 padding 제거 */
-    width: 100%;
+    width: auto;
 }
 
 .genres-container {
@@ -108,7 +107,8 @@
 .genres-novels-grid {
     display: flex; /* Flexbox 사용 */
     flex-wrap: wrap; /* 넘치는 아이템은 다음 줄로 */
-    gap: 20px; /* 카드 간 간격 */
+    grid-template-columns: repeat(4, 1fr); /* 가로로 4개의 열 */
+    gap: 10px; /* 카드 간 간격 */
     justify-content: space-between; /* 카드 간격 균등 분배 */
 }
 
@@ -156,12 +156,12 @@
     overflow: hidden;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s, box-shadow 0.3s;
-    width: 400px;
-    height: 350px;
-    margin: 20px;
+    width: 180px;
+    height: auto;
     background-color: white;
     position: relative;
     padding: 20px;
+    margin: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
