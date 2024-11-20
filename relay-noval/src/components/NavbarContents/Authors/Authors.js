@@ -2,37 +2,63 @@ import React, { useState } from 'react';
 import './Authors.css';
 
 const authorsData = [
-    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12 },
-    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8 },
-    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15 },
-    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15 },
-    { id: 5, name: '동현핑', image: '/images/author5.jpg', participationCount: 4, startedWorks: 10 },
-    { id: 6, name: '승환핑', image: '/images/author6.jpg', participationCount: 6, startedWorks: 7 },
-    // 필요에 따라 데이터 추가
+    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0, thumbsUp: 0 },
+    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8, hearts: 0, thumbsUp: 0 },
+    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15, hearts: 0, thumbsUp: 0 },
+    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15, hearts: 0, thumbsUp: 0 },
+    { id: 5, name: '뚜비핑', image: '/images/author5.jpg', participationCount: 4, startedWorks: 10, hearts: 0, thumbsUp: 0 },
+    { id: 6, name: '승현핑', image: '/images/author6.jpg', participationCount: 6, startedWorks: 7, hearts: 0, thumbsUp: 0 },
+    { id: 7, name: '콩이핑', image: '/images/author7.jpg', participationCount: 2, startedWorks: 5, hearts: 0, thumbsUp: 0 },
+    { id: 8, name: '지수핑', image: '/images/author8.jpg', participationCount: 9, startedWorks: 6, hearts: 0, thumbsUp: 0 },
+    { id: 9, name: '빵빵핑', image: '/images/author9.jpg', participationCount: 8, startedWorks: 11, hearts: 0, thumbsUp: 0 },
+    { id: 10, name: '하츄핑', image: '/images/author10.jpg', participationCount: 5, startedWorks: 9, hearts: 0, thumbsUp: 0 },
+    { id: 11, name: '마루핑', image: '/images/author11.jpg', participationCount: 3, startedWorks: 4, hearts: 0, thumbsUp: 0 },
+    { id: 12, name: '푸름핑', image: '/images/author12.jpg', participationCount: 4, startedWorks: 7, hearts: 0, thumbsUp: 0 },
+    { id: 13, name: '새벽핑', image: '/images/author13.jpg', participationCount: 7, startedWorks: 6, hearts: 0, thumbsUp: 0 },
+    { id: 14, name: '노을핑', image: '/images/author14.jpg', participationCount: 10, startedWorks: 8, hearts: 0, thumbsUp: 0 },
+    { id: 15, name: '별빛핑', image: '/images/author15.jpg', participationCount: 6, startedWorks: 12, hearts: 0, thumbsUp: 0 },
+    { id: 16, name: '하늘핑', image: '/images/author16.jpg', participationCount: 8, startedWorks: 9, hearts: 0, thumbsUp: 0 },
+    { id: 17, name: '구름핑', image: '/images/author17.jpg', participationCount: 3, startedWorks: 6, hearts: 0, thumbsUp: 0 },
+    { id: 18, name: '달빛핑', image: '/images/author18.jpg', participationCount: 9, startedWorks: 10, hearts: 0, thumbsUp: 0 },
+    { id: 19, name: '은하핑', image: '/images/author19.jpg', participationCount: 7, startedWorks: 11, hearts: 0, thumbsUp: 0 },
+    { id: 20, name: '우주핑', image: '/images/author20.jpg', participationCount: 10, startedWorks: 13, hearts: 0, thumbsUp: 0 },
 ];
 
 const Authors = () => {
-    const [sortOption, setSortOption] = useState('작성순'); // 기본 정렬 옵션
+    const [authors, setAuthors] = useState(authorsData);
+    const [likedByUser, setLikedByUser] = useState([]);
+    const [recommendedByUser, setRecommendedByUser] = useState([]);
+    const [sortOption, setSortOption] = useState(null); // 초기 상태는 아무것도 클릭되지 않은 상태
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 4; // 한 페이지에 표시할 저자 수
-    const pagesToShow = 4; // 한 번에 표시할 페이지 수
-    const maxPages = 20; // 페이지네이션을 20페이지까지로 제한
+    const [currentPageGroup, setCurrentPageGroup] = useState(1);
 
-    const totalPages = Math.min(Math.ceil(authorsData.length / itemsPerPage), maxPages);
+    const itemsPerPage = 4;
+    const pagesPerGroup = 4;
+    const totalPages = Math.ceil(authors.length / itemsPerPage);
+
+    const startPage = (currentPageGroup - 1) * pagesPerGroup + 1;
+    const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+    const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const displayedAuthors = [...authorsData]
+    const displayedAuthors = [...authors]
         .sort((a, b) => {
             if (sortOption === '작성순') return b.startedWorks - a.startedWorks;
-            if (sortOption === '인기순') return b.participationCount - a.participationCount;
-            if (sortOption === '추천순') return (b.participationCount + b.startedWorks) - (a.participationCount + a.startedWorks);
+            if (sortOption === '인기순') return b.hearts - a.hearts;
+            if (sortOption === '추천순') return b.thumbsUp - a.thumbsUp;
             return 0;
         })
         .slice(startIndex, startIndex + itemsPerPage);
 
     const handleSortChange = (option) => {
-        setSortOption(option);
-        setCurrentPage(1); // 정렬 변경 시 첫 페이지로 이동
+        // 같은 옵션을 다시 클릭하면 초기화
+        if (sortOption === option) {
+            setSortOption(null); // 초기화
+        } else {
+            setSortOption(option);
+        }
+        setCurrentPage(1);
+        setCurrentPageGroup(1);
     };
 
     const handlePageChange = (pageNumber) => {
@@ -40,17 +66,58 @@ const Authors = () => {
     };
 
     const handleNextGroup = () => {
-        setCurrentPage((prevPage) => Math.min(prevPage + pagesToShow, maxPages));
+        if (endPage < totalPages) {
+            setCurrentPageGroup((prevGroup) => prevGroup + 1);
+            setCurrentPage(endPage + 1);
+        }
     };
 
     const handlePreviousGroup = () => {
-        setCurrentPage((prevPage) => Math.max(prevPage - pagesToShow, 1));
+        if (startPage > 1) {
+            setCurrentPageGroup((prevGroup) => prevGroup - 1);
+            setCurrentPage(startPage - pagesPerGroup);
+        }
     };
 
-    // 표시할 페이지 그룹 범위 계산
-    const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
-    const endPage = Math.min(startPage + pagesToShow - 1, maxPages);
-    const pages = Array.from({ length: pagesToShow }, (_, i) => startPage + i);
+    const handleHeartClick = (authorId) => {
+        const updatedAuthors = authors.map((author) => {
+            if (author.id === authorId) {
+                const newHearts = likedByUser.includes(authorId)
+                    ? author.hearts - 1
+                    : author.hearts + 1;
+                return { ...author, hearts: newHearts };
+            }
+            return author;
+        });
+
+        setAuthors(updatedAuthors);
+
+        if (likedByUser.includes(authorId)) {
+            setLikedByUser(likedByUser.filter((id) => id !== authorId)); // 취소 시 제거
+        } else {
+            setLikedByUser([...likedByUser, authorId]); // 하트 클릭 시 추가
+        }
+    };
+
+    const handleThumbsUpClick = (authorId) => {
+        const updatedAuthors = authors.map((author) => {
+            if (author.id === authorId) {
+                const newThumbsUp = recommendedByUser.includes(authorId)
+                    ? author.thumbsUp - 1
+                    : author.thumbsUp + 1;
+                return { ...author, thumbsUp: newThumbsUp };
+            }
+            return author;
+        });
+
+        setAuthors(updatedAuthors);
+
+        if (recommendedByUser.includes(authorId)) {
+            setRecommendedByUser(recommendedByUser.filter((id) => id !== authorId)); // 취소 시 제거
+        } else {
+            setRecommendedByUser([...recommendedByUser, authorId]); // 따봉 클릭 시 추가
+        }
+    };
 
     return (
         <div className="container">
@@ -68,24 +135,37 @@ const Authors = () => {
 
             <h2>저자 모아보기</h2>
             <div className="card-grid">
-                {displayedAuthors.length > 0 ? (
-                    displayedAuthors.map((author) => (
-                        <div key={author.id} className="card">
-                            <img src={author.image} alt={author.name} />
-                            <h3>{author.name}</h3>
-                            <div className="writing-status">
-                                <p>{author.participationCount}줄 참여 중</p>
-                                <p>{author.startedWorks}작품 시작</p>
-                            </div>
+                {displayedAuthors.map((author) => (
+                    <div key={author.id} className="card">
+                        <img src={author.image} alt={author.name} />
+                        <h3>{author.name}</h3>
+                        <p>{author.participationCount}줄 참여 중</p>
+                        <p>{author.startedWorks}작품 시작</p>
+                        <div className="card-buttons">
                             <button className="button">프로필 보기</button>
+                            <div className="interaction">
+                                <button
+                                    className="heart-button"
+                                    onClick={() => handleHeartClick(author.id)}
+                                >
+                                    {likedByUser.includes(author.id) ? '❤️' : '🤍'}
+                                </button>
+                                <span className="count">{author.hearts}</span>
+                            </div>
+                            <div className="interaction">
+                                <button
+                                    className="thumbs-up-button"
+                                    onClick={() => handleThumbsUpClick(author.id)}
+                                >
+                                    {recommendedByUser.includes(author.id) ? '👍' : '👍'}
+                                </button>
+                                <span className="count">{author.thumbsUp}</span>
+                            </div>
                         </div>
-                    ))
-                ) : (
-                    <p>데이터가 없습니다.</p>
-                )}
+                    </div>
+                ))}
             </div>
 
-            {/* 페이지네이션 */}
             <div className="pagination">
                 <button
                     onClick={handlePreviousGroup}
@@ -106,7 +186,7 @@ const Authors = () => {
                 <button
                     onClick={handleNextGroup}
                     className="page-button"
-                    disabled={endPage >= maxPages}
+                    disabled={endPage >= totalPages}
                 >
                     다음
                 </button>
