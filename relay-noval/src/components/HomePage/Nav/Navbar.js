@@ -1,26 +1,31 @@
     // src/components/Navbar.js
-    import React from 'react';
+    import React, { useState } from 'react';
     import { Link, useNavigate } from 'react-router-dom';
     import { useSelector, useDispatch } from 'react-redux';
     import { signOut } from '../../../store/authSlice'; // 로그아웃 액션 import
     import "./Navbar.css"; // 스타일 파일 import
+    import Profile from '../../Profile/Profile';
+import { CgClose } from 'react-icons/cg';
 
     function Navbar() {
         // Redux에서 사용자 로그인 상태 정보(user) 가져오기
         const { user } = useSelector((state) => state.auth);
         const dispatch = useDispatch();
         const navigate = useNavigate();
-
+        const [profileOpen, setProfileOpen] = useState(false);
         // 로그아웃을 처리하는 함수
         const handleLogout = () => {
             dispatch(signOut()); // 로그아웃 액션 디스패치
             navigate("/"); // 로그아웃 후 메인 페이지로 리디렉션
         };
-
+        const profileHandler = () => {
+            setProfileOpen(!profileOpen)
+        }
         // 표시할 사용자 이름 결정: useNickname 값에 따라 닉네임 또는 이름 선택
         const displayName = user ? (user.useNickname ? user.nickname : user.name) : "";
 
         return (
+            <>
             <nav className="navbar">
                 {/* 왼쪽: 홈으로 이동하는 로고 아이콘 */}
                 <div className="navbar-left">
@@ -47,9 +52,7 @@
                         <>
                             <span className="display-name">{displayName}님</span>
                             <button onClick={handleLogout} className="logout-button">로그아웃</button>
-                            <Link to="/profile">
-                                <button className="profile-button">프로필</button>
-                            </Link>
+                            <button className="profile-button" onClick={profileHandler}>프로필</button>
                         </>
                     ) : (
                         // 비로그인 상태: 로그인 및 회원가입 버튼 표시
@@ -64,7 +67,12 @@
                     )}
                 </div>
             </nav>
+            <Profile isOpen={profileOpen}/>
+            {profileOpen ? <div className="closeBtn" onClick={profileHandler}><CgClose/></div>:<div></div>}
+            
+            </>
         );
+        
     }
 
     export default Navbar;
