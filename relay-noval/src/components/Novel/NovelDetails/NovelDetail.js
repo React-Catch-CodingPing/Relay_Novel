@@ -91,7 +91,7 @@ const NovelDetail = () => {
                 <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>
                 <hr className="divider"/>
             </div>
-
+            {console.log(lines[0].createdAt)}
             {/* 중단: 소설 줄거리 표시 */}
             <div className="novel-content-area">
                 <h2>소설 내용</h2>
@@ -102,8 +102,21 @@ const NovelDetail = () => {
                                 <span className="line-number">[{index + 1}/{novel.lineLimit || "제한 없음"}]</span>
                                 <span className="line-author">{line.createdBy || "익명"}</span>
                                 <span className="line-time">
-                                    {line.createdAt?.toDate ? line.createdAt.toDate().toLocaleString() : "작성 시간 없음"}
-                                </span>
+                                {line.createdAt ? (
+                                    (() => {
+                                    const date = new Date(line.createdAt.toDate ? line.createdAt.toDate() : line.createdAt);
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, "0");
+                                    const day = String(date.getDate()).padStart(2, "0");
+                                    const hours = String(date.getHours()).padStart(2, "0");
+                                    const minutes = String(date.getMinutes()).padStart(2, "0");
+                                    return `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분`;
+                                    })()
+                                ) : (
+                                "작성 시간 없음"
+                                )}
+</span>
+
                             </div>
                             <p className="line-content">{line.content}</p>
                         </li>

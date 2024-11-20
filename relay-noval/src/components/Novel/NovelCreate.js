@@ -65,7 +65,6 @@ const NovelCreate = () => {
             lineLimit: lineLimit ? 100 : null,
             userId: user.uid,
             createdAt: new Date(),
-            participatedAt: new Date()
         }
 
        try {

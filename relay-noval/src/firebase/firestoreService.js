@@ -40,14 +40,14 @@ export const getStartedNovels = async (userId) => {
 };
 
 // 사용자가 참여한 소설 가져오기
-export const getParticipatedNovels = async (userId) => {
+export const getParticipatedNovels = async (nickname) => {
     const novelsRef = collection(firestore, "novels");
     const querySnapshot = await getDocs(novelsRef);
 
     const participatedNovels = [];
     for (const novelDoc of querySnapshot.docs) {
         const linesRef = collection(firestore, `novels/${novelDoc.id}/lines`);
-        const linesQuery = query(linesRef, where("createdBy", "==", userId));
+        const linesQuery = query(linesRef, where("createdBy", "==", nickname));
         const linesSnapshot = await getDocs(linesQuery);
 
         if (!linesSnapshot.empty) {
