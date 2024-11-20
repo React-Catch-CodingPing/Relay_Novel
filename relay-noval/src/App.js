@@ -31,6 +31,18 @@ import NovelDetail from "./components/Novel/NovelDetails/NovelDetail";
 
 import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
 import WritingGuide from "./components/NavbarContents/WritingGuide/WritingGuide";
+import ReportBoard from "./components/HomePage/Footer/ReportBoard";
+
+// ...
+
+<Routes>
+    {/* 기존 라우트 */}
+    <Route path="/" element={<Home />} />
+    <Route path="/home" element={<Home />} />
+
+    {/* 신고 게시판 추가 */}
+    <Route path="/report" element={<ReportBoard />} />
+</Routes>
 
 const App = () => {
     const dispatch = useDispatch();
@@ -88,8 +100,10 @@ const App = () => {
 
                         <Route path="/novels-section" element={<TodaysNovel />} />
                         <Route path="/novels/:novelId" element={<NovelDetail />} />
+                        {/* 신고 게시판 라우트 */}
+                        <Route path="/report" element={<ReportBoard />} />
 
-                </Routes>
+                    </Routes>
                 </div>
                 {/* 하단 Footer */}
                 <Footer />
