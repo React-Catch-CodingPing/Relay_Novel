@@ -44,6 +44,9 @@ import ReportBoard from "./components/HomePage/Footer/ReportBoard";
     <Route path="/report" element={<ReportBoard />} />
 </Routes>
 
+import WritePost from "./components/NavbarContents/Community/WritePost";
+import PostDetail from "./components/NavbarContents/Community/PostDetail";
+
 const App = () => {
     const dispatch = useDispatch();
 
@@ -103,7 +106,11 @@ const App = () => {
                         {/* 신고 게시판 라우트 */}
                         <Route path="/report" element={<ReportBoard />} />
 
-                    </Routes>
+
+                        <Route path="/community/write" element={<WritePost />} />
+                        <Route path="/community/:id" element={<PostDetail />} />
+
+                  </Routes>
                 </div>
                 {/* 하단 Footer */}
                 <Footer />

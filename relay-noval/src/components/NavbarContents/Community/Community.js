@@ -1,82 +1,144 @@
-// src/components/Community.js
-import React, { useState } from 'react';
-import './Community.css';
-import { useNavigate } from 'react-router-dom';
-import { FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
-import Footer from "../../HomePage/Footer/Footer";
+// src/components/NavbarContents/Community/Community.js
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth, firestore } from "../../../firebase/firebase";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import "./Community.css";
 
 function Community() {
     const navigate = useNavigate();
+    const [user, setUser] = useState(null); // 현재 로그인된 사용자 상태
+    const [posts, setPosts] = useState([]); // 커뮤니티 글 상태
+    const [loading, setLoading] = useState(true); // 로딩 상태
+    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+    const itemsPerPage = 6; // 페이지당 항목 수
 
-    // 현재 날짜를 가져와서 "YYYY.MM.DD" 형식으로 변환
-    const today = new Date().toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    });
+    // Firebase 인증 상태 변경 감지
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+            if (currentUser) {
+                // Firestore에서 사용자 세부 정보 가져오기
+                setUser({
+                    name: currentUser.displayName || "이름 없음",
+                    nickname: currentUser.email.split("@")[0], // 이메일 앞부분을 닉네임으로 설정
+                });
+            } else {
+                setUser(null); // 로그아웃 시 사용자 상태 초기화
+            }
+        });
 
-    // 페이지네이션 현재 페이지 상태
-    const [currentPage, setCurrentPage] = useState(1);
+        return () => unsubscribe();
+    }, []);
 
-    // 게시물 예시 데이터 (총 6개)
-    const posts = [
-        { id: 1, title: '커뮤니티 글 제목', author: '글 작성자', info: '23줄 저자' },
-        { id: 2, title: '커뮤니티 글 제목', author: '글 작성자', info: '23줄 저자' },
-        { id: 3, title: '커뮤니티 글 제목', author: '글 작성자', info: '23줄 저자' },
-        { id: 4, title: '커뮤니티 글 제목', author: '글 작성자', info: '23줄 저자' },
-        { id: 5, title: '커뮤니티 글 제목', author: '글 작성자', info: '23줄 저자' },
-        { id: 6, title: '커뮤니티 글 제목', author: '글 작성자', info: '23줄 저자' },
-    ];
+    // Firestore에서 커뮤니티 글 가져오기
+    useEffect(() => {
+        const fetchPosts = async () => {
+            setLoading(true); // 로딩 상태 시작
+            try {
+                // Firestore에서 커뮤니티 글을 시간 역순으로 가져오기
+                const postsQuery = query(
+                    collection(firestore, "communityPosts"),
+                    orderBy("createdAt", "desc")
+                );
+                const querySnapshot = await getDocs(postsQuery);
+                const postsData = querySnapshot.docs.map((doc) => ({
+                    id: doc.id, // 문서 ID
+                    ...doc.data(), // 문서 데이터
+                }));
+                setPosts(postsData); // 상태에 저장
+            } catch (error) {
+                console.error("Error fetching posts:", error); // 에러 처리
+            } finally {
+                setLoading(false); // 로딩 상태 종료
+            }
+        };
 
-    // 네비게이션 버튼 클릭 시 경로 이동
-    const handleNavClick = (path) => {
-        navigate(path);
-    };
+        fetchPosts();
+    }, []);
+
+    // 현재 페이지에 해당하는 글 필터링
+    const currentPosts = posts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     // 페이지 변경 함수
     const handlePageChange = (page) => {
-        setCurrentPage(page);
+        setCurrentPage(page); // 현재 페이지 상태 업데이트
     };
 
     return (
         <div className="community-container">
             {/* 헤더 영역 */}
             <header className="community-header">
-                커뮤니티 페이지
+                <h2> 커뮤니티 </h2>
+                {/* 글쓰기 버튼 */}
+                <button
+                    className="write-button"
+                    onClick={() => navigate("/community/write")}
+                >
+                    글쓰기
+                </button>
             </header>
 
             {/* 게시물 리스트 영역 */}
             <main className="community-main">
-                <h2>{today}</h2>
-                <div className="posts-grid">
-                    {posts.map(post => (
-                        <div key={post.id} className="post-card">
-                            <h3>“{post.title}”</h3>
-                            <div className="post-author">
-                                <img src="https://example.com/author-image.jpg" alt="author" className="author-image" />
-                                <div>
-                                    <span>{post.author}</span>
-                                    <p>{post.info}</p>
+                {loading ? (
+                    // 로딩 상태 표시
+                    <p>Loading...</p>
+                ) : posts.length > 0 ? (
+                    // 게시물 리스트
+                    <div className="posts-grid">
+                        {currentPosts.map((post) => (
+                            <div
+                                key={post.id}
+                                className="post-card"
+                                onClick={() => navigate(`/community/${post.id}`)}
+                            >
+                                <h3>“{post.title}”</h3>
+                                <div className="post-author">
+                                    <p>작성자: {post.author}</p>
+                                    <p>{post.content}</p>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    // 데이터가 없을 때 표시
+                    <p>데이터가 없습니다.</p>
+                )}
             </main>
 
             {/* 페이지네이션 영역 */}
             <div className="pagination">
-                {[1, 2, 3, '...', 67, 68].map((page, index) => (
+                {/* 이전 버튼 */}
+                <button
+                    disabled={currentPage === 1} // 첫 페이지에서는 비활성화
+                    onClick={() => handlePageChange(currentPage - 1)}
+                >
+                    이전
+                </button>
+                {/* 페이지 번호 */}
+                {Array.from(
+                    { length: Math.ceil(posts.length / itemsPerPage) },
+                    (_, index) => index + 1
+                ).map((page) => (
                     <button
-                        key={index}
-                        className={`pagination-button ${currentPage === page ? 'active' : ''}`}
-                        onClick={() => typeof page === 'number' && handlePageChange(page)}
+                        key={page}
+                        className={currentPage === page ? "active" : ""} // 활성화 상태 스타일 적용
+                        onClick={() => handlePageChange(page)}
                     >
                         {page}
                     </button>
                 ))}
+                {/* 다음 버튼 */}
+                <button
+                    disabled={currentPage === Math.ceil(posts.length / itemsPerPage)} // 마지막 페이지에서는 비활성화
+                    onClick={() => handlePageChange(currentPage + 1)}
+                >
+                    다음
+                </button>
             </div>
-
         </div>
     );
 }
