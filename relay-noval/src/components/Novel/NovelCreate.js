@@ -65,7 +65,8 @@ const NovelCreate = () => {
             lineLimit: lineLimit ? 100 : null,
             userId: user.uid,
             createdAt: new Date(),
-        };
+            participatedAt: new Date()
+        }
 
        try {
            // Firestore에 소설 추가
@@ -96,19 +97,21 @@ const NovelCreate = () => {
 
             <div className="imageUpload">
                 <label htmlFor="coverImage">작품 표지</label>
+                {imagePreview && (
+                <img
+                    src={imagePreview}
+                    alt="미리보기"
+                    className="imagePreview"
+                />
+                )}
                 <input
                     type="file"
+                    placeholder="awefawe"
                     id="coverImage"
                     accept="image/*"
                     onChange={handleImageChange}
                 />
-                {imagePreview && (
-                    <img
-                        src={imagePreview}
-                        alt="미리보기"
-                        className="imagePreview"
-                    />
-                )}
+
             </div>
 
             <form onSubmit={handleSubmit} className="form">

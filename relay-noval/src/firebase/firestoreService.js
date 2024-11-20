@@ -1,5 +1,5 @@
 import { firestore } from "./firebase";
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, serverTimestamp, query, where } from "firebase/firestore";
 
 // 소설을 추가하는 함수
 export const addNovelLine = async (novelData) => {
@@ -15,6 +15,7 @@ export const addNovelLine = async (novelData) => {
     }
 };
 
+
 // 모든 소설 문서를 가져오는 함수
 export const getAllNovels = async () => {
     try {
@@ -28,6 +29,33 @@ export const getAllNovels = async () => {
         console.error("Error fetching documents: ", error);
         throw error;
     }
+};
+
+// 사용자가 시작한 소설 가져오기
+export const getStartedNovels = async (userId) => {
+    const novelsRef = collection(firestore, "novels");
+    const q = query(novelsRef, where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+// 사용자가 참여한 소설 가져오기
+export const getParticipatedNovels = async (userId) => {
+    const novelsRef = collection(firestore, "novels");
+    const querySnapshot = await getDocs(novelsRef);
+
+    const participatedNovels = [];
+    for (const novelDoc of querySnapshot.docs) {
+        const linesRef = collection(firestore, `novels/${novelDoc.id}/lines`);
+        const linesQuery = query(linesRef, where("createdBy", "==", userId));
+        const linesSnapshot = await getDocs(linesQuery);
+
+        if (!linesSnapshot.empty) {
+            participatedNovels.push({ id: novelDoc.id, ...novelDoc.data() });
+        }
+    }
+
+    return participatedNovels;
 };
 
 // 특정 소설 문서를 업데이트하는 함수

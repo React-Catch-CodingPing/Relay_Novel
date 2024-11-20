@@ -1,13 +1,15 @@
 // 사용자 정보 및 로그아웃 기능을 제공하는 프로필 페이지.
 
 // src/components/Profile/Profile.js
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { doc, updateDoc } from 'firebase/firestore';
+import {collection, doc, getDoc, getDocs, updateDoc} from 'firebase/firestore';
 import { auth, firestore } from '../../firebase/firebase';
 import { setUser } from '../../store/authSlice'; // Redux의 setUser 액션을 사용하여 상태 업데이트
 import './Profile.css';
+import { getStartedNovels, getParticipatedNovels } from "../../firebase/firestoreService";
+
 
 function Profile() {
     const navigate = useNavigate();
@@ -17,9 +19,79 @@ function Profile() {
     const user = useSelector((state) => state.auth.user);
 
     // 현재 프로필 정보를 위한 상태
-    const [profile, setProfile] = useState(user);
+    const [profile, setProfile] = useState({
+        profileImage: '',
+        nickname: '',
+        name: '',
+        email: '',
+        totalLines: 0, // 기본 줄 수
+        totalWorks: 0, // 기본 작품 수
+    });
+
+    const [startedNovels, setStartedNovels] = useState([]); // 내가 시작한 소설
+    const [participatedNovels, setParticipatedNovels] = useState([]); // 내가 참여한 소설
+
     const [editProfile, setEditProfile] = useState(user); // 편집 모드에서 임시로 사용하는 상태
     const [editMode, setEditMode] = useState(false); // 편집 모드 상태
+
+    const fetchUserProfile = async () => {
+        try {
+            // Firestore에서 사용자 프로필 가져오기
+            const userDoc = doc(firestore, 'users', auth.currentUser.uid);
+            const userSnap = await getDoc(userDoc);
+
+            if (userSnap.exists()) {
+                setProfile((prevProfile) => ({
+                    ...prevProfile,
+                    ...userSnap.data(), // 프로필 데이터 병합
+                }));
+            } else {
+                console.error('사용자 프로필 데이터가 없습니다.');
+            }
+        } catch (error) {
+            console.error('사용자 프로필 데이터를 가져오는 중 오류 발생:', error);
+        }
+    };
+    const fetchWritingStatus = async () => {
+        try {
+            // Firestore에서 사용자가 참여한 줄 수와 작품 수를 계산
+            const linesQuerySnapshot = await getDocs(collection(firestore, `users/${auth.currentUser.uid}/lines`));
+            const worksQuerySnapshot = await getDocs(collection(firestore, `users/${auth.currentUser.uid}/works`));
+
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                totalLines: linesQuerySnapshot.size,
+                totalWorks: worksQuerySnapshot.size,
+            }));
+        } catch (error) {
+            console.error('집필 현황 정보를 가져오는 중 오류 발생:', error);
+        }
+    };
+
+    const fetchUserData = useCallback(async () => {
+        if (!user) return;
+
+        try {
+            // 시작한 소설 가져오기
+            const started = await getStartedNovels(auth.currentUser.uid);
+            setStartedNovels(started);
+
+            // 참여한 소설 가져오기
+            const participated = await getParticipatedNovels(auth.currentUser.uid);
+            setParticipatedNovels(participated);
+        } catch (error) {
+            console.error("데이터 가져오기 실패:", error);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            fetchUserData();
+            fetchUserProfile();
+            fetchWritingStatus();
+        }
+    }, [user, fetchUserData]);
+
 
     // 로그아웃 페이지로 이동하는 함수
     const goToSignOut = () => {
@@ -134,10 +206,46 @@ function Profile() {
                     <div className="profile-field">
                         <span className="profile-label">집필 현황</span>
                         <div className="profile-value">
-                            <div>26 줄 참여 중...</div>
-                            <div>3 작품 시작...</div>
+                            <div>{ profile.totalLines} 줄 참여 중...</div>
+                            <div> { profile.totalWorks }개의 작품 시작...</div>
                         </div>
                     </div>
+                </div>
+                {/* 내가 시작한 소설 */}
+                <div className="novels-section">
+                    <h2>내가 시작한 소설</h2>
+                    {startedNovels && startedNovels.length > 0 ? (
+                        <ul>
+                            {startedNovels.map((novel) => (
+                                <li key={novel.id} className="novel-item">
+                                    <h3>{novel.title}</h3>
+                                    <p>장르: {novel.genre}</p>
+                                    {console.log(novel)}
+                                   // <p>작성일: {novel.createdAt.toDate().toLocaleDateString()}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>시작한 소설이 없습니다.</p>
+                    )}
+                </div>
+
+                {/* 내가 참여한 소설 */}
+                <div className="novels-section">
+                    <h2>내가 참여한 소설</h2>
+                    {participatedNovels && participatedNovels.length > 0 ? (
+                        <ul>
+                            {participatedNovels.map((novel) => (
+                                <li key={novel.id} className="novel-item">
+                                    <h3>{novel.title}</h3>
+                                    <p>장르: {novel.genre}</p>
+                                    <p>참여일: {novel.participatedAt.toDate().toLocaleDateString()}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>참여한 소설이 없습니다.</p>
+                    )}
                 </div>
 
                 {/* 하단의 버튼들 (편집 모드에 따라 다르게 표시) */}
