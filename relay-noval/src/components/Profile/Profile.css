@@ -182,3 +182,20 @@
 .modal-button:hover {
     background: #45a049;
 }
+
+/* li 요소의 기본 스타일 */
+.modal-novel-item {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f9f9f9; /* 배경색 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 효과 추가 */
+    cursor: pointer; /* $$$$$ 커서 스타일 추가 */
+}
+
+/* li 요소에 마우스가 올라갔을 때의 효과 */
+.modal-novel-item:hover {
+    background-color: #e6e6e6; /* hover 시 배경색 변경 */
+    transform: scale(1.02); /* 약간 확대 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}

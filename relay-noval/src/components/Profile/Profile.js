@@ -96,6 +96,11 @@ function Profile() {
         setShowParticipatedNovelsModal(false);
     };
 
+    // 소설 페이지로 이동하는 함수 추가
+    const goToNovelDetail = (novelId) => {
+        navigate(`/novels/${novelId}`); // NovelDetail 페이지로 이동
+    };
+
     return (
         <div className="profile-container">
             <div className="profile-card">
@@ -111,7 +116,7 @@ function Profile() {
                     />
                 ) : (
                     <img
-                        src={profile.profileImage || 'images/hachuping.png'}
+                        src={profile.profileImage || 'images/home-icon.png'}
                         alt="Profile"
                         className="profile-image"
                     />
@@ -222,7 +227,11 @@ function Profile() {
                         </button>
                         <ul>
                             {participatedNovels.map((novel) => (
-                                <li key={novel.id}>
+                                <li
+                                    key={novel.id}
+                                    onClick={() => goToNovelDetail(novel.id)} // NovelDetail 페이지로 이동
+                                    className="modal-novel-item"
+                                >
                                     <strong>{novel.title}</strong>
                                     <p>장르: {novel.genre}</p>
                                 </li>
@@ -235,21 +244,25 @@ function Profile() {
             {/* 시작한 소설 모달 */}
             {showStartedNovelsModal && (
                 <div className="modal">
-                    <div className="modal-content">
+                <div className="modal-content">
                         <h3>내가 시작한 소설</h3>
                         <button onClick={closeModal} className="close-modal">
                             닫기
                         </button>
                         <ul>
                             {startedNovels.map((novel) => (
-                                <li key={novel.id}>
+                                <li
+                                    key={novel.id}
+                                    onClick={() => goToNovelDetail(novel.id)} // NovelDetail 페이지로 이동
+                                    className="modal-novel-item"
+                                >
                                     <strong>{novel.title}</strong>
                                     <p>장르: {novel.genre}</p>
                                     <p>첫 줄: {novel.firstLine}</p>
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                </div>
                 </div>
             )}
         </div>
