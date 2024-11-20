@@ -4,7 +4,8 @@ import {
     incrementNovelViews,
     toggleNovelLike,
     toggleNovelRecommendation,
-    subscribeToNovels,} from '../../../firebase/firestoreService'; // Firebase에서 소설 데이터를 가져오는 함수
+    } from '../../../firebase/firestore/novelService'; // Firebase에서 소설 데이터를 가져오는 함수
+import { subscribeToNovels } from '../../../firebase/firestore/realTimeService';
 import './Genres.css';
 
 function Genres() {

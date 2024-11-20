@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // useNavigate 추가
 import { useSelector } from "react-redux";
-import { addNovelLine } from "../../firebase/firestoreService";
-import { addLineToNovel } from "../../firebase/firestoreService";
+import { addNovelLine } from "../../firebase/firestore/novelService";
+import { addLineToNovel } from "../../firebase/firestore/lineService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Firebase Storage 관련 메서드 추가
 import { storage } from "../../firebase/firebase"; // Storage 객체 가져오기
 import "./NovelCreate.css"; // 일반 CSS 파일로 변경

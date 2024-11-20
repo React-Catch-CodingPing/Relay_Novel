@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getAllNovels, getAuthors } from '../../../firebase/firestoreService'; // 제공된 유틸리티 함수
+import { getAuthors } from '../../../firebase/firestore/userService'; // 제공된 유틸리티 함수
+import { getAllNovels } from '../../../firebase/firestore/novelService'
 import './TodaysNovel.css';
 import {useNavigate} from "react-router-dom";
 

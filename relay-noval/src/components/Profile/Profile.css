@@ -2,50 +2,22 @@
 /* 프로필 전체를 감싸는 메인 컨테이너로, 화면 중앙에 배치 */
 .profile-container {
     display: flex;
-    position: fixed;
-    right:0;
-    top: 0;
     justify-content: center;
     align-items: center;
     height: 100vh; /* 화면 전체 높이로 설정하여 세로 중앙에 배치 */
-    background-color: white; /* 배경색 설정 */
-    width:300px;
-    z-index: 99;
+    background-color: #f8f9fa; /* 배경색 설정 */
 }
 
 /* 프로필 카드 스타일 */
 .profile-card {
-    width: 100%;
+    width: 320px;
     background-color: #fff;
-    height: 100%;
-    padding-bottom: 24px;
+    padding: 24px;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
     text-align: center;
-    overflow-y:scroll;
-    overflow-x:hidden;
-    img{
-        max-width:80%;
-        margin : 24px;
-    }
-}
-.profile-card::-webkit-scrollbar {
-    width: 8px;
 }
 
-.profile-card::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.profile-card::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.profile-card::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
 /* 프로필 이미지 스타일 */
 .profile-image {
     width: 100%; /* 이미지가 카드의 너비에 맞춰져 꽉 차도록 설정 */
@@ -87,7 +59,6 @@
 /* 버튼들 컨테이너 */
 .profile-buttons {
     display: flex;
-    padding: 24px;
     justify-content: space-between; /* 버튼들이 양쪽 끝으로 배치되도록 설정 */
     margin-top: 16px; /* 상단에 여백 추가 */
 }
@@ -141,7 +112,7 @@
 }
 
 /* 로그아웃 버튼 스타일 */
-.logout-button-forPr {
+.logout-button {
     background-color: #333; /* 검은색 배경 */
     color: #fff; /* 흰색 글자 */
     border: none;
@@ -159,36 +130,7 @@
     background-color: #d0d0d0; /* 약간 더 어두운 회색으로 변경 */
 }
 
-.logout-button-forPr:hover {
+.logout-button:hover {
     opacity: 0.9; /* 살짝 투명해지도록 설정 */
     background-color: #2b2b2b; /* 약간 더 어두운 검은색으로 변경 */
-}
-
-.novels-section ul {
-    width: 80%;
-    border : 1px solid #fefefe;
-    display: flex;
-    overflow-x: auto;
-    gap: 1.3rem;
-    cursor: grab;
-    scroll-behavior: smooth;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* 스크롤바 숨기기 */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-/* Webkit (Chrome, Safari, Opera) 스크롤바 숨기기 */
-.novels-section ul::-webkit-scrollbar {
-    display: none;
-}
-
-.novels-section ul:active {
-    cursor: grabbing;
-}
-.novel-card {
-    min-width: 150px;
 }

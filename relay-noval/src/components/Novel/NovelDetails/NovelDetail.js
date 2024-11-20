@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../../../firebase/firebase";
-import { addLineToNovel, getLinesFromNovel } from "../../../firebase/firestoreService";
+import { addLineToNovel, getLinesFromNovel } from "../../../firebase/firestore/lineService";
 import "./NovelDetail.css";
 
 const NovelDetail = () => {
