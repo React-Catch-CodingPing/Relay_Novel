@@ -1,5 +1,5 @@
 // 소설 줄 관련 로직.
-import { firestore } from "../firebase";
+import {auth, firestore} from "../firebase";
 import {addDoc, collection, getDocs, serverTimestamp} from "firebase/firestore";
 
 
@@ -9,6 +9,7 @@ export const addLineToNovel = async (novelId, lineData) => {
         const linesCollection = collection(firestore, `novels/${novelId}/lines`);
         const lineRef = await addDoc(linesCollection, {
             ...lineData,
+            createdBy: auth.currentUser.uid, // 닉네임 대신 사용자 ID 저장
             createdAt: serverTimestamp(),
         });
         return lineRef.id;
@@ -26,6 +27,7 @@ export const getLinesFromNovel = async (novelId) => {
         const lines = querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data(),
+
             createdAt: doc.data().createdAt?.toDate() || "작성 시간 없음", // 시간 변환 추가
         }));
         return lines;

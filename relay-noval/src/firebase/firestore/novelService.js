@@ -66,6 +66,7 @@ export const getAllNovels = async () => {
             id: doc.id,
             ...doc.data(),
             title: doc.data().title || "없음", // 제목 기본값
+            createdAt: doc.data().createdAt || null, // 시간 기본값 추가
             genre: doc.data().genre || "미정", // 장르 기본값
             lineCount: doc.data().lineCount || 0, // 진행된 줄 수 기본값
             views: doc.data().views || 0, // 조회수 기본값

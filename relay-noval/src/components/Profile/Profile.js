@@ -1,14 +1,14 @@
 // 사용자 정보 및 로그아웃 기능을 제공하는 프로필 페이지.
 
 // src/components/Profile/Profile.js
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {collection, doc, getDoc, getDocs, updateDoc} from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { auth, firestore } from '../../firebase/firebase';
-import { setUser } from '../../store/authSlice'; // Redux의 setUser 액션을 사용하여 상태 업데이트
+import { getStartedNovels, getParticipatedNovels } from '../../firebase/firestore/userService';
+import { setUser } from '../../store/authSlice';
 import './Profile.css';
-import { getStartedNovels, getParticipatedNovels } from "../../firebase/firestore/userService";
 
 
 function Profile() {
@@ -20,135 +20,36 @@ function Profile() {
 
     // 현재 프로필 정보를 위한 상태
     const [profile, setProfile] = useState(user);
-
-    const [startedNovels, setStartedNovels] = useState([]); // 내가 시작한 소설
-    const [participatedNovels, setParticipatedNovels] = useState([]); // 내가 참여한 소설
-
     const [editProfile, setEditProfile] = useState(user); // 편집 모드에서 임시로 사용하는 상태
     const [editMode, setEditMode] = useState(false); // 편집 모드 상태
 
+    // 모달 상태 관리
+    const [showStartedNovelsModal, setShowStartedNovelsModal] = useState(false);
+    const [showParticipatedNovelsModal, setShowParticipatedNovelsModal] = useState(false);
 
-    // const [isDragging1, setIsDragging1] = useState(false);
-    // const [isDragging2, setIsDragging2] = useState(false);
-    // const [startX1, setStartX1] = useState(0);
-    // const [startX2, setStartX2] = useState(0);
-    // const [scrollLeft1, setScrollLeft1] = useState(0);
-    // const [scrollLeft2, setScrollLeft2] = useState(0);
-    // const slider1Ref = useRef(null);
-    // const slider2Ref = useRef(null);
+    // 소설 데이터 상태
+    const [startedNovels, setStartedNovels] = useState([]);
+    const [participatedNovels, setParticipatedNovels] = useState([]);
 
-    // const handleMouseDown1 = (e) => {
-    //     setIsDragging1(true);
-    //     setStartX1(e.pageX - slider1Ref.current.offsetLeft);
-    //     setScrollLeft1(slider1Ref.current.scrollLeft);
-    // };
-    //
-    // const handleMouseUp1 = () => {
-    //     setIsDragging1(false);
-    // };
-    //
-    // const handleMouseMove1 = (e) => {
-    //     if (!isDragging1) return;
-    //     e.preventDefault();
-    //     const x = e.pageX - slider1Ref.current.offsetLeft;
-    //     const walk = (x - startX1) * 2; // 스크롤 속도 조절
-    //     slider1Ref.current.scrollLeft = scrollLeft1 - walk;
-    // };
-    //
-    // const handleMouseDown2 = (e) => {
-    //     setIsDragging2(true);
-    //     setStartX2(e.pageX - slider2Ref.current.offsetLeft);
-    //     setScrollLeft2(slider2Ref.current.scrollLeft);
-    // };
-    //
-    // const handleMouseUp2 = () => {
-    //     setIsDragging2(false);
-    // };
-    //
-    // const handleMouseMove2 = (e) => {
-    //     if (!isDragging2) return;
-    //     e.preventDefault();
-    //     const x = e.pageX - slider2Ref.current.offsetLeft;
-    //     const walk = (x - startX2) * 2;
-    //     slider2Ref.current.scrollLeft = scrollLeft2 - walk;
-    // };
-    //
-    // const fetchUserProfile = async () => {
-    //     setIsLoading(true);
-    //     try {
-    //         // Firestore에서 사용자 프로필 가져오기
-    //         const userDoc = doc(firestore, 'users', auth.currentUser.uid);
-    //         const userSnap = await getDoc(userDoc);
-    //
-    //         if (userSnap.exists()) {
-    //             setProfile((prevProfile) => ({
-    //                 ...prevProfile,
-    //                 ...userSnap.data(), // 프로필 데이터 병합
-    //             }));
-    //         } else {
-    //             console.error('사용자 프로필 데이터가 없습니다.');
-    //         }
-    //     } catch (error) {
-    //         console.error('사용자 프로필 데이터를 가져오는 중 오류 발생:', error);
-    //     } finally{
-    //         setIsLoading(false);
-    //     }
-    // };
-    // const fetchWritingStatus = async () => {
-    //     try {
-    //         // Firestore에서 사용자가 참여한 줄 수와 작품 수를 계산
-    //         const linesQuerySnapshot = await getDocs(collection(firestore, `users/${auth.currentUser.uid}/lines`));
-    //         const worksQuerySnapshot = await getDocs(collection(firestore, `users/${auth.currentUser.uid}/works`));
-    //
-    //         setProfile((prevProfile) => ({
-    //             ...prevProfile,
-    //             totalLines: linesQuerySnapshot.size,
-    //             totalWorks: worksQuerySnapshot.size,
-    //         }));
-    //     } catch (error) {
-    //         console.error('집필 현황 정보를 가져오는 중 오류 발생:', error);
-    //     }
-    // };
-    //
-    // const fetchUserData = useCallback(async () => {
-    //     if (!user) return;
-    //     setIsLoading(true);
-    //     try {
-    //         const userDoc = doc(firestore, "users", user.uid);
-    //         const userSnap = await getDoc(userDoc);
-    //
-    //         let nickname = "익명 작성자"; // 기본값 설정
-    //         if (userSnap.exists()) {
-    //             nickname = userSnap.data().nickname || "익명 작성자";
-    //         }
-    //         await Promise.all([
-    //             // 모든 데이터 fetch를 동시에 실행
-    //             fetchUserProfile(),
-    //             fetchWritingStatus(),
-    //             (async () => {
-    //                 const started = await getStartedNovels(auth.currentUser.uid);
-    //                 setStartedNovels(started);
-    //             })(),
-    //             (async () => {
-    //                 const participated = await getParticipatedNovels(nickname);
-    //
-    //                 setParticipatedNovels(participated);
-    //                 console.log("awefawef",auth.currentUser)
-    //             })()
-    //         ]);
-    //     } catch (error) {
-    //         console.error("데이터 가져오기 실패:", error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }, [user]);
-    //
-    // useEffect(() => {
-    //     if (user) {
-    //         fetchUserData();
-    //     }
-    // }, [fetchUserData]);
 
+    // 소설 데이터를 가져오는 useEffect 추가
+    useEffect(() => {
+        if (user) {
+            fetchNovelData();
+        }
+    }, [user]);
+
+    const fetchNovelData = async () => {
+        try {
+            const started = await getStartedNovels(auth.currentUser.uid); // 내가 시작한 소설 가져오기
+            const participated = await getParticipatedNovels(auth.currentUser.uid); // 내가 참여한 소설 가져오기
+
+            setStartedNovels(started); // 상태 업데이트
+            setParticipatedNovels(participated); // 상태 업데이트
+        } catch (error) {
+            console.error('소설 데이터를 가져오는 중 오류 발생:', error);
+        }
+    };
 
     // 로그아웃 페이지로 이동하는 함수
     const goToSignOut = () => {
@@ -188,6 +89,13 @@ function Profile() {
         setEditProfile(profile); // 임시 상태를 원래 프로필 값으로 되돌림
         setEditMode(false); // 편집 모드 종료
     };
+
+    // 모달 닫기 함수 추가
+    const closeModal = () => {
+        setShowStartedNovelsModal(false);
+        setShowParticipatedNovelsModal(false);
+    };
+
     return (
         <div className="profile-container">
             <div className="profile-card">
@@ -203,7 +111,7 @@ function Profile() {
                     />
                 ) : (
                     <img
-                        src={profile.profileImage || 'https://example.com/default-image.jpg'}
+                        src={profile.profileImage || 'images/hachuping.png'}
                         alt="Profile"
                         className="profile-image"
                     />
@@ -261,72 +169,23 @@ function Profile() {
                     <div className="profile-field">
                         <span className="profile-label">집필 현황</span>
                         <div className="profile-value">
-                            <div>26 줄 참여 중...</div>
-                            <div>3 작품 시작...</div>
+                            {/* 참여한 소설 모달 버튼 */}
+                            <button
+                                className="modal-button"
+                                onClick={() => setShowParticipatedNovelsModal(true)}
+                            >
+                                {participatedNovels.length} 줄 참여 중...
+                            </button>
+                            {/* 시작한 소설 모달 버튼 */}
+                            <button
+                                className="modal-button"
+                                onClick={() => setShowStartedNovelsModal(true)}
+                            >
+                                {startedNovels.length} 작품 시작...
+                            </button>
                         </div>
                     </div>
                 </div>
-
-
-                {/*/!* 내가 시작한 소설 *!/*/}
-                {/*<div className="novels-section">*/}
-                {/*    <h2>내가 시작한 소설</h2>*/}
-                {/*    {isLoading ? (<p>불러오는 중 ...</p>) : (*/}
-                {/*        startedNovels && startedNovels.length > 0 ? (*/}
-                {/*            <ul*/}
-                {/*                ref={slider1Ref}*/}
-                {/*                onMouseDown={handleMouseDown1}*/}
-                {/*                onMouseUp={handleMouseUp1}*/}
-                {/*                onMouseLeave={handleMouseUp1}*/}
-                {/*                onMouseMove={handleMouseMove1}*/}
-                {/*            >*/}
-                {/*                {startedNovels.map((novel) => (*/}
-                {/*                    <div className='novel-card'>*/}
-                {/*                        <li key={novel.id} className="novel-item">*/}
-                {/*                            <h3>{novel.title}</h3>*/}
-                {/*                            <p>장르: {novel.genre}</p>*/}
-                {/*                            <p>첫 줄: {novel.firstLine}</p>*/}
-                {/*                            <p>작성일: {novel.createdAt.toDate().toLocaleDateString()}</p>*/}
-                {/*                        </li>*/}
-                {/*                    </div>*/}
-
-                {/*                ))}*/}
-                {/*            </ul>*/}
-                {/*        ) : (<p>시작한 소설이 없습니다.</p>)*/}
-
-                {/*    )*/}
-                {/*    }*/}
-                {/*</div>*/}
-
-
-                {/*/!* 내가 참여한 소설 *!/*/}
-                {/*<div className="novels-section">*/}
-                {/*    <h2>내가 참여한 소설</h2>*/}
-                {/*    {isLoading ? (<p>불러오는 중 ...</p>) : (*/}
-                {/*        participatedNovels && participatedNovels.length > 0 ? (*/}
-                {/*                <ul*/}
-                {/*                    ref={slider2Ref}*/}
-                {/*                    onMouseDown={handleMouseDown2}*/}
-                {/*                    onMouseUp={handleMouseUp2}*/}
-                {/*                    onMouseLeave={handleMouseUp2}*/}
-                {/*                    onMouseMove={handleMouseMove2}*/}
-                {/*                >*/}
-                {/*                    {participatedNovels.map((novel) => (*/}
-                {/*                        <div className='novel-card'>*/}
-                {/*                            <li key={novel.id} className="novel-item">*/}
-                {/*                                <h3>{novel.title}</h3>*/}
-                {/*                                <p>장르: {novel.genre}</p>*/}
-                {/*                                <p>참여일: {novel.participatedAt && novel.participatedAt.toDate().toLocaleDateString()}</p>*/}
-                {/*                            </li>*/}
-                {/*                        </div>*/}
-                {/*                    ))}*/}
-                {/*                </ul>*/}
-                {/*            ) :*/}
-                {/*            (<p>참여한 소설이 없습니다.</p>)*/}
-
-                {/*    )*/}
-                {/*    }*/}
-                {/*</div>*/}
 
                 {/* 하단의 버튼들 (편집 모드에 따라 다르게 표시) */}
                 <div className="profile-buttons">
@@ -343,6 +202,56 @@ function Profile() {
                     )}
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+            {/* 참여한 소설 모달 */}
+            {showParticipatedNovelsModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>내가 참여한 소설</h3>
+                        <button onClick={closeModal} className="close-modal">
+                            닫기
+                        </button>
+                        <ul>
+                            {participatedNovels.map((novel) => (
+                                <li key={novel.id}>
+                                    <strong>{novel.title}</strong>
+                                    <p>장르: {novel.genre}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
+
+            {/* 시작한 소설 모달 */}
+            {showStartedNovelsModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>내가 시작한 소설</h3>
+                        <button onClick={closeModal} className="close-modal">
+                            닫기
+                        </button>
+                        <ul>
+                            {startedNovels.map((novel) => (
+                                <li key={novel.id}>
+                                    <strong>{novel.title}</strong>
+                                    <p>장르: {novel.genre}</p>
+                                    <p>첫 줄: {novel.firstLine}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

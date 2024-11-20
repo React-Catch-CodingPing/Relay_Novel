@@ -95,7 +95,7 @@ export const getParticipatedNovels = async (userId) => {
             const linesRef = collection(firestore, `novels/${novelId}/lines`);
 
             // 사용자 ID로 필터링된 줄 가져오기
-            const linesQuery = query(linesRef, where("userId", "==", userId));
+            const linesQuery = query(linesRef, where("createdBy", "==", userId));
             const linesSnapshot = await getDocs(linesQuery);
 
             if (!linesSnapshot.empty) {
