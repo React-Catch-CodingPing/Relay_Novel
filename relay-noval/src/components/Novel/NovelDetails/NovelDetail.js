@@ -77,18 +77,23 @@ const NovelDetail = () => {
         setIsSubmitting(true);
 
         try {
-            // Firestore에서 사용자 nickname 가져오기
+            // Firestore에서 사용자 nickname/name 가져오기
             const userDoc = doc(firestore, "users", user.uid);
             const userSnap = await getDoc(userDoc);
 
-            let nickname = "익명 작성자"; // 기본값 설정
+            let writername = "익명 작성자"; // 기본값 설정
             if (userSnap.exists()) {
-                nickname = userSnap.data().nickname || "익명 작성자";
+                const userData = userSnap.data();
+                if (userData.useNickname) {
+                    writername = userData.nickname || "익명 작성자";
+                } else {
+                    writername = userData.name || "알 수 없는 사용자";
+                }
             }
 
             const newLineData = {
                 content: newLine,
-                createdBy: nickname,
+                createdBy: writername,
                 createdAt: new Date(),
             };
 
