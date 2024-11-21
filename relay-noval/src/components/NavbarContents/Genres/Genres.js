@@ -8,11 +8,13 @@ import {
     } from '../../../firebase/firestore/novelService'; // Firebase에서 소설 데이터를 가져오는 함수
 import { subscribeToNovels } from '../../../firebase/firestore/realTimeService';
 import './Genres.css';
+import {getLineCountForNovel} from "../../../firebase/firestore/lineService";
 
 function Genres() {
     const [novels, setNovels] = useState([]);
     const [filteredNovels, setFilteredNovels] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [lineCounts, setLineCounts] = useState({});
     const [sortOption, setSortOption] = useState(null);
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
@@ -20,10 +22,18 @@ function Genres() {
 
     // 실시간 Firestore 데이터 구독
     useEffect(() => {
-        const unsubscribe = subscribeToNovels((updatedNovels) => {
+        const unsubscribe = subscribeToNovels(async (updatedNovels) => {
             setNovels(updatedNovels);
             setFilteredNovels(sortNovels(updatedNovels, sortOption)); // 필터 및 정렬 반영
+
+            // 각 소설의 줄 수 가져오기
+            const counts = {};
+            for (const novel of updatedNovels) {
+                counts[novel.id] = await getLineCountForNovel(novel.id);
+            }
+            setLineCounts(counts); // 줄 수 상태 업데이트
         });
+
 
         return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
     }, [sortOption]);
@@ -206,7 +216,7 @@ function Genres() {
                                 <img src={novel.image} alt={novel.title} className="novel-image" />
                                 <div className="novel-info">
                                     <h3>{novel.title}</h3>
-                                    <p>{novel.lineCount}</p>
+                                    <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}
                                 </div>
                             </Link>
                             <div className="genres-actions-container">

@@ -36,3 +36,20 @@ export const getLinesFromNovel = async (novelId) => {
         throw error;
     }
 };
+
+
+/**
+ * 특정 소설의 줄 수를 반환하는 함수
+ * @param {string} novelId - 소설 ID
+ * @returns {Promise<number>} - 줄 수
+ */
+export const getLineCountForNovel = async (novelId) => {
+    try {
+        const linesCollection = collection(firestore, `novels/${novelId}/lines`);
+        const querySnapshot = await getDocs(linesCollection);
+        return querySnapshot.size; // 줄 수 반환
+    } catch (error) {
+        console.error("Error getting line count for novel: ", error);
+        throw error;
+    }
+};

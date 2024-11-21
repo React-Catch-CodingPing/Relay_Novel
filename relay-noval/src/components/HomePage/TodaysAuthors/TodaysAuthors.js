@@ -33,7 +33,12 @@ function TodaysAuthors() {
                     })
                 );
 
-                setAuthors(authorsData); // 상태 업데이트
+                // 총 활동 수를 기준으로 정렬 후 상위 4명 선택
+                const topAuthors = authorsData
+                    .sort((a, b) => b.totalCount - a.totalCount) // 내림차순 정렬
+                    .slice(0, 4); // 상위 4명 선택
+
+                setAuthors(topAuthors); // 상태 업데이트
             } catch (error) {
                 console.error("Error fetching authors data:", error);
             }
@@ -47,6 +52,7 @@ function TodaysAuthors() {
         { id: 1, name: "부끄핑", novels: 13, image: "/path/to/bukkeuping.png" },
         { id: 2, name: "차나핑", novels: 10, image: "/path/to/chanaping.png" },
         { id: 3, name: "하츄핑", novels: 4, image: "/path/to/hachuping.png" },
+        { id: 4, name: "깜비핑", novels: 7, image: "/path/to/kkambi.png" },
     ];
 
     return (
