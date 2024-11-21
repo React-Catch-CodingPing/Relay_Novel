@@ -1,33 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Authors.css';
+import { getUsers } from "../../../firebase/firestore/userService"; // userService 함수
+import { subscribeToAuthors } from "../../../firebase/firestore/realTimeService"; // realTimeService 함수
 
-const authorsData = [
-    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0, thumbsUp: 0 },
-    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8, hearts: 0, thumbsUp: 0 },
-    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15, hearts: 0, thumbsUp: 0 },
-    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15, hearts: 0, thumbsUp: 0 },
-    { id: 5, name: '뚜비핑', image: '/images/author5.jpg', participationCount: 4, startedWorks: 10, hearts: 0, thumbsUp: 0 },
-    { id: 6, name: '승현핑', image: '/images/author6.jpg', participationCount: 6, startedWorks: 7, hearts: 0, thumbsUp: 0 },
-    { id: 7, name: '콩이핑', image: '/images/author7.jpg', participationCount: 2, startedWorks: 5, hearts: 0, thumbsUp: 0 },
-    { id: 8, name: '지수핑', image: '/images/author8.jpg', participationCount: 9, startedWorks: 6, hearts: 0, thumbsUp: 0 },
-    { id: 9, name: '빵빵핑', image: '/images/author9.jpg', participationCount: 8, startedWorks: 11, hearts: 0, thumbsUp: 0 },
-    { id: 10, name: '하츄핑', image: '/images/author10.jpg', participationCount: 5, startedWorks: 9, hearts: 0, thumbsUp: 0 },
-    { id: 11, name: '마루핑', image: '/images/author11.jpg', participationCount: 3, startedWorks: 4, hearts: 0, thumbsUp: 0 },
-    { id: 12, name: '푸름핑', image: '/images/author12.jpg', participationCount: 4, startedWorks: 7, hearts: 0, thumbsUp: 0 },
-    { id: 13, name: '새벽핑', image: '/images/author13.jpg', participationCount: 7, startedWorks: 6, hearts: 0, thumbsUp: 0 },
-    { id: 14, name: '노을핑', image: '/images/author14.jpg', participationCount: 10, startedWorks: 8, hearts: 0, thumbsUp: 0 },
-    { id: 15, name: '별빛핑', image: '/images/author15.jpg', participationCount: 6, startedWorks: 12, hearts: 0, thumbsUp: 0 },
-    { id: 16, name: '하늘핑', image: '/images/author16.jpg', participationCount: 8, startedWorks: 9, hearts: 0, thumbsUp: 0 },
-    { id: 17, name: '구름핑', image: '/images/author17.jpg', participationCount: 3, startedWorks: 6, hearts: 0, thumbsUp: 0 },
-    { id: 18, name: '달빛핑', image: '/images/author18.jpg', participationCount: 9, startedWorks: 10, hearts: 0, thumbsUp: 0 },
-    { id: 19, name: '은하핑', image: '/images/author19.jpg', participationCount: 7, startedWorks: 11, hearts: 0, thumbsUp: 0 },
-    { id: 20, name: '우주핑', image: '/images/author20.jpg', participationCount: 10, startedWorks: 13, hearts: 0, thumbsUp: 0 },
+const placeholderData = [
+    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0 },
+    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8, hearts: 0 },
+    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15, hearts: 0 },
+    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15, hearts: 0 },
 ];
 
 const Authors = () => {
-    const [authors, setAuthors] = useState(authorsData);
+    const [authors, setAuthors] = useState([]);
     const [likedByUser, setLikedByUser] = useState([]);
-    const [recommendedByUser, setRecommendedByUser] = useState([]);
     const [sortOption, setSortOption] = useState(null); // 초기 상태는 아무것도 클릭되지 않은 상태
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageGroup, setCurrentPageGroup] = useState(1);
@@ -40,12 +25,12 @@ const Authors = () => {
     const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
     const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const displayedAuthors = [...authors]
         .sort((a, b) => {
             if (sortOption === '작성순') return b.startedWorks - a.startedWorks;
             if (sortOption === '인기순') return b.hearts - a.hearts;
-            if (sortOption === '추천순') return b.thumbsUp - a.thumbsUp;
             return 0;
         })
         .slice(startIndex, startIndex + itemsPerPage);
@@ -99,30 +84,48 @@ const Authors = () => {
         }
     };
 
-    const handleThumbsUpClick = (authorId) => {
-        const updatedAuthors = authors.map((author) => {
-            if (author.id === authorId) {
-                const newThumbsUp = recommendedByUser.includes(authorId)
-                    ? author.thumbsUp - 1
-                    : author.thumbsUp + 1;
-                return { ...author, thumbsUp: newThumbsUp };
+    useEffect(() => {
+        const fetchAuthors = async () => {
+            try {
+                const usersData = await getUsers(); // Firebase에서 사용자 정보 가져오기
+                const authorsData = usersData.map((user) => ({
+                    id: user.id,
+                    name: user.name || "익명 저자",
+                    image: user.profileImage || "/path/to/default-image.png",
+                    participationCount: user.participationCount || 0, // 참여 작품 수
+                    startedWorks: user.startedWorks || 0, // 시작 작품 수
+                    hearts: user.hearts || 0, // 좋아요 수
+                }));
+                setAuthors(authorsData);
+            } catch (error) {
+                console.error("Error fetching authors:", error);
+                setAuthors(placeholderData); // 에러 발생 시 placeholder 데이터 사용
             }
-            return author;
+        };
+
+        const unsubscribe = subscribeToAuthors((updatedAuthors) => {
+            // 실시간 업데이트 데이터 반영
+            const authorsData = updatedAuthors.map((user) => ({
+                id: user.id,
+                name: user.name || "익명 저자",
+                image: user.profileImage || "/path/to/default-image.png",
+                participationCount: user.participationCount || 0,
+                startedWorks: user.startedWorks || 0,
+                hearts: user.hearts || 0,
+            }));
+            setAuthors(authorsData);
         });
 
-        setAuthors(updatedAuthors);
+        fetchAuthors();
 
-        if (recommendedByUser.includes(authorId)) {
-            setRecommendedByUser(recommendedByUser.filter((id) => id !== authorId)); // 취소 시 제거
-        } else {
-            setRecommendedByUser([...recommendedByUser, authorId]); // 따봉 클릭 시 추가
-        }
-    };
+        return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
+    }, []);
+
 
     return (
         <div className="container">
             <div className="sort-buttons">
-                {['작성순', '인기순', '추천순'].map((option) => (
+                {['작성순', '인기순'].map((option) => (
                     <button
                         key={option}
                         onClick={() => handleSortChange(option)}
@@ -151,15 +154,6 @@ const Authors = () => {
                                     {likedByUser.includes(author.id) ? '❤️' : '🤍'}
                                 </button>
                                 <span className="count">{author.hearts}</span>
-                            </div>
-                            <div className="interaction">
-                                <button
-                                    className="thumbs-up-button"
-                                    onClick={() => handleThumbsUpClick(author.id)}
-                                >
-                                    {recommendedByUser.includes(author.id) ? '👍' : '👍'}
-                                </button>
-                                <span className="count">{author.thumbsUp}</span>
                             </div>
                         </div>
                     </div>

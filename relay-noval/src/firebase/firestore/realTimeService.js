@@ -60,3 +60,27 @@ export const subscribeToAuthor = (authorId, onUpdate) => {
 
     return unsubscribe;
 };
+
+
+/**
+ * 실시간으로 모든 저자 데이터를 구독하는 함수
+ * @param {function} onUpdate - 데이터 업데이트 시 실행할 콜백 함수
+ * @returns {function} unsubscribe - 구독 해제 함수
+ */
+export const subscribeToAuthors = (onUpdate) => {
+    const authorsRef = collection(firestore, "users");
+
+    // Firestore 실시간 구독
+    const unsubscribe = onSnapshot(authorsRef, (snapshot) => {
+        const authors = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            participationCount: doc.data().participationCount || 0, // 참여한 줄 수
+            startedWorks: doc.data().startedWorks || 0, // 시작한 작품 수
+            likes: doc.data().likes || 0, // 좋아요 수
+        }));
+        onUpdate(authors); // 콜백 함수에 실시간 업데이트 데이터 전달
+    });
+
+    return unsubscribe; // 구독 해제 함수 반환
+};
