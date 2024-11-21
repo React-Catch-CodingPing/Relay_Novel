@@ -1,7 +1,17 @@
 // 사용자 관련 함수
 
 import { firestore } from "../firebase";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import {
+    collection,
+    getDocs,
+    where,
+    query,
+    doc,
+    getDoc,
+    updateDoc,
+    arrayUnion,
+    arrayRemove,
+    increment } from "firebase/firestore";
 
 // 저자 정보를 가져오는 함수 ( 유저들 중 집필을 해 본적 있는 이들을 get )
 export const getAuthors = async () => {
@@ -109,6 +119,65 @@ export const getParticipatedNovels = async (userId) => {
         return participatedNovels;
     } catch (error) {
         console.error("Error fetching participated novels:", error);
+        throw error;
+    }
+};
+
+
+/**
+ * 좋아요 상태 확인 함수
+ * @param {string} userId - 현재 사용자 ID
+ * @param {string} authorId - 좋아요 대상 저자 ID
+ * @returns {Promise<boolean>} - 좋아요 여부
+ */
+export const getAuthorLikeStatus = async (userId, authorId) => {
+    try {
+        const userRef = doc(firestore, "users", userId);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            const likedAuthors = userSnap.data().likedAuthors || [];
+            return likedAuthors.includes(authorId);
+        }
+        return false;
+    } catch (error) {
+        console.error("Error fetching like status:", error);
+        throw error;
+    }
+};
+
+/**
+ * 좋아요 토글 및 Firestore 업데이트 함수
+ * @param {string} userId - 현재 사용자 ID
+ * @param {string} authorId - 좋아요 대상 저자 ID
+ * @param {boolean} liked - 현재 좋아요 상태
+ */
+export const updateAuthorLike = async (userId, authorId, liked) => {
+    try {
+        const userRef = doc(firestore, "users", userId);
+        const authorRef = doc(firestore, "users", authorId);
+
+        if (liked) {
+            // 좋아요 취소
+            await updateDoc(userRef, {
+                likedAuthors: arrayRemove(authorId),
+            });
+            await updateDoc(authorRef, {
+                likes: increment(-1),
+                likedBy: arrayRemove(userId),
+            });
+        } else {
+            // 좋아요 추가
+            await updateDoc(userRef, {
+                likedAuthors: arrayUnion(authorId),
+            });
+            await updateDoc(authorRef, {
+                likes: increment(1),
+                likedBy: arrayUnion(userId),
+            });
+        }
+    } catch (error) {
+        console.error("Error updating like:", error);
         throw error;
     }
 };

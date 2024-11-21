@@ -1,13 +1,15 @@
 // 실시간 데이터 관련 함수.
 
 import { firestore } from "../firebase";
-import {collection, onSnapshot} from "firebase/firestore";
+import {collection, doc, onSnapshot} from "firebase/firestore";
+
 
 /**
  * 실시간으로 모든 소설 문서를 구독하는 함수
  * @param {function} onUpdate - 데이터 업데이트 시 실행할 콜백 함수
  * @returns {function} unsubscribe - 구독 해제 함수
  */
+
 export const subscribeToNovels = (onUpdate) => {
     const novelsRef = collection(firestore, "novels");
 
@@ -27,6 +29,33 @@ export const subscribeToNovels = (onUpdate) => {
             image: doc.data().imageUrl || "/placeholder-image.png", // 이미지 기본값
         }));
         onUpdate(novels); // 콜백 함수로 데이터를 전달
+    });
+
+    return unsubscribe;
+};
+
+
+/**
+ * 실시간으로 특정 저자 데이터를 구독하는 함수
+ * @param {string} authorId - 저자 ID
+ * @param {function} onUpdate - 데이터 업데이트 시 실행할 콜백 함수
+ * @returns {function} unsubscribe - 구독 해제 함수
+ */
+export const subscribeToAuthor = (authorId, onUpdate) => {
+    const authorRef = doc(firestore, "users", authorId);
+
+    const unsubscribe = onSnapshot(authorRef, (docSnap) => {
+        if (docSnap.exists()) {
+            const authorData = {
+                id: docSnap.id,
+                ...docSnap.data(),
+                likes: docSnap.data().likes || 0, // 좋아요 수 기본값
+                likedBy: docSnap.data().likedBy || [], // 좋아요한 사용자 목록 기본값
+            };
+            onUpdate(authorData);
+        } else {
+            console.error("Author not found in Firestore.");
+        }
     });
 
     return unsubscribe;

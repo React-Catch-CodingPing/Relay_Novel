@@ -1,72 +1,95 @@
 // src/components/HomePage/AuthorProfile/AuthorProfile.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { firestore, auth } from '../../../firebase/firebase';
+import { useParams } from "react-router-dom";
+import { getAuthorLikeStatus, updateAuthorLike } from "../../../firebase/firestore/userService";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore, auth } from "../../../firebase/firebase";
 import './AuthorProfile.css';
+import {subscribeToAuthor} from "../../../firebase/firestore/realTimeService";
 
 function AuthorProfile() {
-    const { id } = useParams();
-    const [author, setAuthor] = useState(null);
+    const { id : authorId } = useParams(); // URL 파라미터로 저자 ID 가져오기
+    const [author, setAuthor] = useState(null); // 저자 데이터 상태
     const [liked, setLiked] = useState(false); // 좋아요 상태
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // 로딩 상태
 
-    // Firestore에서 저자 데이터를 가져옵니다.
+    const userId = auth.currentUser?.uid;
+
+    // 실시간 구독 설정
+    useEffect(() => {
+        const unsubscribe = subscribeToAuthor(authorId, (updatedAuthor) => {
+            setAuthor((prevAuthor) => ({
+                ...prevAuthor,
+                likes: updatedAuthor.likes || 0, // 실시간 좋아요 수 반영
+            }));
+        });
+
+        return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
+    }, [authorId]);
+
+    // Firestore에서 저자 데이터 및 좋아요 상태 가져오기
     useEffect(() => {
         const fetchAuthorData = async () => {
             try {
-                const docRef = doc(firestore, 'users', id);
-                const docSnap = await getDoc(docRef);
+                const authorRef = doc(firestore, "users", authorId);
+                const authorSnap = await getDoc(authorRef);
 
-                if (docSnap.exists()) {
-                    setAuthor(docSnap.data());
+                if (authorSnap.exists()) {
+                    setAuthor(authorSnap.data());
                 } else {
-                    console.error('No such document!');
+                    console.error("Author not found");
+                }
+
+                if (userId) {
+                    const isLiked = await getAuthorLikeStatus(userId, authorId);
+                    setLiked(isLiked);
                 }
             } catch (error) {
-                console.error('Error fetching author data:', error);
+                console.error("Error fetching author data:", error);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchAuthorData();
-    }, [id]);
+    }, [authorId, userId]);
 
-    // 좋아요 버튼 클릭 시 Firestore 업데이트
-    const handleLike = async () => {
-        if (!auth.currentUser) {
-            alert('좋아요를 누르려면 로그인해야 합니다.');
+    const toggleLike = async () => {
+        if (!userId) {
+            alert("로그인 후 좋아요를 누를 수 있습니다.");
             return;
         }
 
         try {
-            const userRef = doc(firestore, 'users', auth.currentUser.uid);
-            await updateDoc(userRef, {
-                likedAuthors: arrayUnion(id),
-            });
+            // 좋아요 상태 업데이트
+            const newLikedState = !liked;
+            setLiked(newLikedState);
 
-            setLiked(true);
-            alert('좋아요를 눌렀습니다!');
+            // 좋아요 수 로컬 업데이트
+            setAuthor((prevAuthor) => ({
+                ...prevAuthor,
+                likes: prevAuthor.likes + (newLikedState ? 1 : -1), // 좋아요 증가/감소
+            }));
+
+            // Firestore에 업데이트
+            await updateAuthorLike(userId, authorId, liked);
         } catch (error) {
-            console.error('Error liking author:', error);
-            alert('좋아요에 실패했습니다. 다시 시도해주세요.');
+            console.error("Error toggling like:", error);
+            alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
 
     if (loading) return <p>Loading...</p>;
-
     if (!author) return <p>Author not found.</p>;
 
     return (
         <div className="author-profile-container">
             <div className="author-profile-card">
                 <img
-                    src={author.image || '/path/to/default-image.jpg'}
+                    src={author.image || "/path/to/default-image.jpg"}
                     alt={author.name}
                     className="author-profile-image"
                 />
-
                 <div className="author-profile-info">
                     <div className="profile-field">
                         <span className="profile-label">닉네임</span>
@@ -80,15 +103,17 @@ function AuthorProfile() {
                         <span className="profile-label">이메일</span>
                         <span className="profile-value">{author.email}</span>
                     </div>
+                    <div className="profile-field">
+                        <span className="profile-label">좋아요 수</span>
+                        <span className="profile-value">{author.likes || 0}</span>
+                    </div>
                 </div>
-
                 {/* 좋아요 하트 버튼 */}
                 <button
-                    className={`like-button ${liked ? 'liked' : ''}`}
-                    onClick={handleLike}
-                    disabled={liked} // 좋아요를 누른 후 비활성화
+                    className={`like-button ${liked ? "liked" : ""}`}
+                    onClick={toggleLike}
                 >
-                    {liked ? '❤️' : '🤍'}
+                    {liked ? "❤️" : "🤍"}
                 </button>
             </div>
         </div>
