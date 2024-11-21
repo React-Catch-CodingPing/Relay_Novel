@@ -11,7 +11,9 @@ import {
     updateDoc,
     arrayUnion,
     arrayRemove,
-    increment } from "firebase/firestore";
+    increment,
+    Timestamp,
+} from "firebase/firestore";
 
 // 저자 정보를 가져오는 함수 ( 유저들 중 집필을 해 본적 있는 이들을 get )
 export const getAuthors = async () => {
@@ -62,7 +64,7 @@ export const getUsers = async () => {
 };
 
 /**
- * 사용자가 시작한 소설을 가져오는 함수
+ * 사용자가 시작한 모든 소설을 가져오는 함수
  * @param {string} userId - 사용자 ID
  * @returns {Promise<Array<object>>} - 사용자가 시작한 소설 목록
  */
@@ -87,9 +89,8 @@ export const getStartedNovels = async (userId) => {
     }
 };
 
-
 /**
- * 사용자가 참여한 소설을 가져오는 함수
+ * 사용자가 참여한 모든 소설을 가져오는 함수
  * @param {string} userId - 사용자 ID
  * @returns {Promise<Array<object>>} - 사용자가 참여한 소설 목록
  */
@@ -119,6 +120,72 @@ export const getParticipatedNovels = async (userId) => {
         return participatedNovels;
     } catch (error) {
         console.error("Error fetching participated novels:", error);
+        throw error;
+    }
+};
+
+/**
+ * 오늘 참여한 소설을 가져오는 함수
+ * @param {string} userId - 사용자 ID
+ * @returns {Promise<Array<object>>} - 오늘 참여한 소설 목록
+ */
+export const getTodayParticipatedNovels = async (userId) => {
+    try {
+        const novelsRef = collection(firestore, "novels");
+        const startOfToday = Timestamp.fromDate(new Date(new Date().setHours(0, 0, 0, 0)));
+
+        const novelsSnapshot = await getDocs(novelsRef);
+        const todayParticipatedNovels = [];
+
+        for (const novelDoc of novelsSnapshot.docs) {
+            const novelId = novelDoc.id;
+            const linesRef = collection(firestore, `novels/${novelId}/lines`);
+
+            const linesQuery = query(
+                linesRef,
+                where("createdBy", "==", userId),
+                where("createdAt", ">=", startOfToday)
+            );
+
+            try {
+                const linesSnapshot = await getDocs(linesQuery);
+
+                if (!linesSnapshot.empty) {
+                    todayParticipatedNovels.push({
+                        id: novelId,
+                        ...novelDoc.data(),
+                    });
+                }
+            } catch (queryError) {
+                console.warn("Firestore 쿼리 실패 (복합 인덱스 필요):", queryError.message);
+            }
+        }
+
+        return todayParticipatedNovels;
+    } catch (error) {
+        console.error("Error fetching today's participated novels:", error);
+        throw error;
+    }
+};
+
+/**
+ * 사용자가 오늘 시작한 소설을 가져오는 함수
+ * @param {string} userId - 사용자 ID
+ * @returns {Promise<Array<object>>} - 오늘 시작한 소설 목록
+ */
+export const getTodayStartedNovels = async (userId) => {
+    try {
+        const novelsRef = collection(firestore, "novels");
+        const startOfToday = Timestamp.fromDate(new Date(new Date().setHours(0, 0, 0, 0)));
+        const todayQuery = query(novelsRef, where("userId", "==", userId), where("createdAt", ">=", startOfToday));
+
+        const querySnapshot = await getDocs(todayQuery);
+        return querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+    } catch (error) {
+        console.error("Error fetching today's started novels:", error);
         throw error;
     }
 };
