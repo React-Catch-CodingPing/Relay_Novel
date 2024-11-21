@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
 import {
     incrementNovelViews,
     toggleNovelLike,
@@ -63,11 +64,12 @@ function Genres() {
     const handleHeartClick = async (event, novelId) => {
         event.stopPropagation();
 
+        const userId = auth.currentUser.uid; // 현재 사용자 ID 가져오기
         const novel = novels.find((n) => n.id === novelId);
-        const isLiked = novel.likedBy?.includes("currentUserId"); // 실제 사용자 ID 필요
+        const isLiked = novel.likedBy?.includes(userId); // 현재 사용자 ID로 좋아요 여부 확인
 
         try {
-            await toggleNovelLike(novelId, "currentUserId", isLiked); // Firestore에 좋아요 토글
+            await toggleNovelLike(novelId, userId, isLiked); // Firestore에 좋아요 토글
             setNovels((prevNovels) =>
                 prevNovels.map((n) =>
                     n.id === novelId
@@ -75,8 +77,8 @@ function Genres() {
                             ...n,
                             likes: isLiked ? n.likes - 1 : n.likes + 1,
                             likedBy: isLiked
-                                ? n.likedBy.filter((id) => id !== "currentUserId")
-                                : [...(n.likedBy || []), "currentUserId"],
+                                ? n.likedBy.filter((id) => id !== userId)
+                                : [...(n.likedBy || []), userId],
                         }
                         : n
                 )
@@ -86,15 +88,16 @@ function Genres() {
         }
     };
 
-    // 추천 클릭 핸들러
+// 추천 클릭 핸들러
     const handleThumbsUpClick = async (event, novelId) => {
         event.stopPropagation();
 
+        const userId = auth.currentUser.uid; // 현재 사용자 ID 가져오기
         const novel = novels.find((n) => n.id === novelId);
-        const isRecommended = novel.recommendedBy?.includes("currentUserId"); // 실제 사용자 ID 필요
+        const isRecommended = novel.recommendedBy?.includes(userId); // 현재 사용자 ID로 추천 여부 확인
 
         try {
-            await toggleNovelRecommendation(novelId, "currentUserId", isRecommended); // Firestore에 추천 토글
+            await toggleNovelRecommendation(novelId, userId, isRecommended); // Firestore에 추천 토글
             setNovels((prevNovels) =>
                 prevNovels.map((n) =>
                     n.id === novelId
@@ -102,8 +105,8 @@ function Genres() {
                             ...n,
                             recommendations: isRecommended ? n.recommendations - 1 : n.recommendations + 1,
                             recommendedBy: isRecommended
-                                ? n.recommendedBy.filter((id) => id !== "currentUserId")
-                                : [...(n.recommendedBy || []), "currentUserId"],
+                                ? n.recommendedBy.filter((id) => id !== userId)
+                                : [...(n.recommendedBy || []), userId],
                         }
                         : n
                 )
@@ -213,7 +216,7 @@ function Genres() {
                                         className="genres-heart-button"
                                         onClick={(event) => handleHeartClick(event, novel.id)}
                                     >
-                                        {novel.likedBy?.includes("currentUserId") ? '❤️' : '🤍'}
+                                        {novel.likedBy?.includes(auth.currentUser.uid) ? '❤️' : '🤍'}
                                     </button>
                                     <span className="count">{novel.likes}</span>
                                 </div>
@@ -222,7 +225,7 @@ function Genres() {
                                         className="genres-thumbs-up-button"
                                         onClick={(event) => handleThumbsUpClick(event, novel.id)}
                                     >
-                                        {novel.recommendedBy?.includes("currentUserId") ? '👍' : '👎'}
+                                        {novel.recommendedBy?.includes(auth.currentUser.uid) ? '👍' : '👎'}
                                     </button>
                                     <span className="count">{novel.recommendations}</span>
                                 </div>

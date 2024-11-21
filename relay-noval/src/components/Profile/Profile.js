@@ -6,7 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { doc, updateDoc } from 'firebase/firestore';
 import { auth, firestore } from '../../firebase/firebase';
-import { getStartedNovels, getParticipatedNovels } from '../../firebase/firestore/userService';
+import {
+    getStartedNovels,
+    getParticipatedNovels,
+    getLikedAuthors,
+    getLikedNovels,
+} from '../../firebase/firestore/userService';
 import { setUser } from '../../store/authSlice';
 import './Profile.css';
 
@@ -26,16 +31,20 @@ function Profile() {
     // 모달 상태 관리
     const [showStartedNovelsModal, setShowStartedNovelsModal] = useState(false);
     const [showParticipatedNovelsModal, setShowParticipatedNovelsModal] = useState(false);
+    const [showLikedAuthorsModal, setShowLikedAuthorsModal] = useState(false);
+    const [showLikedNovelsModal, setShowLikedNovelsModal] = useState(false);
 
-    // 소설 데이터 상태
+    // 소설 및 좋아요 데이터 상태
     const [startedNovels, setStartedNovels] = useState([]);
     const [participatedNovels, setParticipatedNovels] = useState([]);
+    const [likedAuthors, setLikedAuthors] = useState([]);
+    const [likedNovels, setLikedNovels] = useState([]);
 
-
-    // 소설 데이터를 가져오는 useEffect 추가
+    // 데이터 가져오는 useEffect 추가
     useEffect(() => {
         if (user) {
             fetchNovelData();
+            fetchLikedData();
         }
     }, [user]);
 
@@ -50,6 +59,19 @@ function Profile() {
             console.error('소설 데이터를 가져오는 중 오류 발생:', error);
         }
     };
+
+    const fetchLikedData = async () => {
+        try {
+            const authors = await getLikedAuthors(auth.currentUser.uid); // 내가 좋아요한 작가 가져오기
+            const novels = await getLikedNovels(auth.currentUser.uid); // 내가 좋아요한 소설 가져오기
+
+            setLikedAuthors(authors);
+            setLikedNovels(novels);
+        } catch (error) {
+            console.error('좋아요 데이터를 가져오는 중 오류 발생:', error);
+        }
+    };
+
 
     // 로그아웃 페이지로 이동하는 함수
     const goToSignOut = () => {
@@ -84,6 +106,8 @@ function Profile() {
             alert('프로필 업데이트에 실패했습니다. 다시 시도해주세요.');
         }
     };
+
+
     // 편집 취소 시 임시 상태를 초기화하고 편집 모드 종료
     const handleCancel = () => {
         setEditProfile(profile); // 임시 상태를 원래 프로필 값으로 되돌림
@@ -98,7 +122,12 @@ function Profile() {
 
     // 소설 페이지로 이동하는 함수 추가
     const goToNovelDetail = (novelId) => {
-        navigate(`/novels/${novelId}`); // NovelDetail 페이지로 이동
+        navigate(`/novels/${novelId}`);
+    };
+
+    // 작가 프로필 페이지로 이동하는 함수
+    const goToAuthorProfile = (authorId) => {
+        navigate(`/authors/${authorId}`);
     };
 
     return (
@@ -170,6 +199,7 @@ function Profile() {
                         )}
                     </div>
 
+
                     {/* 집필 현황 (편집 불가) */}
                     <div className="profile-field">
                         <span className="profile-label">집필 현황</span>
@@ -192,6 +222,17 @@ function Profile() {
                     </div>
                 </div>
 
+
+                {/* 좋아요 모달 버튼 */}
+                <div className="profile-buttons">
+                    <button className="modal-button" onClick={() => setShowLikedAuthorsModal(true)}>
+                        좋아요한 작가 보기
+                    </button>
+                    <button className="modal-button" onClick={() => setShowLikedNovelsModal(true)}>
+                        좋아요한 작품 보기
+                    </button>
+                </div>
+
                 {/* 하단의 버튼들 (편집 모드에 따라 다르게 표시) */}
                 <div className="profile-buttons">
                     {editMode ? (
@@ -208,14 +249,52 @@ function Profile() {
                 </div>
             </div>
 
+            {/* 좋아요한 작가 모달 */}
+            {showLikedAuthorsModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>좋아요한 작가</h3>
+                        <button onClick={() => setShowLikedAuthorsModal(false)} className="close-modal">
+                            닫기
+                        </button>
+                        <ul>
+                            {likedAuthors.map((author) => (
+                                <li
+                                    key={author.id}
+                                    onClick={() => goToAuthorProfile(author.id)}
+                                    className="modal-novel-item"
+                                >
+                                    <strong>{author.name}</strong>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
 
 
-
-
-
-
-
-
+            {/* 좋아요한 작품 모달 */}
+            {showLikedNovelsModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>좋아요한 작품</h3>
+                        <button onClick={() => setShowLikedNovelsModal(false)} className="close-modal">
+                            닫기
+                        </button>
+                        <ul>
+                            {likedNovels.map((novel) => (
+                                <li
+                                    key={novel.id}
+                                    onClick={() => goToNovelDetail(novel.id)}
+                                    className="modal-novel-item"
+                                >
+                                    <strong>{novel.title}</strong>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
 
             {/* 참여한 소설 모달 */}
             {showParticipatedNovelsModal && (

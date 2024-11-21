@@ -248,3 +248,65 @@ export const updateAuthorLike = async (userId, authorId, liked) => {
         throw error;
     }
 };
+
+
+/**
+ * 사용자가 좋아요한 작가 정보를 가져오는 함수
+ * @param {string} userId - 현재 사용자 ID
+ * @returns {Promise<Array<object>>} - 좋아요한 작가 목록
+ */
+export const getLikedAuthors = async (userId) => {
+    try {
+        // 사용자 문서 가져오기
+        const userRef = doc(firestore, "users", userId);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            const likedAuthors = userSnap.data().likedAuthors || []; // 좋아요한 작가 ID 배열
+            const authors = [];
+
+            // 좋아요한 작가 ID로 해당 작가 데이터 가져오기
+            for (const authorId of likedAuthors) {
+                const authorRef = doc(firestore, "users", authorId);
+                const authorSnap = await getDoc(authorRef);
+
+                if (authorSnap.exists()) {
+                    authors.push({ id: authorId, ...authorSnap.data() });
+                }
+            }
+
+            return authors;
+        } else {
+            console.warn("User document not found.");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching liked authors:", error);
+        throw error;
+    }
+};
+
+/**
+ * 사용자가 좋아요한 소설 정보를 가져오는 함수
+ * @param {string} userId - 현재 사용자 ID
+ * @returns {Promise<Array<object>>} - 좋아요한 소설 목록
+ */
+export const getLikedNovels = async (userId) => {
+    try {
+        const novelsSnapshot = await getDocs(collection(firestore, "novels"));
+        const likedNovels = [];
+
+        // 모든 소설을 순회하며 좋아요 리스트에 사용자가 있는지 확인
+        novelsSnapshot.forEach((doc) => {
+            const novelData = doc.data();
+            if (novelData.likedBy && novelData.likedBy.includes(userId)) {
+                likedNovels.push({ id: doc.id, ...novelData });
+            }
+        });
+
+        return likedNovels;
+    } catch (error) {
+        console.error("Error fetching liked novels:", error);
+        throw error;
+    }
+};
