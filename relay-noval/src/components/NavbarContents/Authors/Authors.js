@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './Authors.css';
-import { getUsers } from "../../../firebase/firestore/userService"; // userService 함수
-import { subscribeToAuthors } from "../../../firebase/firestore/realTimeService"; // realTimeService 함수
+import { getAuthorLikeStatus, updateAuthorLike, getUsers} from "../../../firebase/firestore/userService"; // userService 함수
+import { subscribeToAuthors } from "../../../firebase/firestore/realTimeService";
+import { Link } from "react-router-dom";
+import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
 
 const placeholderData = [
     { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0 },
@@ -13,7 +15,7 @@ const placeholderData = [
 const Authors = () => {
     const [authors, setAuthors] = useState([]);
     const [likedByUser, setLikedByUser] = useState([]);
-    const [sortOption, setSortOption] = useState(null); // 초기 상태는 아무것도 클릭되지 않은 상태
+    const [sortOption, setSortOption] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageGroup, setCurrentPageGroup] = useState(1);
 
@@ -25,7 +27,6 @@ const Authors = () => {
     const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
     const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
-
     const startIndex = (currentPage - 1) * itemsPerPage;
     const displayedAuthors = [...authors]
         .sort((a, b) => {
@@ -35,10 +36,10 @@ const Authors = () => {
         })
         .slice(startIndex, startIndex + itemsPerPage);
 
+
     const handleSortChange = (option) => {
-        // 같은 옵션을 다시 클릭하면 초기화
         if (sortOption === option) {
-            setSortOption(null); // 초기화
+            setSortOption(null);
         } else {
             setSortOption(option);
         }
@@ -64,61 +65,93 @@ const Authors = () => {
         }
     };
 
-    const handleHeartClick = (authorId) => {
-        const updatedAuthors = authors.map((author) => {
-            if (author.id === authorId) {
-                const newHearts = likedByUser.includes(authorId)
-                    ? author.hearts - 1
-                    : author.hearts + 1;
-                return { ...author, hearts: newHearts };
+    const handleHeartClick = async (authorId) => {
+        const currentUserId = auth.currentUser?.uid;
+
+        if (!currentUserId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        const liked = likedByUser.includes(authorId);
+
+        try {
+            await updateAuthorLike(currentUserId, authorId, liked); // 좋아요 상태 업데이트
+            const updatedAuthors = authors.map((author) => {
+                if (author.id === authorId) {
+                    return {
+                        ...author,
+                        hearts: liked ? author.hearts - 1 : author.hearts + 1,
+                    };
+                }
+                return author;
+            });
+            setAuthors(updatedAuthors);
+
+            if (liked) {
+                setLikedByUser(likedByUser.filter((id) => id !== authorId));
+            } else {
+                setLikedByUser([...likedByUser, authorId]);
             }
-            return author;
-        });
-
-        setAuthors(updatedAuthors);
-
-        if (likedByUser.includes(authorId)) {
-            setLikedByUser(likedByUser.filter((id) => id !== authorId)); // 취소 시 제거
-        } else {
-            setLikedByUser([...likedByUser, authorId]); // 하트 클릭 시 추가
+        } catch (error) {
+            console.error("Error updating like:", error);
+            alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
 
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
-                const usersData = await getUsers(); // Firebase에서 사용자 정보 가져오기
-                const authorsData = usersData.map((user) => ({
-                    id: user.id,
-                    name: user.name || "익명 저자",
-                    image: user.profileImage || "/path/to/default-image.png",
-                    participationCount: user.participationCount || 0, // 참여 작품 수
-                    startedWorks: user.startedWorks || 0, // 시작 작품 수
-                    hearts: user.hearts || 0, // 좋아요 수
-                }));
-                setAuthors(authorsData);
+                const usersData = await getUsers();
+                const currentUserId = auth.currentUser?.uid;
+
+                if (currentUserId) {
+                    const likedStatuses = await Promise.all(
+                        usersData.map((user) =>
+                            getAuthorLikeStatus(currentUserId, user.id)
+                        )
+                    );
+
+                    const authorsData = usersData.map((user, index) => ({
+                        id: user.id,
+                        name: user.name || "익명 저자",
+                        image: user.profileImage || "/path/to/default-image.png",
+                        participationCount: user.participationCount || 0,
+                        startedWorks: user.startedWorks || 0,
+                        hearts: user.likes || 0,
+                    }));
+
+                    setLikedByUser(
+                        authorsData
+                            .filter((_, index) => likedStatuses[index])
+                            .map((author) => author.id)
+                    );
+
+                    setAuthors(authorsData);
+                } else {
+                    setAuthors(usersData);
+                }
             } catch (error) {
                 console.error("Error fetching authors:", error);
-                setAuthors(placeholderData); // 에러 발생 시 placeholder 데이터 사용
+                setAuthors(placeholderData);
             }
         };
 
         const unsubscribe = subscribeToAuthors((updatedAuthors) => {
-            // 실시간 업데이트 데이터 반영
             const authorsData = updatedAuthors.map((user) => ({
                 id: user.id,
                 name: user.name || "익명 저자",
                 image: user.profileImage || "/path/to/default-image.png",
                 participationCount: user.participationCount || 0,
                 startedWorks: user.startedWorks || 0,
-                hearts: user.hearts || 0,
+                hearts: user.likes || 0,
             }));
             setAuthors(authorsData);
         });
 
         fetchAuthors();
 
-        return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
+        return () => unsubscribe();
     }, []);
 
 
@@ -145,7 +178,19 @@ const Authors = () => {
                         <p>{author.participationCount}줄 참여 중</p>
                         <p>{author.startedWorks}작품 시작</p>
                         <div className="card-buttons">
-                            <button className="button">프로필 보기</button>
+                            <Link
+                                to={{
+                                    pathname: `/authors/${author.id}`,
+                                }}
+                                state={{
+                                    name: author.name,
+                                    todayParticipatedNovels: author.participationCount,
+                                    todayStartedNovels: author.startedWorks,
+                                    image: author.image,
+                                }}
+                            >
+                                <button className="button">프로필 보기</button>
+                            </Link>
                             <div className="interaction">
                                 <button
                                     className="heart-button"
