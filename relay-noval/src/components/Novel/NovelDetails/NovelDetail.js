@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../../../firebase/firebase";
-import { addLineToNovel, getLinesFromNovel } from "../../../firebase/firestoreService";
+import { addLineToNovel, getLinesFromNovel } from "../../../firebase/firestore/lineService";
 import "./NovelDetail.css";
 
 const NovelDetail = () => {
@@ -11,8 +11,29 @@ const NovelDetail = () => {
     const [lines, setLines] = useState([]); // 현재 소설의 모든 줄거리
     const [newLine, setNewLine] = useState(""); // 추가할 줄거리
     const [isSubmitting, setIsSubmitting] = useState(false); // 제출 중 상태
+    const [authorName, setAuthorName] = useState("알 수 없는 사용자"); // 시작 저자 이름 상태 추가
 
     const user = auth.currentUser;
+
+    const fetchAuthorName = async (userId) => {
+        try {
+            const userDoc = doc(firestore, "users", userId);
+            const userSnap = await getDoc(userDoc);
+
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                // useNickname 값에 따라 반환할 이름 결정
+                if (userData.useNickname) {
+                    return userData.nickname || "익명 작성자";
+                } else {
+                    return userData.name || "알 수 없는 사용자";
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching author name:", error);
+        }
+        return "알 수 없는 사용자"; // 기본값
+    };
 
     useEffect(() => {
         const fetchNovel = async () => {
@@ -22,6 +43,10 @@ const NovelDetail = () => {
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     setNovel({ id: docSnap.id, ...docSnap.data() });
+
+
+                    const fetchedAuthorName = await fetchAuthorName(docSnap.data().userId);
+                    setAuthorName(fetchedAuthorName); // 시작 저자 이름 상태 업데이트
                 } else {
                     console.error("소설 정보를 찾을 수 없습니다.");
                 }
@@ -52,18 +77,23 @@ const NovelDetail = () => {
         setIsSubmitting(true);
 
         try {
-            // Firestore에서 사용자 nickname 가져오기
+            // Firestore에서 사용자 nickname/name 가져오기
             const userDoc = doc(firestore, "users", user.uid);
             const userSnap = await getDoc(userDoc);
 
-            let nickname = "익명 작성자"; // 기본값 설정
+            let writername = "익명 작성자"; // 기본값 설정
             if (userSnap.exists()) {
-                nickname = userSnap.data().nickname || "익명 작성자";
+                const userData = userSnap.data();
+                if (userData.useNickname) {
+                    writername = userData.nickname || "익명 작성자";
+                } else {
+                    writername = userData.name || "알 수 없는 사용자";
+                }
             }
 
             const newLineData = {
                 content: newLine,
-                createdBy: nickname,
+                createdBy: writername,
                 createdAt: new Date(),
             };
 
@@ -87,11 +117,17 @@ const NovelDetail = () => {
             <div className="novel-detail-container">
                 <img src={novel.imageUrl || "/placeholder-image.png"} alt={novel.title} className="novel-image"/>
                 <h1 className="novel-title">{novel.title}</h1>
-                <p>장르: {novel.genre || "미정"}</p>
+                <p>장르 : {novel.genre || "미정"}</p>
                 <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>
+                <p>
+                    작성일:{" "}
+                    {novel.createdAt
+                        ? novel.createdAt.toDate().toLocaleDateString()
+                        : "작성일 정보 없음"} {/* 수정된 부분: 안전한 createdAt 처리 */}
+                </p>
+                <p>시작 저자 : {authorName}</p>
                 <hr className="divider"/>
             </div>
-            {console.log(lines[0].createdAt)}
             {/* 중단: 소설 줄거리 표시 */}
             <div className="novel-content-area">
                 <h2>소설 내용</h2>

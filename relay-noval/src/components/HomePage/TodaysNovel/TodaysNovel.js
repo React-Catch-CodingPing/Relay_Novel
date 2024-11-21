@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { getAllNovels, getAuthors } from '../../../firebase/firestoreService'; // 제공된 유틸리티 함수
+import { getAuthors } from '../../../firebase/firestore/userService'; // 제공된 유틸리티 함수
+import { getAllNovels } from '../../../firebase/firestore/novelService';
 import './TodaysNovel.css';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import {getLineCountForNovel} from "../../../firebase/firestore/lineService";
 
 
 function TodaysNovel() {
@@ -13,7 +15,7 @@ function TodaysNovel() {
         const fetchData = async () => {
             try {
                 // 모든 소설 데이터 가져오기
-                const novels = await getAllNovels();
+                const allNovels = await getAllNovels();
 
                 // 모든 저자 데이터 가져오기
                 const authorsArray = await getAuthors();
@@ -23,10 +25,24 @@ function TodaysNovel() {
                     return map;
                 }, {});
 
-                console.log("Authors Map:", authorsMap); // 저자 매핑 디버깅
+                // 각 소설의 줄 수를 계산
+                const novelsWithLineCounts = await Promise.all(
+                    allNovels.map(async (novel) => {
+                        const lineCount = await getLineCountForNovel(novel.id); // 줄 수 가져오기
+                        return {
+                            ...novel,
+                            lineCount, // 줄 수 추가
+                        };
+                    })
+                );
+
+                // 줄 수를 기준으로 정렬 및 상위 4개 선택
+                const topNovels = novelsWithLineCounts
+                    .sort((a, b) => b.lineCount - a.lineCount) // 내림차순 정렬
+                    .slice(0, 4); // 상위 4개 선택
 
                 setAuthors(authorsMap); // 저자 데이터 설정
-                setNovels(novels); // 소설 데이터 설정
+                setNovels(topNovels); // 소설 데이터 설정
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -49,6 +65,7 @@ function TodaysNovel() {
                         <h5>시작 첫 줄 : {novel.firstLine}</h5>
                         <p>{novel.genre}</p>
                         <p>저자: {authors[novel.userId] || "익명 사용자"}</p> {/* 저자 이름 출력 */}
+                        <p>{novel.lineCount}줄 째 진행 중...</p> {/* 현재 진행 줄 수 표시 */}
                         {/* 참여하기 버튼 추가 */}
                         <button
                             className="participate-button"

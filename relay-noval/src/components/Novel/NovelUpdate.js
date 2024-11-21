@@ -1,6 +1,6 @@
 // src/components/NovelUpdate.js
 import React, { useState } from "react";
-import { updateNovel } from "../../firebase/firestoreService";
+import { updateNovel } from "../../firebase/firestore/novelService";
 
 const NovelUpdate = ({ novelId, existingData }) => {
     const [title, setTitle] = useState(existingData.title);

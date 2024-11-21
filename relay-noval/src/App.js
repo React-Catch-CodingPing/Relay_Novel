@@ -33,17 +33,6 @@ import AuthorProfile from "./components/HomePage/AuthorProfile/AuthorProfile";
 import WritingGuide from "./components/NavbarContents/WritingGuide/WritingGuide";
 import ReportBoard from "./components/HomePage/Footer/ReportBoard";
 
-// ...
-
-<Routes>
-    {/* 기존 라우트 */}
-    <Route path="/" element={<Home />} />
-    <Route path="/home" element={<Home />} />
-
-    {/* 신고 게시판 추가 */}
-    <Route path="/report" element={<ReportBoard />} />
-</Routes>
-
 import WritePost from "./components/NavbarContents/Community/WritePost";
 import PostDetail from "./components/NavbarContents/Community/PostDetail";
 
