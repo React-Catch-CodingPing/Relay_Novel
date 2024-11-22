@@ -2,12 +2,30 @@ import React, { useState } from 'react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { auth, firestore } from '../../../firebase/firebase';
 import './ReportBoard.css';
+import {useNavigate} from "react-router-dom";
 
 function ReportBoard() {
     const [reportContent, setReportContent] = useState("");
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
+
+
+
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
         try {
             const reportData = {
                 reporter: auth.currentUser?.email || "익명 사용자", // 신고자 이메일

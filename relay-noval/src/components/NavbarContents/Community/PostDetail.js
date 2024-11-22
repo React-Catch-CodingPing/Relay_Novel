@@ -63,6 +63,17 @@ function PostDetail() {
         fetchPost();
     }, [id, navigate]);
 
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
+
+
     // 삭제 버튼 클릭 시 Firestore에서 문서를 삭제
     const handleDelete = async () => {
         try {
