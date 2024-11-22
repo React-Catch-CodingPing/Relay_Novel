@@ -65,7 +65,7 @@ function TodaysAuthors() {
                         name={author.name}
                         todayParticipatedNovels={author.todayParticipatedNovels}
                         todayStartedNovels={author.todayStartedNovels}
-                        image={author.image}
+                        image={ author.image }
                         link={`/authors/${author.id}`}
                     />
                 ))}

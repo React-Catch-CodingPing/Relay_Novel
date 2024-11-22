@@ -1,46 +1,96 @@
-/* src/components/TodaysNovel.css */
 .novels-section {
-    padding: 20px;
+    padding: 40px 20px;
+    background-color: #fce4ec; /* 섹션 배경색 */
+}
+
+.novels-h2 {
+    font-size: 28px;
+    color: white; /* 텍스트 색상을 화이트로 변경 */
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 20px; /* 내부 여백 추가 */
+    border-radius: 12px; /* 둥근 모서리 */
+    background: linear-gradient(90deg, #ec407a, #ed62aa); /* 그라데이션 배경 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    border: 2px solid #ec407a; /* 얇고 깔끔한 테두리 */
+    letter-spacing: 1px; /* 글자 간격 */
+    transition: transform 0.3s, box-shadow 0.3s; /* 애니메이션 */
 }
 
 .novels-list {
-    display: flex;            /* 가로 정렬 */
-    gap: 20px;                /* 카드 간격 */
-    flex-wrap: wrap;          /* 화면 너비에 따라 줄바꿈 */
-    justify-content: space-around;
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    gap: 20px;              /* 카드 간격 */
+    justify-content: center; /* 컨텐츠 좌우정렬 */
 }
 
 .novel-card {
+    display: flex;          /* 가로 정렬 */
+    align-items: center;    /* 세로 가운데 정렬 */
     border: 1px solid #ddd;
-    width: 200px;
-    border-radius: 8px;
-    text-align: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-    overflow: hidden; /* 이미지 오버플로 방지 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s; /* 마우스 오버 효과 */
-    margin-bottom: 20px;
+    width: 100%;            /* 카드 너비 전체 사용 */
+    border-radius: 12px;    /* 둥근 모서리 */
+    overflow: hidden;       /* 오버플로 방지 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    transition: transform 0.3s, box-shadow 0.3s; /* 마우스 오버 효과 */
+    background-color: white; /* 카드 배경 */
+    padding: 15px;          /* 카드 내부 패딩 */
+    margin-bottom: 20px;    /* 카드 간격 */
 }
 
 .novel-card:hover {
-    transform: scale(1.05); /* 마우스 오버 시 확대 */
+    transform: scale(1.05); /* 확대 효과 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* 참여하기 버튼 스타일 추가 */
+.novel-card img {
+    width: 250px;           /* 이미지 고정 너비 */
+    height: 250px;          /* 이미지 고정 높이 */
+    border-radius: 8px;     /* 이미지 모서리 둥글게 */
+    margin-right: 20px;     /* 이미지와 텍스트 간격 */
+    background-color: #e0e0e0; /* 기본 배경 추가 */
+    display: block;
+    object-fit: contain;
+    border: 3px solid #ec407a; /* 핑크 테두리 */
+
+}
+
+.novel-card-content h3 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.novel-card-content h5 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.novel-card-content p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
 .participate-button {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 16px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 16px;
     transition: background-color 0.3s;
     margin-top: 10px;
 }
 
 .participate-button:hover {
-    background-color: #218838;
+    background-color: #d81b60; /* 호버 시 더 어두운 파란색 */
+    transform: scale(1.05); /* 호버 시 약간 확대 */
 }

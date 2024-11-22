@@ -8,17 +8,6 @@
     background-color: #f8f9fa;
 }
 
-/* 프로필 카드 스타일 */
-.profile-card {
-    width: 360px;
-    background-color: #fff;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    position: relative;
-}
-
 /* 프로필 이미지 스타일 */
 .profile-image {
     width: 100%;

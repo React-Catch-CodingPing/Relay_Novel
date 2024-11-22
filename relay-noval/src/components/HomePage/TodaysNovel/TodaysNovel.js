@@ -57,22 +57,30 @@ function TodaysNovel() {
 
     return (
         <section className="novels-section">
-            <h2>오늘의 작품</h2>
+            <h2 className="novels-h2">오늘의 작품</h2>
+            <h4> Top 3 </h4>
             <div className="novels-list">
-                {novels.map(novel => (
+                {novels.map((novel) => (
                     <div key={novel.id} className="novel-card">
-                        <h3>{novel.title}</h3>
-                        <h5>시작 첫 줄 : {novel.firstLine}</h5>
-                        <p>{novel.genre}</p>
-                        <p>저자: {authors[novel.userId] || "익명 사용자"}</p> {/* 저자 이름 출력 */}
-                        <p>{novel.lineCount}줄 째 진행 중...</p> {/* 현재 진행 줄 수 표시 */}
-                        {/* 참여하기 버튼 추가 */}
-                        <button
-                            className="participate-button"
-                            onClick={() => handleParticipateClick(novel.id)} // 클릭 시 NovelDetail로 이동
-                        >
-                            참여하기
-                        </button>
+                        {/* 왼쪽 이미지 */}
+                        <img
+                            src={novel.coverImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png'} // 기본 이미지 처리
+                            alt={`${novel.title} 표지`}
+                        />
+                        {/* 오른쪽 텍스트 및 버튼 */}
+                        <div className="novel-card-content">
+                            <h3>{novel.title}</h3>
+                            <h5>시작 첫 줄 : {novel.firstLine}</h5>
+                            <p>{novel.genre}</p>
+                            <p>저자: {authors[novel.userId] || "익명 사용자"}</p>
+                            <p>{novel.lineCount}줄 째 진행 중...</p>
+                            <button
+                                className="participate-button"
+                                onClick={() => handleParticipateClick(novel.id)}
+                            >
+                                참여하기
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
