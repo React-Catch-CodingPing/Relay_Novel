@@ -59,17 +59,6 @@
     margin-top: 16px;
 }
 
-/* 버튼 기본 스타일 */
-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
 /* 수정 버튼 */
 .edit-button {
     background-color: #007bff;

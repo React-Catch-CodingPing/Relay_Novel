@@ -64,7 +64,7 @@ function TodaysNovel() {
                     <div key={novel.id} className="novel-card">
                         {/* 왼쪽 이미지 */}
                         <img
-                            src={novel.coverImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png'} // 기본 이미지 처리
+                            src={novel.coverImage || '/images/art-icon.png'} // 기본 이미지 처리
                             alt={`${novel.title} 표지`}
                         />
                         {/* 오른쪽 텍스트 및 버튼 */}
