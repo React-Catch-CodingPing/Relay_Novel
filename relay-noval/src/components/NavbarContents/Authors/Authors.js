@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Authors.css';
 import { getAuthorLikeStatus, updateAuthorLike, getUsers} from "../../../firebase/firestore/userService"; // userService 함수
 import { subscribeToAuthors } from "../../../firebase/firestore/realTimeService";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
 
 const placeholderData = [
@@ -18,6 +18,7 @@ const Authors = () => {
     const [sortOption, setSortOption] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageGroup, setCurrentPageGroup] = useState(1);
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
     const itemsPerPage = 4;
     const pagesPerGroup = 4;
@@ -35,6 +36,16 @@ const Authors = () => {
             return 0;
         })
         .slice(startIndex, startIndex + itemsPerPage);
+
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
 
 
     const handleSortChange = (option) => {
@@ -68,10 +79,7 @@ const Authors = () => {
     const handleHeartClick = async (authorId) => {
         const currentUserId = auth.currentUser?.uid;
 
-        if (!currentUserId) {
-            alert("로그인이 필요합니다.");
-            return;
-        }
+        if (!ensureLoggedIn()) return; // 로그인 확인
 
         const liked = likedByUser.includes(authorId);
 
@@ -197,6 +205,7 @@ const Authors = () => {
                                     onClick={() => handleHeartClick(author.id)}
                                 >
                                     {likedByUser.includes(author.id) ? '❤️' : '🤍'}
+
                                 </button>
                                 <span className="count">{author.hearts}</span>
                             </div>

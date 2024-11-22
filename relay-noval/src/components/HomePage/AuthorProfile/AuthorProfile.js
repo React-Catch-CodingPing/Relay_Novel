@@ -1,6 +1,6 @@
 // src/components/HomePage/AuthorProfile/AuthorProfile.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { getAuthorLikeStatus, updateAuthorLike } from "../../../firebase/firestore/userService";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../../../firebase/firebase";
@@ -12,8 +12,11 @@ function AuthorProfile() {
     const [author, setAuthor] = useState(null); // 저자 데이터 상태
     const [liked, setLiked] = useState(false); // 좋아요 상태
     const [loading, setLoading] = useState(true); // 로딩 상태
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
     const userId = auth.currentUser?.uid;
+
+
 
     // 실시간 구독 설정
     useEffect(() => {
@@ -54,11 +57,18 @@ function AuthorProfile() {
         fetchAuthorData();
     }, [authorId, userId]);
 
-    const toggleLike = async () => {
-        if (!userId) {
-            alert("로그인 후 좋아요를 누를 수 있습니다.");
-            return;
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
         }
+        return true;
+    };
+
+    const toggleLike = async () => {
+        if (!ensureLoggedIn()) return; // 로그인 확인
 
         try {
             // 좋아요 상태 업데이트

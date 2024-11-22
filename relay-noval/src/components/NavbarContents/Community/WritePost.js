@@ -41,6 +41,17 @@ function WritePost() {
         fetchUserProfile();
     }, []); // 컴포넌트가 처음 렌더링될 때 실행
 
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
+
+
     // 글 저장 처리 함수
     const handleSavePost = async () => {
         // 제목과 내용을 입력했는지 확인
@@ -48,6 +59,9 @@ function WritePost() {
             alert("제목과 내용을 모두 입력해주세요!");
             return;
         }
+
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
 
         // 선택한 작성자 정보를 설정
         const author = authorType === "nickname" ? user.nickname : user.name;

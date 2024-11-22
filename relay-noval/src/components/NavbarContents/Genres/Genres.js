@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
 import {
     incrementNovelViews,
@@ -19,6 +19,7 @@ function Genres() {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
     const pagesPerGroup = 4; // 한 그룹에 표시할 페이지 수
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
     // 실시간 Firestore 데이터 구독
     useEffect(() => {
@@ -37,6 +38,16 @@ function Genres() {
 
         return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
     }, [sortOption]);
+
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
 
     // 장르 토글 기능
     const toggleGenre = (genre) => {
@@ -74,6 +85,8 @@ function Genres() {
     const handleHeartClick = async (event, novelId) => {
         event.stopPropagation();
 
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
         const userId = auth.currentUser.uid; // 현재 사용자 ID 가져오기
         const novel = novels.find((n) => n.id === novelId);
         const isLiked = novel.likedBy?.includes(userId); // 현재 사용자 ID로 좋아요 여부 확인
@@ -102,6 +115,8 @@ function Genres() {
     const handleThumbsUpClick = async (event, novelId) => {
         event.stopPropagation();
 
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
         const userId = auth.currentUser.uid; // 현재 사용자 ID 가져오기
         const novel = novels.find((n) => n.id === novelId);
         const isRecommended = novel.recommendedBy?.includes(userId); // 현재 사용자 ID로 추천 여부 확인
@@ -129,6 +144,8 @@ function Genres() {
     // 조회수 증가 핸들러
     const handleViewCount = async (event, novelId) => {
         event.preventDefault();
+
+        if (!ensureLoggedIn()) return; // 로그인 확인
 
         try {
             await incrementNovelViews(novelId); // Firestore에 조회수 증가
@@ -226,7 +243,7 @@ function Genres() {
                                         className="genres-heart-button"
                                         onClick={(event) => handleHeartClick(event, novel.id)}
                                     >
-                                        {novel.likedBy?.includes(auth.currentUser.uid) ? '❤️' : '🤍'}
+                                        {auth.currentUser ? (novel.likedBy?.includes(auth.currentUser.uid) ? '❤️' : '🤍') : '🤍'}
                                     </button>
                                     <span className="count">{novel.likes}</span>
                                 </div>
@@ -235,7 +252,7 @@ function Genres() {
                                         className="genres-thumbs-up-button"
                                         onClick={(event) => handleThumbsUpClick(event, novel.id)}
                                     >
-                                        {novel.recommendedBy?.includes(auth.currentUser.uid) ? '👍' : '👎'}
+                                        {auth.currentUser ? (novel.recommendedBy?.includes(auth.currentUser.uid) ? '👍' : '👎') : '👎'}
                                     </button>
                                     <span className="count">{novel.recommendations}</span>
                                 </div>
