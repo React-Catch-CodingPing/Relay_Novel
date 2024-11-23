@@ -1,5 +1,5 @@
     // src/components/Navbar.js
-    import React from 'react';
+    import React, { useState } from 'react';
     import { Link, useNavigate } from 'react-router-dom';
     import { useSelector, useDispatch } from 'react-redux';
     import { signOut } from '../../../store/authSlice'; // 로그아웃 액션 import
@@ -65,6 +65,7 @@
                 </div>
             </nav>
         );
+        
     }
 
     export default Navbar;

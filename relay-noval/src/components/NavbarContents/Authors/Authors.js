@@ -1,36 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Authors.css';
+import { getAuthorLikeStatus, updateAuthorLike, getUsers} from "../../../firebase/firestore/userService"; // userService 함수
+import { subscribeToAuthors } from "../../../firebase/firestore/realTimeService";
+import {Link, useNavigate} from "react-router-dom";
+import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
 
-const authorsData = [
-    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0, thumbsUp: 0 },
-    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8, hearts: 0, thumbsUp: 0 },
-    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15, hearts: 0, thumbsUp: 0 },
-    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15, hearts: 0, thumbsUp: 0 },
-    { id: 5, name: '뚜비핑', image: '/images/author5.jpg', participationCount: 4, startedWorks: 10, hearts: 0, thumbsUp: 0 },
-    { id: 6, name: '승현핑', image: '/images/author6.jpg', participationCount: 6, startedWorks: 7, hearts: 0, thumbsUp: 0 },
-    { id: 7, name: '콩이핑', image: '/images/author7.jpg', participationCount: 2, startedWorks: 5, hearts: 0, thumbsUp: 0 },
-    { id: 8, name: '지수핑', image: '/images/author8.jpg', participationCount: 9, startedWorks: 6, hearts: 0, thumbsUp: 0 },
-    { id: 9, name: '빵빵핑', image: '/images/author9.jpg', participationCount: 8, startedWorks: 11, hearts: 0, thumbsUp: 0 },
-    { id: 10, name: '하츄핑', image: '/images/author10.jpg', participationCount: 5, startedWorks: 9, hearts: 0, thumbsUp: 0 },
-    { id: 11, name: '마루핑', image: '/images/author11.jpg', participationCount: 3, startedWorks: 4, hearts: 0, thumbsUp: 0 },
-    { id: 12, name: '푸름핑', image: '/images/author12.jpg', participationCount: 4, startedWorks: 7, hearts: 0, thumbsUp: 0 },
-    { id: 13, name: '새벽핑', image: '/images/author13.jpg', participationCount: 7, startedWorks: 6, hearts: 0, thumbsUp: 0 },
-    { id: 14, name: '노을핑', image: '/images/author14.jpg', participationCount: 10, startedWorks: 8, hearts: 0, thumbsUp: 0 },
-    { id: 15, name: '별빛핑', image: '/images/author15.jpg', participationCount: 6, startedWorks: 12, hearts: 0, thumbsUp: 0 },
-    { id: 16, name: '하늘핑', image: '/images/author16.jpg', participationCount: 8, startedWorks: 9, hearts: 0, thumbsUp: 0 },
-    { id: 17, name: '구름핑', image: '/images/author17.jpg', participationCount: 3, startedWorks: 6, hearts: 0, thumbsUp: 0 },
-    { id: 18, name: '달빛핑', image: '/images/author18.jpg', participationCount: 9, startedWorks: 10, hearts: 0, thumbsUp: 0 },
-    { id: 19, name: '은하핑', image: '/images/author19.jpg', participationCount: 7, startedWorks: 11, hearts: 0, thumbsUp: 0 },
-    { id: 20, name: '우주핑', image: '/images/author20.jpg', participationCount: 10, startedWorks: 13, hearts: 0, thumbsUp: 0 },
+const placeholderData = [
+    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0 },
+    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8, hearts: 0 },
+    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15, hearts: 0 },
+    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15, hearts: 0 },
 ];
 
 const Authors = () => {
-    const [authors, setAuthors] = useState(authorsData);
+    const [authors, setAuthors] = useState([]);
     const [likedByUser, setLikedByUser] = useState([]);
-    const [recommendedByUser, setRecommendedByUser] = useState([]);
-    const [sortOption, setSortOption] = useState(null); // 초기 상태는 아무것도 클릭되지 않은 상태
+    const [sortOption, setSortOption] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageGroup, setCurrentPageGroup] = useState(1);
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
     const itemsPerPage = 4;
     const pagesPerGroup = 4;
@@ -45,15 +33,24 @@ const Authors = () => {
         .sort((a, b) => {
             if (sortOption === '작성순') return b.startedWorks - a.startedWorks;
             if (sortOption === '인기순') return b.hearts - a.hearts;
-            if (sortOption === '추천순') return b.thumbsUp - a.thumbsUp;
             return 0;
         })
         .slice(startIndex, startIndex + itemsPerPage);
 
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
+
+
     const handleSortChange = (option) => {
-        // 같은 옵션을 다시 클릭하면 초기화
         if (sortOption === option) {
-            setSortOption(null); // 초기화
+            setSortOption(null);
         } else {
             setSortOption(option);
         }
@@ -79,50 +76,97 @@ const Authors = () => {
         }
     };
 
-    const handleHeartClick = (authorId) => {
-        const updatedAuthors = authors.map((author) => {
-            if (author.id === authorId) {
-                const newHearts = likedByUser.includes(authorId)
-                    ? author.hearts - 1
-                    : author.hearts + 1;
-                return { ...author, hearts: newHearts };
+    const handleHeartClick = async (authorId) => {
+        const currentUserId = auth.currentUser?.uid;
+
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
+        const liked = likedByUser.includes(authorId);
+
+        try {
+            await updateAuthorLike(currentUserId, authorId, liked); // 좋아요 상태 업데이트
+            const updatedAuthors = authors.map((author) => {
+                if (author.id === authorId) {
+                    return {
+                        ...author,
+                        hearts: liked ? author.hearts - 1 : author.hearts + 1,
+                    };
+                }
+                return author;
+            });
+            setAuthors(updatedAuthors);
+
+            if (liked) {
+                setLikedByUser(likedByUser.filter((id) => id !== authorId));
+            } else {
+                setLikedByUser([...likedByUser, authorId]);
             }
-            return author;
-        });
-
-        setAuthors(updatedAuthors);
-
-        if (likedByUser.includes(authorId)) {
-            setLikedByUser(likedByUser.filter((id) => id !== authorId)); // 취소 시 제거
-        } else {
-            setLikedByUser([...likedByUser, authorId]); // 하트 클릭 시 추가
+        } catch (error) {
+            console.error("Error updating like:", error);
+            alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
 
-    const handleThumbsUpClick = (authorId) => {
-        const updatedAuthors = authors.map((author) => {
-            if (author.id === authorId) {
-                const newThumbsUp = recommendedByUser.includes(authorId)
-                    ? author.thumbsUp - 1
-                    : author.thumbsUp + 1;
-                return { ...author, thumbsUp: newThumbsUp };
+    useEffect(() => {
+        const fetchAuthors = async () => {
+            try {
+                const usersData = await getUsers();
+                const currentUserId = auth.currentUser?.uid;
+
+                if (currentUserId) {
+                    const likedStatuses = await Promise.all(
+                        usersData.map((user) =>
+                            getAuthorLikeStatus(currentUserId, user.id)
+                        )
+                    );
+
+                    const authorsData = usersData.map((user, index) => ({
+                        id: user.id,
+                        name: user.name || "익명 저자",
+                        image: user.profileImage || "/path/to/default-image.png",
+                        participationCount: user.participationCount || 0,
+                        startedWorks: user.startedWorks || 0,
+                        hearts: user.likes || 0,
+                    }));
+
+                    setLikedByUser(
+                        authorsData
+                            .filter((_, index) => likedStatuses[index])
+                            .map((author) => author.id)
+                    );
+
+                    setAuthors(authorsData);
+                } else {
+                    setAuthors(usersData);
+                }
+            } catch (error) {
+                console.error("Error fetching authors:", error);
+                setAuthors(placeholderData);
             }
-            return author;
+        };
+
+        const unsubscribe = subscribeToAuthors((updatedAuthors) => {
+            const authorsData = updatedAuthors.map((user) => ({
+                id: user.id,
+                name: user.name || "익명 저자",
+                image: user.profileImage || "/path/to/default-image.png",
+                participationCount: user.participationCount || 0,
+                startedWorks: user.startedWorks || 0,
+                hearts: user.likes || 0,
+            }));
+            setAuthors(authorsData);
         });
 
-        setAuthors(updatedAuthors);
+        fetchAuthors();
 
-        if (recommendedByUser.includes(authorId)) {
-            setRecommendedByUser(recommendedByUser.filter((id) => id !== authorId)); // 취소 시 제거
-        } else {
-            setRecommendedByUser([...recommendedByUser, authorId]); // 따봉 클릭 시 추가
-        }
-    };
+        return () => unsubscribe();
+    }, []);
+
 
     return (
         <div className="container">
             <div className="sort-buttons">
-                {['작성순', '인기순', '추천순'].map((option) => (
+                {['작성순', '인기순'].map((option) => (
                     <button
                         key={option}
                         onClick={() => handleSortChange(option)}
@@ -142,24 +186,28 @@ const Authors = () => {
                         <p>{author.participationCount}줄 참여 중</p>
                         <p>{author.startedWorks}작품 시작</p>
                         <div className="card-buttons">
-                            <button className="button">프로필 보기</button>
+                            <Link
+                                to={{
+                                    pathname: `/authors/${author.id}`,
+                                }}
+                                state={{
+                                    name: author.name,
+                                    todayParticipatedNovels: author.participationCount,
+                                    todayStartedNovels: author.startedWorks,
+                                    image: author.image,
+                                }}
+                            >
+                                <button className="button">프로필 보기</button>
+                            </Link>
                             <div className="interaction">
                                 <button
                                     className="heart-button"
                                     onClick={() => handleHeartClick(author.id)}
                                 >
                                     {likedByUser.includes(author.id) ? '❤️' : '🤍'}
+
                                 </button>
                                 <span className="count">{author.hearts}</span>
-                            </div>
-                            <div className="interaction">
-                                <button
-                                    className="thumbs-up-button"
-                                    onClick={() => handleThumbsUpClick(author.id)}
-                                >
-                                    {recommendedByUser.includes(author.id) ? '👍' : '👍'}
-                                </button>
-                                <span className="count">{author.thumbsUp}</span>
                             </div>
                         </div>
                     </div>

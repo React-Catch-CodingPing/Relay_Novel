@@ -1,136 +1,177 @@
 /* src/components/Profile.css */
-/* 프로필 전체를 감싸는 메인 컨테이너로, 화면 중앙에 배치 */
+/* 프로필 전체를 감싸는 메인 컨테이너 */
 .profile-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* 화면 전체 높이로 설정하여 세로 중앙에 배치 */
-    background-color: #f8f9fa; /* 배경색 설정 */
+    height: 100vh;
+    background-color: #f8f9fa;
 }
 
 /* 프로필 카드 스타일 */
 .profile-card {
-    width: 320px;
+    width: 360px;
     background-color: #fff;
     padding: 24px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    border-radius: 12px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
     text-align: center;
+    position: relative;
 }
 
 /* 프로필 이미지 스타일 */
 .profile-image {
-    width: 100%; /* 이미지가 카드의 너비에 맞춰져 꽉 차도록 설정 */
+    width: 100%;
     height: auto;
-    border-radius: 8px; /* 이미지 모서리를 둥글게 처리 */
-    margin-bottom: 16px; /* 이미지와 아래 텍스트 사이의 간격 */
-    background-color: #e9ecef; /* 이미지가 없을 때 표시되는 배경색 */
-}
-
-/* 편집 모드에서 입력 필드 스타일 */
-.profile-input {
-    width: 100%; /* 입력 필드가 카드의 너비에 맞도록 설정 */
-    padding: 8px;
-    margin-top: 4px;
+    border-radius: 12px;
     margin-bottom: 16px;
-    border: 1px solid #ddd; /* 테두리 설정 */
-    border-radius: 4px; /* 모서리 둥글게 처리 */
-    font-size: 1rem;
+    background-color: #e9ecef;
 }
 
-/* 개별 프로필 정보 필드의 컨테이너 */
-.profile-field {
-    margin-bottom: 12px;
+/* 프로필 정보 컨테이너 */
+.profile-info {
+    margin-bottom: 16px;
 }
 
-/* 필드 라벨 스타일 (닉네임, 이름 등) */
+/* 각 필드 라벨 스타일 */
 .profile-label {
-    font-weight: bold; /* 텍스트를 굵게 표시 */
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #555;
     display: block;
-    margin-bottom: 4px; /* 라벨과 값 또는 입력 필드 사이 간격 */
+    margin-bottom: 4px;
 }
 
-/* 일반 텍스트 값 스타일 (편집 모드가 아닐 때 표시되는 값) */
+/* 필드 값 스타일 */
 .profile-value {
     font-size: 1rem;
     color: #333;
+    margin-bottom: 12px;
+}
+
+/* 입력 필드 스타일 */
+.profile-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
 /* 버튼들 컨테이너 */
 .profile-buttons {
     display: flex;
-    justify-content: space-between; /* 버튼들이 양쪽 끝으로 배치되도록 설정 */
-    margin-top: 16px; /* 상단에 여백 추가 */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 16px;
+    gap: 10px; /* 버튼 간 간격 */
 }
 
-/* 프로필 편집 버튼 스타일 */
-.edit-button {
-    background-color: #e0e0e0; /* 회색 배경 */
-    color: #333; /* 어두운 글자색 */
-    border: none;
-    padding: 10px 16px; /* 버튼 내부 여백 설정 */
-    border-radius: 4px; /* 모서리를 둥글게 */
-    font-size: 1rem; /* 글자 크기 설정 */
-    cursor: pointer;
-    width: 48%; /* 버튼 크기 통일을 위해 너비 설정 */
-    text-align: center;
-}
-
-.edit-button:hover {
-    background-color: #0056b3; /* 마우스 오버 시 색상 변경 */
-}
-
-/* 저장 버튼 스타일 */
-.save-button {
-    background-color: #28a745; /* 초록색 배경 */
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+/* 공통 버튼 스타일 */
+.modal-button,
+.edit-button,
+.save-button,
+.cancel-button,
+.logout-button {
+    flex: 1 1 calc(48% - 10px); /* 버튼이 48% 너비를 가지며 간격 유지 */
+    padding: 12px;
     font-size: 1rem;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
-    margin-right: 8px; /* 버튼 사이 간격 */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* 좋아요 버튼 스타일 */
+.modal-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* 저장 버튼 */
+.save-button {
+    background-color: #28a745;
+    color: white;
 }
 
 .save-button:hover {
-    background-color: #218838; /* 마우스 오버 시 색상 변경 */
+    background-color: #218838;
 }
 
-/* 취소 버튼 스타일 */
+/* 취소 버튼 */
 .cancel-button {
-    background-color: #6c757d; /* 회색 배경 */
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
+    background-color: #6c757d;
+    color: white;
 }
 
 .cancel-button:hover {
-    background-color: #5a6268; /* 마우스 오버 시 색상 변경 */
+    background-color: #5a6268;
 }
 
-/* 로그아웃 버튼 스타일 */
-.logout-button-forPr {
-    background-color: #333; /* 검은색 배경 */
-    color: #fff; /* 흰색 글자 */
-    border: none;
-    padding: 10px 16px;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 48%; /* 버튼 크기 통일을 위해 너비 설정 */
+/* 로그아웃 버튼 */
+.logout-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+/* 모달 스타일 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
     text-align: center;
+    position: relative;
 }
 
-/* 마우스 오버 시 효과 */
-.edit-button:hover {
-    opacity: 0.9; /* 살짝 투명해지도록 설정 */
-    background-color: #d0d0d0; /* 약간 더 어두운 회색으로 변경 */
+/* 닫기 버튼 */
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-.logout-button-forPr:hover {
-    opacity: 0.9; /* 살짝 투명해지도록 설정 */
-    background-color: #2b2b2b; /* 약간 더 어두운 검은색으로 변경 */
+/* 좋아요한 작품 리스트 아이템 */
+.modal-novel-item {
+    padding: 10px;
+    margin: 8px 0;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 호버 효과와 애니메이션 */
+}
+
+/* 호버 상태에서의 스타일 */
+.modal-novel-item:hover {
+    background-color: #e6e6e6; /* 배경색 변경 */
+    transform: scale(1.03); /* 살짝 확대 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }

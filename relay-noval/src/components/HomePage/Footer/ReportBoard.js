@@ -1,15 +1,47 @@
 import React, { useState } from 'react';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { auth, firestore } from '../../../firebase/firebase';
 import './ReportBoard.css';
+import {useNavigate} from "react-router-dom";
 
 function ReportBoard() {
     const [reportContent, setReportContent] = useState("");
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
-    const handleSubmit = (e) => {
+
+
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // 신고 내용 제출 로직 (추후 서버와 연결 가능)
-        console.log("신고 내용:", reportContent);
-        setReportContent(""); // 입력 필드 초기화
-        alert("신고가 접수되었습니다.");
+
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
+        try {
+            const reportData = {
+                reporter: auth.currentUser?.email || "익명 사용자", // 신고자 이메일
+                content: reportContent, // 신고 내용
+                createdAt: serverTimestamp(), // 신고 접수 시간
+            };
+
+            // Firestore에 데이터 추가
+            await addDoc(collection(firestore, "reports"), reportData);
+
+            setReportContent(""); // 입력 필드 초기화
+            alert("신고가 접수되었습니다.");
+        } catch (error) {
+            console.error("신고 접수 중 오류:", error);
+            alert("신고 접수에 실패했습니다. 다시 시도해주세요.");
+        }
     };
 
     return (

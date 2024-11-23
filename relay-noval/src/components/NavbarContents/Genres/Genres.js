@@ -1,30 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
 import {
     incrementNovelViews,
     toggleNovelLike,
     toggleNovelRecommendation,
-    subscribeToNovels,} from '../../../firebase/firestoreService'; // Firebase에서 소설 데이터를 가져오는 함수
+    } from '../../../firebase/firestore/novelService'; // Firebase에서 소설 데이터를 가져오는 함수
+import { subscribeToNovels } from '../../../firebase/firestore/realTimeService';
 import './Genres.css';
+import {getLineCountForNovel} from "../../../firebase/firestore/lineService";
 
 function Genres() {
     const [novels, setNovels] = useState([]);
     const [filteredNovels, setFilteredNovels] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [lineCounts, setLineCounts] = useState({});
     const [sortOption, setSortOption] = useState(null);
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
     const pagesPerGroup = 4; // 한 그룹에 표시할 페이지 수
+    const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
     // 실시간 Firestore 데이터 구독
     useEffect(() => {
-        const unsubscribe = subscribeToNovels((updatedNovels) => {
+        const unsubscribe = subscribeToNovels(async (updatedNovels) => {
             setNovels(updatedNovels);
             setFilteredNovels(sortNovels(updatedNovels, sortOption)); // 필터 및 정렬 반영
+
+            // 각 소설의 줄 수 가져오기
+            const counts = {};
+            for (const novel of updatedNovels) {
+                counts[novel.id] = await getLineCountForNovel(novel.id);
+            }
+            setLineCounts(counts); // 줄 수 상태 업데이트
         });
+
 
         return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
     }, [sortOption]);
+
+    // 로그인 여부 확인 함수
+    const ensureLoggedIn = () => {
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login"); // 로그인 페이지로 이동
+            return false;
+        }
+        return true;
+    };
 
     // 장르 토글 기능
     const toggleGenre = (genre) => {
@@ -62,11 +85,14 @@ function Genres() {
     const handleHeartClick = async (event, novelId) => {
         event.stopPropagation();
 
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
+        const userId = auth.currentUser.uid; // 현재 사용자 ID 가져오기
         const novel = novels.find((n) => n.id === novelId);
-        const isLiked = novel.likedBy?.includes("currentUserId"); // 실제 사용자 ID 필요
+        const isLiked = novel.likedBy?.includes(userId); // 현재 사용자 ID로 좋아요 여부 확인
 
         try {
-            await toggleNovelLike(novelId, "currentUserId", isLiked); // Firestore에 좋아요 토글
+            await toggleNovelLike(novelId, userId, isLiked); // Firestore에 좋아요 토글
             setNovels((prevNovels) =>
                 prevNovels.map((n) =>
                     n.id === novelId
@@ -74,8 +100,8 @@ function Genres() {
                             ...n,
                             likes: isLiked ? n.likes - 1 : n.likes + 1,
                             likedBy: isLiked
-                                ? n.likedBy.filter((id) => id !== "currentUserId")
-                                : [...(n.likedBy || []), "currentUserId"],
+                                ? n.likedBy.filter((id) => id !== userId)
+                                : [...(n.likedBy || []), userId],
                         }
                         : n
                 )
@@ -85,15 +111,18 @@ function Genres() {
         }
     };
 
-    // 추천 클릭 핸들러
+// 추천 클릭 핸들러
     const handleThumbsUpClick = async (event, novelId) => {
         event.stopPropagation();
 
+        if (!ensureLoggedIn()) return; // 로그인 확인
+
+        const userId = auth.currentUser.uid; // 현재 사용자 ID 가져오기
         const novel = novels.find((n) => n.id === novelId);
-        const isRecommended = novel.recommendedBy?.includes("currentUserId"); // 실제 사용자 ID 필요
+        const isRecommended = novel.recommendedBy?.includes(userId); // 현재 사용자 ID로 추천 여부 확인
 
         try {
-            await toggleNovelRecommendation(novelId, "currentUserId", isRecommended); // Firestore에 추천 토글
+            await toggleNovelRecommendation(novelId, userId, isRecommended); // Firestore에 추천 토글
             setNovels((prevNovels) =>
                 prevNovels.map((n) =>
                     n.id === novelId
@@ -101,8 +130,8 @@ function Genres() {
                             ...n,
                             recommendations: isRecommended ? n.recommendations - 1 : n.recommendations + 1,
                             recommendedBy: isRecommended
-                                ? n.recommendedBy.filter((id) => id !== "currentUserId")
-                                : [...(n.recommendedBy || []), "currentUserId"],
+                                ? n.recommendedBy.filter((id) => id !== userId)
+                                : [...(n.recommendedBy || []), userId],
                         }
                         : n
                 )
@@ -115,6 +144,8 @@ function Genres() {
     // 조회수 증가 핸들러
     const handleViewCount = async (event, novelId) => {
         event.preventDefault();
+
+        if (!ensureLoggedIn()) return; // 로그인 확인
 
         try {
             await incrementNovelViews(novelId); // Firestore에 조회수 증가
@@ -202,7 +233,7 @@ function Genres() {
                                 <img src={novel.image} alt={novel.title} className="novel-image" />
                                 <div className="novel-info">
                                     <h3>{novel.title}</h3>
-                                    <p>{novel.lineCount}</p>
+                                    <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}
                                 </div>
                             </Link>
                             <div className="genres-actions-container">
@@ -212,7 +243,7 @@ function Genres() {
                                         className="genres-heart-button"
                                         onClick={(event) => handleHeartClick(event, novel.id)}
                                     >
-                                        {novel.likedBy?.includes("currentUserId") ? '❤️' : '🤍'}
+                                        {auth.currentUser ? (novel.likedBy?.includes(auth.currentUser.uid) ? '❤️' : '🤍') : '🤍'}
                                     </button>
                                     <span className="count">{novel.likes}</span>
                                 </div>
@@ -221,7 +252,7 @@ function Genres() {
                                         className="genres-thumbs-up-button"
                                         onClick={(event) => handleThumbsUpClick(event, novel.id)}
                                     >
-                                        {novel.recommendedBy?.includes("currentUserId") ? '👍' : '👎'}
+                                        {auth.currentUser ? (novel.recommendedBy?.includes(auth.currentUser.uid) ? '👍' : '👎') : '👎'}
                                     </button>
                                     <span className="count">{novel.recommendations}</span>
                                 </div>

@@ -56,6 +56,8 @@ function Community() {
         fetchPosts();
     }, []);
 
+
+
     // 현재 페이지에 해당하는 글 필터링
     const currentPosts = posts.slice(
         (currentPage - 1) * itemsPerPage,

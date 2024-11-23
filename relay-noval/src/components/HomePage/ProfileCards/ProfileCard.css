@@ -7,7 +7,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px; /* 기본 카드 너비 */
     max-width: 100%; /* 화면 크기 초과 방지 */
-    margin: 20px;
     text-align: center;
     transition: transform 0.3s; /* 마우스 오버 효과 */
 }
@@ -22,9 +21,6 @@
     object-fit: cover;
 }
 
-.profile-card-content {
-    padding: 16px;
-}
 
 .profile-card-content h3 {
     font-size: 1.5em;

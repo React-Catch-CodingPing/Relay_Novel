@@ -23,18 +23,57 @@
     margin-bottom: 20px;
 }
 
-.image-upload {
+.imageUpload {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-}
 
-.image-preview {
-    width: 100%;
-    max-width: 400px;
+}
+input[type="file"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    color: transparent;
+    font-weight: bolder;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+input[type="file"]::after{
+    display: none;
+}
+input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+}
+input[type="file"]::before {
+    content: '파일 업로드';
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    color: black;
+    background-color: rgba(175, 173, 173, 0.36);
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+input[type="file"]:hover::before {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-color: black;
+    color: white;
+}
+.imagePreview {
+
+    width: 300px;
     margin-top: 10px;
     border-radius: 8px;
+    max-height: 300px;
+    min-height: 300px;
 }
 
 .form {

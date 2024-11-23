@@ -1,6 +1,6 @@
 // src/components/Novel/NovelList.js
 import React, { useEffect, useState } from "react";
-import { getAllNovels, deleteNovel } from "../../firebase/firestoreService";
+import { getAllNovels, deleteNovel } from "../../firebase/firestore/novelService";
 import NovelItem from "./NovelItem";
 
 const NovelList = () => {
