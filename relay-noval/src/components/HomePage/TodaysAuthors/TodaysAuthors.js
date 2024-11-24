@@ -33,10 +33,10 @@ function TodaysAuthors() {
                     })
                 );
 
-                // 총 활동 수를 기준으로 정렬 후 상위 4명 선택
+                // 총 활동 수를 기준으로 정렬 후 상위 3명 선택
                 const topAuthors = authorsData
                     .sort((a, b) => b.totalCount - a.totalCount) // 내림차순 정렬
-                    .slice(0, 4); // 상위 4명 선택
+                    .slice(0, 3); // 상위 3명 선택
 
                 setAuthors(topAuthors); // 상태 업데이트
             } catch (error) {
@@ -65,7 +65,7 @@ function TodaysAuthors() {
                         name={author.name}
                         todayParticipatedNovels={author.todayParticipatedNovels}
                         todayStartedNovels={author.todayStartedNovels}
-                        image={author.image}
+                        image={ author.image || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png' }
                         link={`/authors/${author.id}`}
                     />
                 ))}

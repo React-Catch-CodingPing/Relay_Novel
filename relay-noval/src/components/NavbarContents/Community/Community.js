@@ -63,11 +63,11 @@ function Community() {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
-
-    // 페이지 변경 함수
     const handlePageChange = (page) => {
         setCurrentPage(page); // 현재 페이지 상태 업데이트
     };
+
+    //console.log(post.views);
 
     return (
         <div className="community-container">
@@ -97,9 +97,21 @@ function Community() {
                                 className="post-card"
                                 onClick={() => navigate(`/community/${post.id}`)}
                             >
+                                {/* 작성자 표시 */}
+                                <div className="post-meta">
+                                    <p>{post.author}</p>
+                                    <p>{post.date}</p>
+                                    <p>조회수 {post.views}</p>
+                                </div>
+
+                                {/* 구분선 */}
+                                <hr className="post-divider" />
+
+                                {/* 제목 */}
                                 <h3>“{post.title}”</h3>
-                                <div className="post-author">
-                                    <p>작성자: {post.author}</p>
+
+                                {/* 본문 */}
+                                <div className="post-content">
                                     <p>{post.content}</p>
                                 </div>
                             </div>
@@ -115,10 +127,11 @@ function Community() {
             <div className="pagination">
                 {/* 이전 버튼 */}
                 <button
+                    className="pagination-button"
                     disabled={currentPage === 1} // 첫 페이지에서는 비활성화
                     onClick={() => handlePageChange(currentPage - 1)}
                 >
-                    이전
+                    &laquo;
                 </button>
                 {/* 페이지 번호 */}
                 {Array.from(
@@ -135,10 +148,11 @@ function Community() {
                 ))}
                 {/* 다음 버튼 */}
                 <button
+                    className="pagination-button"
                     disabled={currentPage === Math.ceil(posts.length / itemsPerPage)} // 마지막 페이지에서는 비활성화
                     onClick={() => handlePageChange(currentPage + 1)}
                 >
-                    다음
+                    &raquo;
                 </button>
             </div>
         </div>
