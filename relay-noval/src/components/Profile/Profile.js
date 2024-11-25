@@ -25,8 +25,8 @@ function Profile() {
     const user = useSelector((state) => state.auth.user);
 
     // 현재 프로필 정보를 위한 상태
-    const [profile, setProfile] = useState(user);
-    const [editProfile, setEditProfile] = useState(user); // 편집 모드에서 임시로 사용하는 상태
+    const [profile, setProfile] = useState(user || {});
+    const [editProfile, setEditProfile] = useState(user || {}); // 편집 모드에서 임시로 사용하는 상태
     const [editMode, setEditMode] = useState(false); // 편집 모드 상태
 
     // 모달 상태 관리
@@ -49,13 +49,19 @@ function Profile() {
         }
     }, [user]);
 
+    // 프로필 이미지 기본값 처리 함수 추가
+    const getProfileImage = () =>
+        profile.profileImage ||
+        'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png';
+
+
     const fetchNovelData = async () => {
         try {
-            const started = await getStartedNovels(auth.currentUser.uid); // 내가 시작한 소설 가져오기
-            const participated = await getParticipatedNovels(auth.currentUser.uid); // 내가 참여한 소설 가져오기
+            const started = await getStartedNovels(auth.currentUser?.uid); // 내가 시작한 소설 가져오기
+            const participated = await getParticipatedNovels(auth.currentUser?.uid); // 내가 참여한 소설 가져오기
 
-            setStartedNovels(started); // 상태 업데이트
-            setParticipatedNovels(participated); // 상태 업데이트
+            setStartedNovels(started || []); // 상태 업데이트
+            setParticipatedNovels(participated || []); // 상태 업데이트
         } catch (error) {
             console.error('소설 데이터를 가져오는 중 오류 발생:', error);
         }
@@ -66,8 +72,8 @@ function Profile() {
             const authors = await getLikedAuthors(auth.currentUser.uid); // 내가 좋아요한 작가 가져오기
             const novels = await getLikedNovels(auth.currentUser.uid); // 내가 좋아요한 소설 가져오기
 
-            setLikedAuthors(authors);
-            setLikedNovels(novels);
+            setLikedAuthors(authors || []);
+            setLikedNovels(novels || []);
         } catch (error) {
             console.error('좋아요 데이터를 가져오는 중 오류 발생:', error);
         }
@@ -102,7 +108,7 @@ function Profile() {
     const handleSave = async () => {
         try {
             // Firebase Firestore에 사용자 프로필 업데이트
-            const userRef = doc(firestore, 'users', auth.currentUser.uid);
+            const userRef = doc(firestore, 'users', auth.currentUser?.uid);
             await updateDoc(userRef, {
                 profileImage: editProfile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
                 nickname: editProfile.nickname,
@@ -152,7 +158,7 @@ function Profile() {
                     <div>
                         {editProfile.profileImage && (
                             <img
-                                src={editProfile.profileImage}
+                                src={getProfileImage()}
                                 alt="Profile Preview"
                                 className="profile-image-preview"
                             />
