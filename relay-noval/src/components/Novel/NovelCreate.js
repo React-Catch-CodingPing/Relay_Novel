@@ -6,7 +6,8 @@ import { addNovelLine } from "../../firebase/firestore/novelService";
 import { addLineToNovel } from "../../firebase/firestore/lineService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Firebase Storage 관련 메서드 추가
 import { storage } from "../../firebase/firebase"; // Storage 객체 가져오기
-import "./NovelCreate.css"; // 일반 CSS 파일로 변경
+import "./NovelCreate.css";
+import {uploadImage} from "../../firebase/firestore/storageService"; // 일반 CSS 파일로 변경
 
 const NovelCreate = () => {
     const [title, setTitle] = useState("");
@@ -46,23 +47,22 @@ const NovelCreate = () => {
         }
 
         let coverImageUrl = "";
-        if (coverImage) {
-            try {
-                const imageRef = ref(storage, `novelCovers/${Date.now()}_${coverImage.name}`);
-                await uploadBytes(imageRef, coverImage);
-                coverImageUrl = await getDownloadURL(imageRef);
-            } catch (error) {
-                console.error("이미지 업로드 중 오류:", error);
-                alert("이미지 업로드에 실패했습니다.");
-                return;
-            }
-        }
+       if (coverImage) {
+           try {
+               coverImageUrl = await uploadImage(coverImage, "novelCovers");
+           } catch (error) {
+               console.error("Error uploading cover image:", error);
+               alert("이미지 업로드에 실패했습니다.");
+               return;
+           }
+       }
 
         const novelData = {
             title,
             genre,
             firstLine,
             lineLimit: lineLimit ? 100 : null,
+            coverImage: coverImageUrl, // 업로드된 이미지 URL 저장
             userId: user.uid,
             createdAt: new Date(),
         }
@@ -99,7 +99,7 @@ const NovelCreate = () => {
                 {imagePreview && (
                 <img
                     src={imagePreview}
-                    alt="미리보기"
+                    alt={title || "이미지 미리보기"}
                     className="imagePreview"
                 />
                 )}

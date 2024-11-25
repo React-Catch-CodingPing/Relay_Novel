@@ -16,6 +16,7 @@ import {
 } from '../../firebase/firestore/userService';
 import { setUser } from '../../store/authSlice';
 import './Profile.css';
+import {uploadImage} from "../../firebase/firestore/storageService";
 
 function Profile() {
     const navigate = useNavigate();
@@ -25,8 +26,8 @@ function Profile() {
     const user = useSelector((state) => state.auth.user);
 
     // 현재 프로필 정보를 위한 상태
-    const [profile, setProfile] = useState(user);
-    const [editProfile, setEditProfile] = useState(user); // 편집 모드에서 임시로 사용하는 상태
+    const [profile, setProfile] = useState(user || {});
+    const [editProfile, setEditProfile] = useState(user || {}); // 편집 모드에서 임시로 사용하는 상태
     const [editMode, setEditMode] = useState(false); // 편집 모드 상태
 
     // 모달 상태 관리
@@ -49,13 +50,19 @@ function Profile() {
         }
     }, [user]);
 
+    // 프로필 이미지 기본값 처리 함수 추가
+    const getProfileImage = () =>
+        profile.profileImage ||
+        'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png';
+
+
     const fetchNovelData = async () => {
         try {
-            const started = await getStartedNovels(auth.currentUser.uid);
-            const participated = await getParticipatedNovels(auth.currentUser.uid);
+            const started = await getStartedNovels(auth.currentUser?.uid); // 내가 시작한 소설 가져오기
+            const participated = await getParticipatedNovels(auth.currentUser?.uid); // 내가 참여한 소설 가져오기
 
-            setStartedNovels(started);
-            setParticipatedNovels(participated);
+            setStartedNovels(started || []); // 상태 업데이트
+            setParticipatedNovels(participated || []); // 상태 업데이트
         } catch (error) {
             console.error('소설 데이터를 가져오는 중 오류 발생:', error);
         }
@@ -66,8 +73,8 @@ function Profile() {
             const authors = await getLikedAuthors(auth.currentUser.uid);
             const novels = await getLikedNovels(auth.currentUser.uid);
 
-            setLikedAuthors(authors);
-            setLikedNovels(novels);
+            setLikedAuthors(authors || []);
+            setLikedNovels(novels || []);
         } catch (error) {
             console.error('좋아요 데이터를 가져오는 중 오류 발생:', error);
         }
@@ -84,10 +91,25 @@ function Profile() {
         setEditMode(true);
     };
 
+    const handleProfileImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                const imageUrl = await uploadImage(file, "profilePictures");
+                setEditProfile((prev) => ({ ...prev, profileImage: imageUrl }));
+            } catch (error) {
+                console.error("Error uploading profile image:", error);
+                alert("이미지 업로드에 실패했습니다.");
+            }
+        }
+    };
+
     // 변경 사항 저장 후 Firebase에 업데이트
     const handleSave = async () => {
         try {
-            const userRef = doc(firestore, 'users', auth.currentUser.uid);
+            // Firebase Firestore에 사용자 프로필 업데이트
+            const userRef = doc(firestore, 'users', auth.currentUser?.uid);
+          
             await updateDoc(userRef, {
                 profileImage: editProfile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
                 nickname: editProfile.nickname,
@@ -129,16 +151,23 @@ function Profile() {
     return (
         <div className="profile-container">
             <div className="profile-card">
-
                 {/* 프로필 이미지 */}
                 {editMode ? (
-                    <input
-                        type="text"
-                        value={editProfile.profileImage}
-                        onChange={(e) => setEditProfile({ ...editProfile, profileImage: e.target.value })}
-                        placeholder="프로필 이미지 URL을 입력하세요"
-                        className="profile-input"
-                    />
+                    <div>
+                        {editProfile.profileImage && (
+                            <img
+                                src={getProfileImage()}
+                                alt="Profile Preview"
+                                className="profile-image-preview"
+                            />
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageChange} // 파일 변경 핸들러
+                            className="profile-input-file"
+                        />
+                    </div>
                 ) : (
                     <img
                         src={profile.profileImage || 'images/home-icon.png'}

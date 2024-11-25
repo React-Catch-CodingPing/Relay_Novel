@@ -12,6 +12,15 @@
     margin-bottom: 30px;
 }
 
+.novel-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    object-fit: cover; /* 이미지가 비율에 맞게 표시되도록 설정 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
 .novel-info {
     flex: 1;
 }
@@ -58,21 +67,6 @@
     flex-wrap: wrap;
 }
 
-/*.novel-card {
-    width: 200px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: center;
-}
-
-
-.novel-card h3 {
-    margin: 10px 0;
-    font-size: 18px;
-}
-
-*/
 .line-header {
     span{
         padding-right: 10px;
