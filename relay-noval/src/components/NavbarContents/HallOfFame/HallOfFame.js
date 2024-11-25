@@ -73,9 +73,9 @@ function HallOfFame() {
                             className="user-image"
                         />
                         <h3>{user.name || '익명 사용자'}</h3>
+                        <p>🏅 순위: {user.rank}</p>
                         <p>참여 작품 수: {user.novelsParticipated}</p>
                         <p>시작한 작품 수: {user.novelsStarted}</p>
-                        <p>🏅 순위: {user.rank}</p>
                     </div>
                 ))}
             </div>
