@@ -1,3 +1,5 @@
+
+
 // 사용자 정보 및 로그아웃 기능을 제공하는 프로필 페이지.
 
 // src/components/Profile/Profile.js
@@ -15,7 +17,6 @@ import {
 import { setUser } from '../../store/authSlice';
 import './Profile.css';
 import {uploadImage} from "../../firebase/firestore/storageService";
-
 
 function Profile() {
     const navigate = useNavigate();
@@ -69,8 +70,8 @@ function Profile() {
 
     const fetchLikedData = async () => {
         try {
-            const authors = await getLikedAuthors(auth.currentUser.uid); // 내가 좋아요한 작가 가져오기
-            const novels = await getLikedNovels(auth.currentUser.uid); // 내가 좋아요한 소설 가져오기
+            const authors = await getLikedAuthors(auth.currentUser.uid);
+            const novels = await getLikedNovels(auth.currentUser.uid);
 
             setLikedAuthors(authors || []);
             setLikedNovels(novels || []);
@@ -79,7 +80,6 @@ function Profile() {
         }
     };
 
-
     // 로그아웃 페이지로 이동하는 함수
     const goToSignOut = () => {
         navigate('/signout');
@@ -87,7 +87,7 @@ function Profile() {
 
     // 프로필 편집 모드 시작
     const handleEdit = () => {
-        setEditProfile(profile); // 현재 프로필 값을 임시 상태에 저장
+        setEditProfile(profile);
         setEditMode(true);
     };
 
@@ -109,6 +109,7 @@ function Profile() {
         try {
             // Firebase Firestore에 사용자 프로필 업데이트
             const userRef = doc(firestore, 'users', auth.currentUser?.uid);
+          
             await updateDoc(userRef, {
                 profileImage: editProfile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
                 nickname: editProfile.nickname,
@@ -116,22 +117,19 @@ function Profile() {
                 email: editProfile.email,
             });
 
-            // 상태 업데이트 및 Redux에 반영
-            setProfile(editProfile); // 임시 상태의 값을 실제 프로필 상태에 저장
-            dispatch(setUser(editProfile)); // Redux 상태에 저장하여 전체 앱에서 업데이트
-            setEditMode(false); // 편집 모드 종료
-
+            setProfile(editProfile);
+            dispatch(setUser(editProfile));
+            setEditMode(false);
         } catch (error) {
             console.error('프로필 업데이트 실패:', error);
             alert('프로필 업데이트에 실패했습니다. 다시 시도해주세요.');
         }
     };
 
-
     // 편집 취소 시 임시 상태를 초기화하고 편집 모드 종료
     const handleCancel = () => {
-        setEditProfile(profile); // 임시 상태를 원래 프로필 값으로 되돌림
-        setEditMode(false); // 편집 모드 종료
+        setEditProfile(profile);
+        setEditMode(false);
     };
 
     // 모달 닫기 함수 추가
@@ -226,53 +224,55 @@ function Profile() {
                         )}
                     </div>
 
+                    {/* 집필 현황 (편집 모드가 아닐 때만 표시) */}
+                    {!editMode && (
+                        <div className="profile-field">
+                            <span className="profile-label">집필 현황</span>
+                            <div className="profile-value">
+                                {/* 참여한 소설 모달 버튼 */}
+                                <button
+                                    className="modal-button"
+                                    onClick={() => setShowParticipatedNovelsModal(true)}
+                                >
+                                    {participatedNovels.length} 줄 참여 중...
+                                </button>
+                                {/* 시작한 소설 모달 버튼 */}
+                                <button
+                                    className="modal-button"
+                                    onClick={() => setShowStartedNovelsModal(true)}
+                                >
+                                    {startedNovels.length} 작품 시작...
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
-                    {/* 집필 현황 (편집 불가) */}
-                    <div className="profile-field">
-                        <span className="profile-label">집필 현황</span>
-                        <div className="profile-value">
-                            {/* 참여한 소설 모달 버튼 */}
-                            <button
-                                className="modal-button"
-                                onClick={() => setShowParticipatedNovelsModal(true)}
-                            >
-                                {participatedNovels.length} 줄 참여 중...
+                    {/* 좋아요 모달 버튼 (편집 모드가 아닐 때만 표시) */}
+                    {!editMode && (
+                        <div className="profile-buttons">
+                            <button className="modal-button" onClick={() => setShowLikedAuthorsModal(true)}>
+                                좋아요한 작가 보기
                             </button>
-                            {/* 시작한 소설 모달 버튼 */}
-                            <button
-                                className="modal-button"
-                                onClick={() => setShowStartedNovelsModal(true)}
-                            >
-                                {startedNovels.length} 작품 시작...
+                            <button className="modal-button" onClick={() => setShowLikedNovelsModal(true)}>
+                                좋아요한 작품 보기
                             </button>
                         </div>
-                    </div>
-                </div>
-
-
-                {/* 좋아요 모달 버튼 */}
-                <div className="profile-buttons">
-                    <button className="modal-button" onClick={() => setShowLikedAuthorsModal(true)}>
-                        좋아요한 작가 보기
-                    </button>
-                    <button className="modal-button" onClick={() => setShowLikedNovelsModal(true)}>
-                        좋아요한 작품 보기
-                    </button>
-                </div>
-
-                {/* 하단의 버튼들 (편집 모드에 따라 다르게 표시) */}
-                <div className="profile-buttons">
-                    {editMode ? (
-                        <>
-                            <button className="save-button" onClick={handleSave}>저장</button>
-                            <button className="cancel-button" onClick={handleCancel}>취소</button>
-                        </>
-                    ) : (
-                        <>
-                            <button className="edit-button" onClick={handleEdit}>프로필 편집</button>
-                            <button className="logout-button" onClick={goToSignOut}>로그아웃</button>
-                        </>
                     )}
+
+                    {/* 하단의 버튼들 (편집 모드에 따라 다르게 표시) */}
+                    <div className="profile-buttons">
+                        {editMode ? (
+                            <>
+                                <button className="save-button" onClick={handleSave}>저장</button>
+                                <button className="cancel-button" onClick={handleCancel}>취소</button>
+                            </>
+                        ) : (
+                            <>
+                                <button className="profile-edit-button" onClick={handleEdit}>프로필 편집</button>
+                                <button className="logout-button" onClick={goToSignOut}>로그아웃</button>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -298,7 +298,6 @@ function Profile() {
                     </div>
                 </div>
             )}
-
 
             {/* 좋아요한 작품 모달 */}
             {showLikedNovelsModal && (
@@ -335,7 +334,7 @@ function Profile() {
                             {participatedNovels.map((novel) => (
                                 <li
                                     key={novel.id}
-                                    onClick={() => goToNovelDetail(novel.id)} // NovelDetail 페이지로 이동
+                                    onClick={() => goToNovelDetail(novel.id)}
                                     className="modal-novel-item"
                                 >
                                     <strong>{novel.title}</strong>
@@ -350,7 +349,7 @@ function Profile() {
             {/* 시작한 소설 모달 */}
             {showStartedNovelsModal && (
                 <div className="modal">
-                <div className="modal-content">
+                    <div className="modal-content">
                         <h3>내가 시작한 소설</h3>
                         <button onClick={closeModal} className="close-modal">
                             닫기
@@ -359,7 +358,7 @@ function Profile() {
                             {startedNovels.map((novel) => (
                                 <li
                                     key={novel.id}
-                                    onClick={() => goToNovelDetail(novel.id)} // NovelDetail 페이지로 이동
+                                    onClick={() => goToNovelDetail(novel.id)}
                                     className="modal-novel-item"
                                 >
                                     <strong>{novel.title}</strong>
@@ -368,7 +367,7 @@ function Profile() {
                                 </li>
                             ))}
                         </ul>
-                </div>
+                    </div>
                 </div>
             )}
         </div>
