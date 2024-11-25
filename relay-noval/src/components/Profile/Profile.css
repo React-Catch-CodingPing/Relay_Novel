@@ -9,13 +9,18 @@
 }
 
 /* 프로필 이미지 스타일 */
-.profile-image {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    background-color: #e9ecef;
+.profile-image-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
+
+.profile-input-file {
+    margin-top: 10px;
+}
+
 
 /* 프로필 정보 컨테이너 */
 .profile-info {
@@ -36,16 +41,6 @@
     font-size: 1rem;
     color: #333;
     margin-bottom: 12px;
-}
-
-/* 입력 필드 스타일 */
-.profile-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
 }
 
 /* 버튼들 컨테이너 */

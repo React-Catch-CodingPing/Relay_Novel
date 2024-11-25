@@ -14,6 +14,7 @@ import {
 } from '../../firebase/firestore/userService';
 import { setUser } from '../../store/authSlice';
 import './Profile.css';
+import {uploadImage} from "../../firebase/firestore/storageService";
 
 
 function Profile() {
@@ -84,6 +85,19 @@ function Profile() {
         setEditMode(true);
     };
 
+    const handleProfileImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                const imageUrl = await uploadImage(file, "profilePictures");
+                setEditProfile((prev) => ({ ...prev, profileImage: imageUrl }));
+            } catch (error) {
+                console.error("Error uploading profile image:", error);
+                alert("이미지 업로드에 실패했습니다.");
+            }
+        }
+    };
+
     // 변경 사항 저장 후 Firebase에 업데이트
     const handleSave = async () => {
         try {
@@ -133,16 +147,23 @@ function Profile() {
     return (
         <div className="profile-container">
             <div className="profile-card">
-
                 {/* 프로필 이미지 */}
                 {editMode ? (
-                    <input
-                        type="text"
-                        value={editProfile.profileImage}
-                        onChange={(e) => setEditProfile({ ...editProfile, profileImage: e.target.value })}
-                        placeholder="프로필 이미지 URL을 입력하세요"
-                        className="profile-input"
-                    />
+                    <div>
+                        {editProfile.profileImage && (
+                            <img
+                                src={editProfile.profileImage}
+                                alt="Profile Preview"
+                                className="profile-image-preview"
+                            />
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageChange} // 파일 변경 핸들러
+                            className="profile-input-file"
+                        />
+                    </div>
                 ) : (
                     <img
                         src={profile.profileImage || 'images/home-icon.png'}
