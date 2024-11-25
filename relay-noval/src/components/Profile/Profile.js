@@ -95,8 +95,18 @@ function Profile() {
         const file = e.target.files[0];
         if (file) {
             try {
+                // 이미지를 Storage에 업로드
                 const imageUrl = await uploadImage(file, "profilePictures");
+
+                // 업로드 성공 시, editProfile에 업데이트
                 setEditProfile((prev) => ({ ...prev, profileImage: imageUrl }));
+
+                // 업로드 성공 시, 즉시 미리보기로 반영
+                const fileReader = new FileReader();
+                fileReader.onload = () => {
+                    document.querySelector(".profile-image-preview").src = fileReader.result; // 미리보기 업데이트
+                };
+                fileReader.readAsDataURL(file);
             } catch (error) {
                 console.error("Error uploading profile image:", error);
                 alert("이미지 업로드에 실패했습니다.");
@@ -111,10 +121,10 @@ function Profile() {
             const userRef = doc(firestore, 'users', auth.currentUser?.uid);
           
             await updateDoc(userRef, {
-                profileImage: editProfile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
-                nickname: editProfile.nickname,
-                name: editProfile.name,
-                email: editProfile.email,
+                profileImage: editProfile.profileImage || profile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
+                nickname: editProfile.nickname || profile.nickname || "익명 사용자",
+                name: editProfile.name || profile.name || "",
+                email: editProfile.email || profile.email || "",
             });
 
             setProfile(editProfile);
@@ -154,13 +164,11 @@ function Profile() {
                 {/* 프로필 이미지 */}
                 {editMode ? (
                     <div>
-                        {editProfile.profileImage && (
-                            <img
-                                src={getProfileImage()}
-                                alt="Profile Preview"
-                                className="profile-image-preview"
-                            />
-                        )}
+                        <img
+                            src={editProfile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png'}
+                            alt="Profile Preview"
+                            className="profile-image-preview"
+                        />
                         <input
                             type="file"
                             accept="image/*"
