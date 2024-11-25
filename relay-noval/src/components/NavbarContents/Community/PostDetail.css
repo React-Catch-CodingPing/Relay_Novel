@@ -84,7 +84,7 @@
 /* 저장 버튼 */
 .save-button,
 .cancel-button {
-    background-color: #28a745; /* 저장 버튼 색 */
+    background-color: #ffb6c1; /* 저장 버튼 색 */
     color: white;
     width: 120px; /* 버튼 너비 통일 */
     height: 40px; /* 버튼 높이 통일 */
@@ -103,7 +103,7 @@
 
 /* 호버 효과 */
 .save-button:hover {
-    background-color: #218838;
+    background-color: #ffb6c1;
 }
 
 .cancel-button:hover {

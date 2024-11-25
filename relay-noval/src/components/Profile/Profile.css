@@ -1,11 +1,12 @@
-/* src/components/Profile.css */
-/* 프로필 전체를 감싸는 메인 컨테이너 */
+
+    /* src/components/Profile.css */
+    /* 프로필 전체를 감싸는 메인 컨테이너 */
 .profile-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f8f9fa;
+    background-color: #fce4ec;
 }
 
 /* 프로필 이미지 스타일 */
@@ -14,7 +15,7 @@
     height: auto;
     border-radius: 12px;
     margin-bottom: 16px;
-    background-color: #e9ecef;
+    background-color: #f8c8d8;
 }
 
 /* 프로필 정보 컨테이너 */
@@ -74,23 +75,23 @@
 
 /* 좋아요 버튼 스타일 */
 .modal-button {
-    background-color: #007bff;
+    background-color: #ff69b4;
     color: white;
 }
 
 .modal-button:hover {
-    background-color: #0056b3;
+    background-color: #ff1493;
     transform: scale(1.05);
 }
 
 /* 저장 버튼 */
 .save-button {
-    background-color: #28a745;
+    background-color: #ffb6c1;
     color: white;
 }
 
 .save-button:hover {
-    background-color: #218838;
+    background-color: #ff91af;
 }
 
 /* 취소 버튼 */
@@ -105,12 +106,12 @@
 
 /* 로그아웃 버튼 */
 .logout-button {
-    background-color: #dc3545;
+    background-color:#333;
     color: white;
 }
 
 .logout-button:hover {
-    background-color: #c82333;
+    background-color:  #333;
 }
 
 /* 모달 스타일 */
@@ -152,7 +153,7 @@
 .modal-novel-item {
     padding: 10px;
     margin: 8px 0;
-    background-color: #f9f9f9;
+    background-color: #ffe4e1;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease; /* 호버 효과와 애니메이션 */
@@ -160,7 +161,18 @@
 
 /* 호버 상태에서의 스타일 */
 .modal-novel-item:hover {
-    background-color: #e6e6e6; /* 배경색 변경 */
+    background-color: #ffccd5; /* 배경색 변경 */
     transform: scale(1.03); /* 살짝 확대 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+/* 프로필 편집 버튼 스타일 */
+.profile-edit-button {
+    background-color: #ffb6c1; /* 핑크 버튼 */
+    color: white;
+}
+
+.profile-edit-button:hover {
+    background-color: #ff1493; /* 진한 핑크색 */
+    transform: scale(1.05);
 }
