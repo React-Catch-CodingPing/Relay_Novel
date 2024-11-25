@@ -4,7 +4,7 @@
 .hall-of-fame-container {
     text-align: center;
     padding: 40px;
-    background-color: #f8f9fa; /* 밝은 배경색 */
+    background-color: #fce4ec;
 }
 
 /* 페이지 제목 스타일 */
@@ -31,6 +31,7 @@
 
 /* 각 사용자 카드 스타일 */
 .user-card {
+    border: 1px solid #ff99aa;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -53,6 +54,13 @@
     font-size: 1.4rem;
     margin: 10px 0;
     color: #333;
+}
+
+.user-card p:first-of-type {
+    font-weight: bold; /* 순위 텍스트를 두껍게 강조 */
+    font-size: 1rem; /* 다른 텍스트와 같은 크기 유지 */
+    margin-bottom: 8px; /* 아래 텍스트와의 간격 조정 */
+    color: #333; /* 동일한 색상 유지 */
 }
 
 /* 참여 작품 수, 시작 작품 수 텍스트 스타일 */
