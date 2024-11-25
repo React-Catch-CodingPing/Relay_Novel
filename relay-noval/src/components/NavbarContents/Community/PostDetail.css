@@ -84,26 +84,28 @@
 /* 저장 버튼 */
 .save-button,
 .cancel-button {
-    background-color: #28a745; /* 저장 버튼 색 */
+    margin-top: 10px;
+    background-color: #ff99aa; /* 밝은 핑크 */
     color: white;
-    width: 120px; /* 버튼 너비 통일 */
-    height: 40px; /* 버튼 높이 통일 */
-    text-align: center;
-    display: flex; /* Flexbox 사용 */
-    align-items: center;
-    justify-content: center;
-    padding: 0; /* 여백 초기화 */
     border: none;
-    font-size: 1rem; /* 글자 크기 통일 */
+    padding: 12px 20px;
+    border-radius: 8px; /* 둥근 모서리 */
+    cursor: pointer;
+    font-size: 1.2rem;
     font-weight: bold;
-}
-.cancel-button {
-    background-color: #6c757d; /* 취소 버튼 색 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 */
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* 호버 효과 */
 .save-button:hover {
-    background-color: #218838;
+    background-color: #ec407a; /* 진한 핑크 */
+    transform: translateY(-2px); /* 살짝 위로 이동 */
+}
+
+.save-button:active {
+    background-color: #d81b60; /* 더 진한 핑크 */
+    transform: translateY(0); /* 원래 위치로 복귀 */
 }
 
 .cancel-button:hover {
@@ -134,4 +136,10 @@
 .back-button:hover {
     background-color: #e0e0e0;
     transform: translateY(-2px);
+}
+
+
+input[type="radio"] {
+    margin-right: 8px; /* 버튼과 텍스트 사이 간격 */
+    accent-color: #ec407a; /* 라디오 버튼 색상 */
 }

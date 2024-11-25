@@ -208,7 +208,7 @@ function Genres() {
             </aside>
             <main className="genres-main-content">
                 <div className="genres-header">
-                    <h1>소설 모아보기 페이지</h1>
+                    <h1>소설 모아보기</h1>
                     <div className="genres-sort-options">
                         {['조회순', '인기순', '추천순'].map((option) => (
                             <button

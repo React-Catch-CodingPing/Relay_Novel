@@ -60,8 +60,6 @@
 /* 공통 버튼 스타일 */
 .modal-button,
 .edit-button,
-.save-button,
-.cancel-button,
 .logout-button {
     flex: 1 1 calc(48% - 10px); /* 버튼이 48% 너비를 가지며 간격 유지 */
     padding: 12px;
@@ -82,17 +80,6 @@
     background-color: #0056b3;
     transform: scale(1.05);
 }
-
-/* 저장 버튼 */
-.save-button {
-    background-color: #28a745;
-    color: white;
-}
-
-.save-button:hover {
-    background-color: #218838;
-}
-
 /* 취소 버튼 */
 .cancel-button {
     background-color: #6c757d;
