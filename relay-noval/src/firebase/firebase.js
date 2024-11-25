@@ -7,12 +7,12 @@ import { getStorage } from "firebase/storage";
 
 // Firebase 설정
 const firebaseConfig = {
-    apiKey: "AIzaSyACCspYhXfZWJvDNeg7xONh1rBVAIzzlSs",
-    authDomain: "relay-novel-webproject.firebaseapp.com",
-    projectId: "relay-novel-webproject",
-    storageBucket: "relay-novel-webproject.appspot.com",
-    messagingSenderId: "791727970618",
-    appId: "1:791727970618:web:09b9db3b1ad3f74860d803"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
 // Firebase 초기화
