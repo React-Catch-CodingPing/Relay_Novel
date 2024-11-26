@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { auth, firestore } from '../../../firebase/firebase';
 import './ReportBoard.css';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function ReportBoard() {
     const [reportContent, setReportContent] = useState("");
     const navigate = useNavigate(); // 페이지 이동을 위한 훅
-
-
 
     // 로그인 여부 확인 함수
     const ensureLoggedIn = () => {
@@ -19,7 +17,6 @@ function ReportBoard() {
         }
         return true;
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,19 +42,21 @@ function ReportBoard() {
     };
 
     return (
-        <div className="report-board">
-            <h1>🚨 신고 게시판</h1>
-            <form onSubmit={handleSubmit} className="report-form">
-                <label htmlFor="reportText">신고 내용을 입력하세요:</label>
-                <textarea
-                    id="reportText"
-                    placeholder="신고 사유를 상세히 작성해주세요."
-                    value={reportContent}
-                    onChange={(e) => setReportContent(e.target.value)}
-                    required
-                ></textarea>
-                <button type="submit">신고 접수</button>
-            </form>
+        <div className="report-wrapper">
+            <div className="report-board">
+                <h1>🚨 신고 게시판</h1>
+                <form onSubmit={handleSubmit} className="report-form">
+                    <label htmlFor="reportText">신고 내용을 입력하세요:</label>
+                    <textarea
+                        id="reportText"
+                        placeholder="신고 사유를 상세히 작성해주세요."
+                        value={reportContent}
+                        onChange={(e) => setReportContent(e.target.value)}
+                        required
+                    ></textarea>
+                    <button type="submit">신고 접수</button>
+                </form>
+            </div>
         </div>
     );
 }
