@@ -67,6 +67,11 @@ const NovelDetail = () => {
         const fetchLines = async () => {
             try {
                 const fetchedLines = await getLinesFromNovel(novelId); // Firestore에서 줄거리 가져오기
+                fetchedLines.sort((a, b) => {
+                    const dateA = a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+                    const dateB = b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+                    return dateA - dateB; // 오름차순
+                });
                 setLines(fetchedLines);
             } catch (error) {
                 console.error("Error fetching lines:", error);
