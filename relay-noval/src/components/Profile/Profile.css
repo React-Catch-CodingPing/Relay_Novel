@@ -57,8 +57,6 @@
 /* 공통 버튼 스타일 */
 .modal-button,
 .edit-button,
-.save-button,
-.cancel-button,
 .logout-button {
     flex: 1 1 calc(48% - 10px); /* 버튼이 48% 너비를 가지며 간격 유지 */
     padding: 12px;

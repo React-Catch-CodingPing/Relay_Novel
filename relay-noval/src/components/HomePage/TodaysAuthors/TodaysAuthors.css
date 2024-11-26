@@ -30,30 +30,4 @@
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.author-card:hover {
-    transform: scale(1.05); /* 호버 시 살짝 확대 */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* 그림자 강조 */
-}
 
-.author-card img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%; /* 원형 이미지 */
-    object-fit: cover;
-    margin-bottom: 15px;
-    border: 3px solid #ec407a; /* 핑크 테두리 */
-}
-
-.author-card h3 {
-    font-size: 18px; /* 이름 크기 */
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.author-card p {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}

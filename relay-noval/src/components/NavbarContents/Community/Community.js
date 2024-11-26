@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../../../firebase/firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, doc, updateDoc } from "firebase/firestore"; // updateDoc 추가
 import "./Community.css";
 
 function Community() {
@@ -63,25 +63,31 @@ function Community() {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+
     const handlePageChange = (page) => {
         setCurrentPage(page); // 현재 페이지 상태 업데이트
     };
 
-    //console.log(post.views);
+    // Firestore에서 조회수 증가 함수
+    const incrementViews = async (postId) => {
+        try {
+            const postRef = doc(firestore, "communityPosts", postId);
+            await updateDoc(postRef, {
+                views: (posts.find(post => post.id === postId)?.views || 0) + 1,
+            });
+        } catch (error) {
+            console.error("Error incrementing views:", error);
+        }
+    };
 
     return (
         <div className="community-container">
             {/* 헤더 영역 */}
             <header className="community-header">
                 <h2> 커뮤니티 </h2>
-                {/* 글쓰기 버튼 */}
-                <button
-                    className="write-button"
-                    onClick={() => navigate("/community/write")}
-                >
-                    글쓰기
-                </button>
             </header>
+
 
             {/* 게시물 리스트 영역 */}
             <main className="community-main">
@@ -95,7 +101,10 @@ function Community() {
                             <div
                                 key={post.id}
                                 className="post-card"
-                                onClick={() => navigate(`/community/${post.id}`)}
+                                onClick={async () => {
+                                    await incrementViews(post.id); // 조회수 증가
+                                    navigate(`/community/${post.id}`); // 상세 페이지로 이동
+                                }}
                             >
                                 {/* 작성자 표시 */}
                                 <div className="post-meta">
@@ -105,10 +114,10 @@ function Community() {
                                 </div>
 
                                 {/* 구분선 */}
-                                <hr className="post-divider" />
+                                <hr className="post-divider"/>
 
                                 {/* 제목 */}
-                                <h3>“{post.title}”</h3>
+                                <h3>{post.title}</h3>
 
                                 {/* 본문 */}
                                 <div className="post-content">
@@ -122,41 +131,49 @@ function Community() {
                     <p>데이터가 없습니다.</p>
                 )}
             </main>
-
-            {/* 페이지네이션 영역 */}
-            <div className="pagination">
-                {/* 이전 버튼 */}
+            <div className="footer-container">
+                {/* 글쓰기 버튼 */}
                 <button
-                    className="pagination-button"
-                    disabled={currentPage === 1} // 첫 페이지에서는 비활성화
-                    onClick={() => handlePageChange(currentPage - 1)}
+                    className="write-button"
+                    onClick={() => navigate("/community/write")}
                 >
-                    &laquo;
+                    글쓰기
                 </button>
-                {/* 페이지 번호 */}
-                {Array.from(
-                    { length: Math.ceil(posts.length / itemsPerPage) },
-                    (_, index) => index + 1
-                ).map((page) => (
+                {/* 페이지네이션 영역 */}
+                <div className="pagination">
+                    {/* 이전 버튼 */}
                     <button
-                        key={page}
-                        className={currentPage === page ? "active" : ""} // 활성화 상태 스타일 적용
-                        onClick={() => handlePageChange(page)}
+                        className="pagination-button"
+                        disabled={currentPage === 1} // 첫 페이지에서는 비활성화
+                        onClick={() => handlePageChange(currentPage - 1)}
                     >
-                        {page}
+                        &laquo;
                     </button>
-                ))}
-                {/* 다음 버튼 */}
-                <button
-                    className="pagination-button"
-                    disabled={currentPage === Math.ceil(posts.length / itemsPerPage)} // 마지막 페이지에서는 비활성화
-                    onClick={() => handlePageChange(currentPage + 1)}
-                >
-                    &raquo;
-                </button>
+                    {/* 페이지 번호 */}
+                    {Array.from(
+                        {length: Math.ceil(posts.length / itemsPerPage)},
+                        (_, index) => index + 1
+                    ).map((page) => (
+                        <button
+                            key={page}
+                            className={currentPage === page ? "active" : ""} // 활성화 상태 스타일 적용
+                            onClick={() => handlePageChange(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+                    {/* 다음 버튼 */}
+                    <button
+                        className="pagination-button"
+                        disabled={currentPage === Math.ceil(posts.length / itemsPerPage)} // 마지막 페이지에서는 비활성화
+                        onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                        &raquo;
+                    </button>
+                </div>
             </div>
         </div>
-    );
-}
+            );
+            }
 
-export default Community;
+            export default Community;

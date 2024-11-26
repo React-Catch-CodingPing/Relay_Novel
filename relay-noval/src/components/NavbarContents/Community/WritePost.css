@@ -6,16 +6,19 @@
     align-items: center;
     height: 100vh;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #fce4ec; /* 연한 핑크 배경 */
     border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
 }
 
 /* 헤더 스타일 */
 .write-post-header {
+    color: #ec407a;
     margin-bottom: 20px;
-    font-size: 1.8rem; /* 크기를 키움 */
+    font-size: 2rem; /* 크기를 키움 */
     font-weight: bold;
     text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 헤더 텍스트 그림자 */
 }
 
 /* 폼 그룹 */
@@ -23,25 +26,22 @@
     width: 100%;
     max-width: 600px; /* 폼 크기를 늘림 */
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* 요소를 세로 정렬 */
+    gap: 10px; /* 요소 간격 추가 */
 }
 
 label {
     display: block;
     font-weight: bold;
+    font-size: 1.2rem; /* 라벨 크기 증가 */
+    color: #ec407a; /* 진한 핑크 */
     margin-bottom: 8px;
 }
 
-input,
 textarea {
-    width: 100%;
-    padding: 12px; /* 여백을 키움 */
-    font-size: 1.2rem; /* 폰트 크기 증가 */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-textarea {
-    height: 200px; /* 텍스트 입력창의 기본 높이 */
+    height: 200px;
+    resize: none; /* 크기 조정 비활성화 */
 }
 
 /* 작성자 선택 */
@@ -57,6 +57,8 @@ textarea {
     align-items: center; /* 라디오 버튼과 텍스트를 수직 정렬 */
     cursor: pointer; /* 커서를 포인터로 변경 */
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    font-size: 1.1rem;
+    color: #555;
 }
 
 input[type="radio"] {

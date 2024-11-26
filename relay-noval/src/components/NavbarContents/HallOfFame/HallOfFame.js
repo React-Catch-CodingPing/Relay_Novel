@@ -8,43 +8,38 @@ function HallOfFame() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // 명예의 전당 데이터를 가져오는 함수
     const fetchHallOfFameData = async () => {
         try {
-            const usersData = await getUsers(); // 전체 사용자 데이터를 가져옴
+            const usersData = await getUsers();
 
             const usersWithStats = await Promise.all(usersData.map(async (user) => {
-                // 각 사용자에 대해 참여한 소설과 시작한 소설 가져오기
                 const participatedNovels = await getParticipatedNovels(user.id);
                 const startedNovels = await getStartedNovels(user.id);
 
-                // 사용자 통계 업데이트
                 return {
                     id: user.id,
                     name: user.name,
-                    profileImage: user.profileImage || "/path/to/default-image.png", // 기본 이미지
-                    novelsParticipated: participatedNovels.length, // 전체 참여한 소설 수
-                    novelsStarted: startedNovels.length, // 전체 시작한 소설 수
+                    profileImage: user.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png', // 핑크 테마 기본 이미지
+                    novelsParticipated: participatedNovels.length,
+                    novelsStarted: startedNovels.length,
                 };
             }));
 
-            // 참여한 소설 수가 우선, 동점일 경우 시작한 소설 수 기준으로 정렬
             const sortedUsers = usersWithStats.sort((a, b) => {
                 if (b.novelsParticipated === a.novelsParticipated) {
-                    return b.novelsStarted - a.novelsStarted; // 시작한 소설 수로 정렬
+                    return b.novelsStarted - a.novelsStarted;
                 }
-                return b.novelsParticipated - a.novelsParticipated; // 참여한 소설 수로 정렬
+                return b.novelsParticipated - a.novelsParticipated;
             });
 
-            // 순위 부여
             const rankedUsers = sortedUsers.map((user, index) => ({
                 ...user,
-                rank: index + 1, // 1부터 시작하는 순위
+                rank: index + 1,
             }));
 
-            setUsers(rankedUsers.slice(0, 3)); // 상위 3명만 가져오기
+            setUsers(rankedUsers.slice(0, 3)); // 상위 3명
         } catch (error) {
-            console.error('Error fetching Hall of Fame data:', error);
+            console.error("Error fetching Hall of Fame data:", error);
         } finally {
             setLoading(false);
         }
@@ -57,7 +52,6 @@ function HallOfFame() {
     if (loading) {
         return <p>명예의 전당 데이터를 불러오는 중입니다...</p>;
     }
-
 
     return (
         <section className="hall-of-fame-container">

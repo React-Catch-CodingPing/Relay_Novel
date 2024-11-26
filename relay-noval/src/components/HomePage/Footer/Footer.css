@@ -1,6 +1,7 @@
 /* src/components/Footer.css */
 
 .footer {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: flex-start; /* 상단 정렬 */

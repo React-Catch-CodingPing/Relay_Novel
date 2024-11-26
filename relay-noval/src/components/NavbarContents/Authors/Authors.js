@@ -1,90 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './Authors.css';
-import { getAuthorLikeStatus, updateAuthorLike, getUsers} from "../../../firebase/firestore/userService"; // userService 함수
-import { subscribeToAuthors } from "../../../firebase/firestore/realTimeService";
-import {Link, useNavigate} from "react-router-dom";
-import { auth } from "../../../firebase/firebase"; // 인증 정보 가져오기
-
-const placeholderData = [
-    { id: 1, name: '어진핑', image: '/images/author1.jpg', participationCount: 5, startedWorks: 12, hearts: 0 },
-    { id: 2, name: '민금핑', image: '/images/author2.jpg', participationCount: 8, startedWorks: 8, hearts: 0 },
-    { id: 3, name: '기환핑', image: '/images/author3.jpg', participationCount: 3, startedWorks: 15, hearts: 0 },
-    { id: 4, name: '깜비핑', image: '/images/author4.jpg', participationCount: 3, startedWorks: 15, hearts: 0 },
-];
+import { getUsers, getAuthorLikeStatus, updateAuthorLike } from "../../../firebase/firestore/userService";
+import { auth } from "../../../firebase/firebase";
 
 const Authors = () => {
     const [authors, setAuthors] = useState([]);
     const [likedByUser, setLikedByUser] = useState([]);
-    const [sortOption, setSortOption] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentPageGroup, setCurrentPageGroup] = useState(1);
-    const navigate = useNavigate(); // 페이지 이동을 위한 훅
+    const [searchTerm, setSearchTerm] = useState(''); // 검색 상태 추가
+    const [filterTerm, setFilterTerm] = useState(''); // 실제 필터링에 사용될 상태
+    const containerRef = useRef(null);
 
-    const itemsPerPage = 4;
-    const pagesPerGroup = 4;
-    const totalPages = Math.ceil(authors.length / itemsPerPage);
-
-    const startPage = (currentPageGroup - 1) * pagesPerGroup + 1;
-    const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-    const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const displayedAuthors = [...authors]
-        .sort((a, b) => {
-            if (sortOption === '작성순') return b.startedWorks - a.startedWorks;
-            if (sortOption === '인기순') return b.hearts - a.hearts;
-            return 0;
-        })
-        .slice(startIndex, startIndex + itemsPerPage);
-
-    // 로그인 여부 확인 함수
-    const ensureLoggedIn = () => {
-        if (!auth.currentUser) {
-            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate("/login"); // 로그인 페이지로 이동
-            return false;
-        }
-        return true;
-    };
-
-
-    const handleSortChange = (option) => {
-        if (sortOption === option) {
-            setSortOption(null);
-        } else {
-            setSortOption(option);
-        }
-        setCurrentPage(1);
-        setCurrentPageGroup(1);
-    };
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    const handleNextGroup = () => {
-        if (endPage < totalPages) {
-            setCurrentPageGroup((prevGroup) => prevGroup + 1);
-            setCurrentPage(endPage + 1);
-        }
-    };
-
-    const handlePreviousGroup = () => {
-        if (startPage > 1) {
-            setCurrentPageGroup((prevGroup) => prevGroup - 1);
-            setCurrentPage(startPage - pagesPerGroup);
-        }
-    };
-
+    // 좋아요 클릭 함수
     const handleHeartClick = async (authorId) => {
-        const currentUserId = auth.currentUser?.uid;
-
-        if (!ensureLoggedIn()) return; // 로그인 확인
+        if (!auth.currentUser) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
 
         const liked = likedByUser.includes(authorId);
 
         try {
-            await updateAuthorLike(currentUserId, authorId, liked); // 좋아요 상태 업데이트
+            await updateAuthorLike(auth.currentUser.uid, authorId, liked);
             const updatedAuthors = authors.map((author) => {
                 if (author.id === authorId) {
                     return {
@@ -103,10 +39,10 @@ const Authors = () => {
             }
         } catch (error) {
             console.error("Error updating like:", error);
-            alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
 
+    // Firestore에서 저자 정보 가져오기
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
@@ -123,7 +59,7 @@ const Authors = () => {
                     const authorsData = usersData.map((user, index) => ({
                         id: user.id,
                         name: user.name || "익명 저자",
-                        image: user.profileImage || "/path/to/default-image.png",
+                        image: user.profileImage || "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png",
                         participationCount: user.participationCount || 0,
                         startedWorks: user.startedWorks || 0,
                         hearts: user.likes || 0,
@@ -141,103 +77,77 @@ const Authors = () => {
                 }
             } catch (error) {
                 console.error("Error fetching authors:", error);
-                setAuthors(placeholderData);
             }
         };
 
-        const unsubscribe = subscribeToAuthors((updatedAuthors) => {
-            const authorsData = updatedAuthors.map((user) => ({
-                id: user.id,
-                name: user.name || "익명 저자",
-                image: user.profileImage || "/path/to/default-image.png",
-                participationCount: user.participationCount || 0,
-                startedWorks: user.startedWorks || 0,
-                hearts: user.likes || 0,
-            }));
-            setAuthors(authorsData);
-        });
-
         fetchAuthors();
-
-        return () => unsubscribe();
     }, []);
 
+    const handleWheelScroll = (event) => {
+        const container = containerRef.current;
+        if (container) {
+            container.scrollLeft += event.deltaY * 1.5; // 마우스 휠로 가로로 스크롤
+        }
+    };
 
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener("wheel", handleWheelScroll );
+        }
+        return () => {
+            if (container) {
+                container.removeEventListener("wheel", handleWheelScroll );
+            }
+        };
+    }, []);
+
+// 검색 입력 필드에서 엔터키 처리
+const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+        setFilterTerm(searchTerm); // 엔터를 누를 때만 필터 상태 업데이트
+}
+};
+
+    const filteredAuthors = authors.filter((author) =>
+        author.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     return (
-        <div className="container">
-            <div className="sort-buttons">
-                {['작성순', '인기순'].map((option) => (
-                    <button
-                        key={option}
-                        onClick={() => handleSortChange(option)}
-                        className={`sort-button ${sortOption === option ? 'active' : ''}`}
-                    >
-                        {option}
-                    </button>
-                ))}
+        <div className="authors-container">
+            {/* 검색창 */}
+            <div className="search-container">
+                <span className="search-icon">
+          <i className="fa fa-search"></i>
+                 </span>
+                <input
+                    type="text"
+                    placeholder="저자 이름을 검색하세요..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="search-input"
+                />
             </div>
 
-            <h2>저자 모아보기</h2>
-            <div className="card-grid">
-                {displayedAuthors.map((author) => (
-                    <div key={author.id} className="card">
+            {/* 저자 카드 슬라이더 */}
+            <div className="authors-slider" ref={containerRef}>
+                {filteredAuthors.map((author) => (
+                    <div key={author.id} className="author-card">
                         <img src={author.image} alt={author.name} />
                         <h3>{author.name}</h3>
                         <p>{author.participationCount}줄 참여 중</p>
                         <p>{author.startedWorks}작품 시작</p>
-                        <div className="card-buttons">
-                            <Link
-                                to={{
-                                    pathname: `/authors/${author.id}`,
-                                }}
-                                state={{
-                                    name: author.name,
-                                    todayParticipatedNovels: author.participationCount,
-                                    todayStartedNovels: author.startedWorks,
-                                    image: author.image,
-                                }}
+                        <div className="interaction">
+                            <button
+                                className="heart-button"
+                                onClick={() => handleHeartClick(author.id)}
                             >
-                                <button className="button">프로필 보기</button>
-                            </Link>
-                            <div className="interaction">
-                                <button
-                                    className="heart-button"
-                                    onClick={() => handleHeartClick(author.id)}
-                                >
-                                    {likedByUser.includes(author.id) ? '❤️' : '🤍'}
-
-                                </button>
-                                <span className="count">{author.hearts}</span>
-                            </div>
+                                {likedByUser.includes(author.id) ? '❤️' : '🤍'}
+                            </button>
+                            <span className="count">{author.hearts}</span>
                         </div>
                     </div>
                 ))}
-            </div>
-
-            <div className="pagination">
-                <button
-                    onClick={handlePreviousGroup}
-                    className="page-button"
-                    disabled={startPage === 1}
-                >
-                    이전
-                </button>
-                {pages.map((page) => (
-                    <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`page-button ${currentPage === page ? 'active' : ''}`}
-                    >
-                        {page}
-                    </button>
-                ))}
-                <button
-                    onClick={handleNextGroup}
-                    className="page-button"
-                    disabled={endPage >= totalPages}
-                >
-                    다음
-                </button>
             </div>
         </div>
     );

@@ -71,6 +71,7 @@ function WritePost() {
             title, // 제목
             content, // 내용
             author, // 작성자 (닉네임 또는 이름)
+            views: 0, // 조회수 기본값
             createdAt: serverTimestamp(), // Firestore의 서버 시간을 저장
         };
 
@@ -79,7 +80,7 @@ function WritePost() {
             await addDoc(collection(firestore, "communityPosts"), newPost);
 
             // 저장 성공 시 알림 및 커뮤니티 페이지로 이동
-            alert("글이 성공적으로 저장되었습니다!");
+            //alert("글이 성공적으로 저장되었습니다!");
             navigate("/community");
         } catch (error) {
             console.error("Error saving post to Firestore:", error);
@@ -117,27 +118,15 @@ function WritePost() {
 
             {/* 작성자 선택 */}
             <div className="form-group">
-                <label>작성자 선택</label>
+                <label>작성자 표시 설정</label>
                 <div className="author-select">
                     <label>
                         <input
-                            type="radio"
-                            name="authorType"
-                            value="nickname"
+                            type="checkbox"
                             checked={authorType === "nickname"} // 닉네임 선택 여부
-                            onChange={() => setAuthorType("nickname")} // 선택 변경 시 상태 업데이트
+                            onChange={() => setAuthorType(authorType === "nickname" ? "" : "nickname")} // 상태 업데이트
                         />
-                        닉네임 ({user.nickname || "로그인 필요"}) {/* Firestore에서 가져온 닉네임 */}
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="authorType"
-                            value="name"
-                            checked={authorType === "name"} // 이름 선택 여부
-                            onChange={() => setAuthorType("name")} // 선택 변경 시 상태 업데이트
-                        />
-                        이름 ({user.name || "로그인 필요"}) {/* Firestore에서 가져온 이름 */}
+                        닉네임으로 표시하기 ({user.nickname || "로그인 필요"}) {/* Firestore에서 가져온 닉네임 */}
                     </label>
                 </div>
             </div>
