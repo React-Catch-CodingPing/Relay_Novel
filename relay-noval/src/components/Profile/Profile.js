@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { doc, updateDoc } from 'firebase/firestore';
+import {doc, getDoc, updateDoc} from 'firebase/firestore';
 import { auth, firestore } from '../../firebase/firebase';
 import {
     getStartedNovels,
@@ -26,8 +26,8 @@ function Profile() {
     const user = useSelector((state) => state.auth.user);
 
     // 현재 프로필 정보를 위한 상태
-    const [profile, setProfile] = useState(user || {});
-    const [editProfile, setEditProfile] = useState(user || {}); // 편집 모드에서 임시로 사용하는 상태
+    const [profile, setProfile] = useState( {});
+    const [editProfile, setEditProfile] = useState({}); // 편집 모드에서 임시로 사용하는 상태
     const [editMode, setEditMode] = useState(false); // 편집 모드 상태
 
     // 모달 상태 관리
@@ -44,6 +44,27 @@ function Profile() {
 
     // 데이터 가져오는 useEffect 추가
     useEffect(() => {
+
+        const fetchUserProfile = async () => {
+            if (!auth.currentUser) return;
+
+            try {
+                const userRef = doc(firestore, 'users', auth.currentUser.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    setProfile(userData);
+                    setEditProfile(userData); // 편집 상태 초기화
+                    dispatch(setUser(userData)); // Redux 상태 업데이트
+                }
+            } catch (error) {
+                console.error("사용자 데이터 불러오기 실패:", error);
+            }
+        };
+
+        fetchUserProfile();
+
         if (user) {
             fetchNovelData();
             fetchLikedData();
@@ -116,7 +137,17 @@ function Profile() {
 
     // 변경 사항 저장 후 Firebase에 업데이트
     const handleSave = async () => {
+        if (!editProfile.email || editProfile.email.trim() === "") {
+            alert("이메일을 입력해주세요."); // 이메일이 비어 있으면 경고
+            return;
+        }
+
         try {
+            // Firebase Authentication 이메일 업데이트
+            if (auth.currentUser?.email !== editProfile.email) {
+                await auth.currentUser.updateEmail(editProfile.email);
+            }
+
             // Firebase Firestore에 사용자 프로필 업데이트
             const userRef = doc(firestore, 'users', auth.currentUser?.uid);
           
@@ -132,7 +163,11 @@ function Profile() {
             setEditMode(false);
         } catch (error) {
             console.error('프로필 업데이트 실패:', error);
-            alert('프로필 업데이트에 실패했습니다. 다시 시도해주세요.');
+            if (error.code === "auth/requires-recent-login") {
+                alert("민감한 정보 업데이트를 위해 다시 로그인해주세요.");
+            } else {
+                alert("프로필 업데이트에 실패했습니다. 다시 시도해주세요.");
+            }
         }
     };
 
@@ -224,8 +259,11 @@ function Profile() {
                             <input
                                 type="email"
                                 value={editProfile.email}
-                                onChange={(e) => setEditProfile({ ...editProfile, email: e.target.value })}
+                                onChange={(e) => setEditProfile({...editProfile, email: e.target.value})}
                                 className="profile-input"
+                                required
+                                onInvalid={(e) => e.target.setCustomValidity("유효한 이메일 주소를 입력해주세요.")}
+                                onInput={(e) => e.target.setCustomValidity("")} // 유효성 검사 메시지 초기화
                             />
                         ) : (
                             <span className="profile-value">{profile.email}</span>
