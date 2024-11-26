@@ -124,7 +124,15 @@ const NovelDetail = () => {
         <div className="novel-detail">
             {/* 상단: 소설 기본 정보 */}
             <div className="novel-detail-container">
-                <img src={novel.coverImage || "/placeholder-image.png"} alt={novel.title} className="novel-image"/>
+                <img
+                    src={novel.coverImage || "/images/art-icon.png"}
+                    alt={novel.title}
+                    className="novel-image"
+                    onError={(e) => {
+                        e.target.onerror = null; // 무한 루프 방지
+                        e.target.src = "/images/art-icon.png"; // 기본 이미지로 대체
+                    }}
+                />
                 <h1 className="novel-title">{novel.title}</h1>
                 <p>장르 : {novel.genre || "미정"}</p>
                 <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>

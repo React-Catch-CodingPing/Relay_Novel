@@ -230,7 +230,15 @@ function Genres() {
                                 className="novel-link"
                                 onClick={(event) => handleViewCount(event, novel.id)}
                             >
-                                <img src={novel.coverImage} alt={novel.title} className="novel-image" />
+                                <img
+                                    src={novel.coverImage || "/images/art-icon.png"}
+                                    alt={novel.title}
+                                    className="novel-image"
+                                    onError={(e) => {
+                                        e.target.onerror = null; // 무한 루프 방지
+                                        e.target.src = "/images/art-icon.png"; // 기본 이미지로 대체
+                                    }}
+                                />
                                 <div className="novel-info">
                                     <h3>{novel.title}</h3>
                                     <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}
