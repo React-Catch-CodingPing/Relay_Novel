@@ -96,7 +96,7 @@ function AuthorProfile() {
         <div className="author-profile-container">
             <div className="author-profile-card">
                 <img
-                    src={author.image || "/path/to/default-image.jpg"}
+                    src={author.profileImage || "/path/to/default-image.jpg"}
                     alt={author.name}
                     className="author-profile-image"
                 />
