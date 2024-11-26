@@ -230,7 +230,7 @@ function Genres() {
                                 className="novel-link"
                                 onClick={(event) => handleViewCount(event, novel.id)}
                             >
-                                <img src={novel.image} alt={novel.title} className="novel-image" />
+                                <img src={novel.coverImage} alt={novel.title} className="novel-image" />
                                 <div className="novel-info">
                                     <h3>{novel.title}</h3>
                                     <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}

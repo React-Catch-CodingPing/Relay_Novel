@@ -1,6 +1,6 @@
 
-    /* src/components/Profile.css */
-    /* 프로필 전체를 감싸는 메인 컨테이너 */
+/* src/components/Profile.css */
+/* 프로필 전체를 감싸는 메인 컨테이너 */
 .profile-container {
     display: flex;
     justify-content: center;
@@ -10,13 +10,23 @@
 }
 
 /* 프로필 이미지 스타일 */
+/* 프로필 이미지 스타일 */
 .profile-image-preview {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 120px; /* 크기를 조정 */
+    height: 120px; /* 크기를 조정 */
+    border-radius: 50%; /* 원형 이미지 */
+    object-fit: cover; /* 이미지 비율 유지 */
     margin-bottom: 10px;
-    background-color: #f8c8d8;
+    background-color: #f8c8d8; /* 배경색 */
+}
+
+.profile-image {
+    width: 120px; /* 크기를 조정 */
+    height: 120px; /* 크기를 조정 */
+    border-radius: 50%; /* 원형 이미지 */
+    object-fit: cover; /* 이미지 비율 유지 */
+    background-color: #f8c8d8; /* 배경색 */
+    margin-bottom: 10px;
 }
 
 .profile-input-file {
