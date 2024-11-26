@@ -3,6 +3,7 @@
     text-align: center;
     padding: 40px;
     background-color: #fce4ec; /* 연한 핑크 배경 */
+
 }
 
 /* 페이지 제목 스타일 */
@@ -33,6 +34,7 @@
 /* 각 사용자 카드 스타일 */
 .user-card {
     justify-content: center;
+    border: 1px solid #ff99aa;
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3); /* 핑크빛 그림자 */
@@ -60,6 +62,13 @@
     margin: 10px 0;
     color: #d81b60; /* 짙은 핑크 */
     font-weight: bold;
+}
+
+.user-card p:first-of-type {
+    font-weight: bold; /* 순위 텍스트를 두껍게 강조 */
+    font-size: 1rem; /* 다른 텍스트와 같은 크기 유지 */
+    margin-bottom: 8px; /* 아래 텍스트와의 간격 조정 */
+    color: #333; /* 동일한 색상 유지 */
 }
 
 /* 참여 작품 수, 시작 작품 수 텍스트 스타일 */

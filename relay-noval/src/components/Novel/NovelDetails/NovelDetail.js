@@ -41,8 +41,17 @@ const NovelDetail = () => {
                 // Firestore에서 소설 정보 가져오기
                 const docRef = doc(firestore, "novels", novelId);
                 const docSnap = await getDoc(docRef);
+
+
                 if (docSnap.exists()) {
-                    setNovel({ id: docSnap.id, ...docSnap.data() });
+                    const novelData = { id: docSnap.id, ...docSnap.data() };
+
+                    // 이미지 URL이 없는 경우 기본값으로 설정
+                    if (!novelData.coverImage) {
+                        novelData.coverImage = "/placeholder-image.png"; // 기본 이미지 경로
+                    }
+
+                    setNovel(novelData); // novel 상태 업데이트
 
 
                     const fetchedAuthorName = await fetchAuthorName(docSnap.data().userId);
@@ -115,7 +124,7 @@ const NovelDetail = () => {
         <div className="novel-detail">
             {/* 상단: 소설 기본 정보 */}
             <div className="novel-detail-container">
-                <img src={novel.imageUrl || "/placeholder-image.png"} alt={novel.title} className="novel-image"/>
+                <img src={novel.coverImage || "/placeholder-image.png"} alt={novel.title} className="novel-image"/>
                 <h1 className="novel-title">{novel.title}</h1>
                 <p>장르 : {novel.genre || "미정"}</p>
                 <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>

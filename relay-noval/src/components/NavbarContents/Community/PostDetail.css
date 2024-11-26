@@ -84,8 +84,10 @@
 /* 저장 버튼 */
 .save-button,
 .cancel-button {
-    margin-top: 10px;
-    background-color: #ff99aa; /* 밝은 핑크 */
+    background-color: #ff99aa; /* 밝은 핑크 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 */
+
+    background-color: #ffb6c1; /* 저장 버튼 색 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요*/
+
     color: white;
     border: none;
     padding: 12px 20px;
@@ -100,12 +102,14 @@
 /* 호버 효과 */
 .save-button:hover {
     background-color: #ec407a; /* 진한 핑크 */
-    transform: translateY(-2px); /* 살짝 위로 이동 */
+    transform: translateY(-2px); /* 살짝 위로 이동 수정 필요수정 필요수정 필요수정 필요수정 필요 */
 }
 
 .save-button:active {
     background-color: #d81b60; /* 더 진한 핑크 */
-    transform: translateY(0); /* 원래 위치로 복귀 */
+    transform: translateY(0); /* 원래 위치로 복귀 수정 필요수정 필요수정 필요수정 필요수정 필요수정 필요수정 필요*/
+
+
 }
 
 .cancel-button:hover {
