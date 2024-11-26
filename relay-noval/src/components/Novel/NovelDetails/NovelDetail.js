@@ -12,22 +12,28 @@ const NovelDetail = () => {
     const [newLine, setNewLine] = useState(""); // 추가할 줄거리
     const [isSubmitting, setIsSubmitting] = useState(false); // 제출 중 상태
     const [authorName, setAuthorName] = useState("알 수 없는 사용자"); // 시작 저자 이름 상태 추가
+    const [userCache, setUserCache] = useState({}); // 사용자 데이터를 캐싱하는 상태
 
     const user = auth.currentUser;
 
     const fetchAuthorName = async (userId) => {
+
+        if (!userId) return "알 수 없는 사용자"; // 유효하지 않은 userId 처리
+
+        if (userCache[userId]) return userCache[userId]; // 캐시된 데이터 반환
+
         try {
             const userDoc = doc(firestore, "users", userId);
             const userSnap = await getDoc(userDoc);
 
             if (userSnap.exists()) {
                 const userData = userSnap.data();
-                // useNickname 값에 따라 반환할 이름 결정
-                if (userData.useNickname) {
-                    return userData.nickname || "익명 작성자";
-                } else {
-                    return userData.name || "알 수 없는 사용자";
-                }
+                const displayName = userData.useNickname
+                    ? userData.nickname || "익명 작성자"
+                    : userData.name || "알 수 없는 사용자";
+
+                setUserCache((prevCache) => ({ ...prevCache, [userId]: displayName })); // 캐시 저장
+                return displayName;
             }
         } catch (error) {
             console.error("Error fetching author name:", error);
@@ -35,6 +41,7 @@ const NovelDetail = () => {
         return "알 수 없는 사용자"; // 기본값
     };
 
+    // 소설 데이터와 사용자 정보 가져오기
     useEffect(() => {
         const fetchNovel = async () => {
             try {
@@ -48,7 +55,7 @@ const NovelDetail = () => {
 
                     // 이미지 URL이 없는 경우 기본값으로 설정
                     if (!novelData.coverImage) {
-                        novelData.coverImage = "/placeholder-image.png"; // 기본 이미지 경로
+                        novelData.coverImage = "/images/art-icon.png"; // 기본 이미지 경로
                     }
 
                     setNovel(novelData); // novel 상태 업데이트
@@ -67,12 +74,20 @@ const NovelDetail = () => {
         const fetchLines = async () => {
             try {
                 const fetchedLines = await getLinesFromNovel(novelId); // Firestore에서 줄거리 가져오기
-                fetchedLines.sort((a, b) => {
+                const updatedLines = await Promise.all(
+                    fetchedLines.map(async (line) => {
+                        const displayName = await fetchAuthorName(line.createdBy);
+                        return { ...line, displayName }; // displayName 필드 추가
+                    })
+                );
+
+
+                updatedLines.sort((a, b) => {
                     const dateA = a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
                     const dateB = b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
                     return dateA - dateB; // 오름차순
                 });
-                setLines(fetchedLines);
+                setLines(updatedLines);
             } catch (error) {
                 console.error("Error fetching lines:", error);
             }
@@ -92,27 +107,16 @@ const NovelDetail = () => {
 
         try {
             // Firestore에서 사용자 nickname/name 가져오기
-            const userDoc = doc(firestore, "users", user.uid);
-            const userSnap = await getDoc(userDoc);
-
-            let writername = "익명 작성자"; // 기본값 설정
-            if (userSnap.exists()) {
-                const userData = userSnap.data();
-                if (userData.useNickname) {
-                    writername = userData.nickname || "익명 작성자";
-                } else {
-                    writername = userData.name || "알 수 없는 사용자";
-                }
-            }
+            const writername = await fetchAuthorName(user.uid); // 작성자 이름/닉네임 가져오기
 
             const newLineData = {
                 content: newLine,
-                createdBy: writername,
+                createdBy: user.uid, // Firestore에 userId 저장
                 createdAt: new Date(),
             };
 
             await addLineToNovel(novelId, newLineData); // Firestore에 줄 추가
-            setLines([...lines, newLineData]); // UI 업데이트
+            setLines((prevLines) => [...prevLines, { ...newLineData, displayName: writername }]); // UI 업데이트
             setNewLine(""); // 입력 필드 초기화
         } catch (error) {
             console.error("Error adding line:", error);
@@ -158,7 +162,7 @@ const NovelDetail = () => {
                         <li key={index} className="line-item">
                             <div className="line-header">
                                 <span className="line-number">[{index + 1}/{novel.lineLimit || "제한 없음"}]</span>
-                                <span className="line-author">{line.createdBy || "익명"}</span>
+                                <span className="line-author">{line.displayName || "익명"}</span>
                                 <span className="line-time">
                                 {line.createdAt ? (
                                     (() => {
