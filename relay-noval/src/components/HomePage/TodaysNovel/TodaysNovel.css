@@ -19,6 +19,7 @@
     transition: transform 0.3s, box-shadow 0.3s; /* 애니메이션 */
 }
 
+
 .novels-list {
     display: flex;
     flex-direction: column; /* 세로 정렬 */

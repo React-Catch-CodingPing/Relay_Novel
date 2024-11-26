@@ -127,7 +127,10 @@ const NovelCreate = () => {
                     <option value="판타지">판타지</option>
                     <option value="일상">일상</option>
                     <option value="공포">공포</option>
-                    <option value="개그">개그</option>
+                    <option value="코믹">코믹</option>
+                    <option value="미스터리">미스터리</option>
+                    <option value="액션">액션</option>
+                    <option value="스릴러">스릴러</option>
                 </select>
                 <textarea
                     value={firstLine}
