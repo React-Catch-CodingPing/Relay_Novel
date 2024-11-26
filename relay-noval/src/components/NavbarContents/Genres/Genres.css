@@ -9,7 +9,7 @@
 .sidebar {
     width: 300px;
     padding: 20px;
-    background-color: #ffe4e1; /* 부드러운 분홍색 */
+    background-color: #fdd8e8; /* 부드러운 분홍색 */
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
@@ -105,7 +105,7 @@
 }
 
 .genres-novel-card {
-    background-color: #ffe4e1; /* 부드러운 분홍 */
+    background-color: #fdd8e8; /* 부드러운 분홍 */
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 그림자 추가 */
     padding: 15px;

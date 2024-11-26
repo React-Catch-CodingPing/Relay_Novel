@@ -4,7 +4,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* 화면 전체 높이 기준으로 중앙 정렬 */
+    height: 100vh;
+    background-color:  #fce4ec;/* 화면 전체 높이 기준으로 중앙 정렬 */
 }
 
 .signin-container {
@@ -16,6 +17,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #fff
 }
 
 .signin-form {
