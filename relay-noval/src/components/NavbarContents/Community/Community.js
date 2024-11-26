@@ -64,6 +64,12 @@ function Community() {
         currentPage * itemsPerPage
     );
 
+    // 텍스트 길이 제한 함수
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) return text; // 제한 길이보다 짧으면 그대로 반환
+        return text.substring(0, maxLength) + "..."; // 길이를 제한하고 ... 추가
+    };
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page); // 현재 페이지 상태 업데이트
@@ -110,7 +116,7 @@ function Community() {
                                 <div className="post-meta">
                                     <p>{post.author}</p>
                                     <p>{post.date}</p>
-                                    <p>조회수 {post.views}</p>
+                                    <p>조회수 : {post.views || 0} </p>
                                 </div>
 
                                 {/* 구분선 */}
@@ -121,7 +127,7 @@ function Community() {
 
                                 {/* 본문 */}
                                 <div className="post-content">
-                                    <p>{post.content}</p>
+                                    <p>{truncateText(post.content, 45)}</p> {/* 글자를 제한함 */}
                                 </div>
                             </div>
                         ))}
@@ -173,7 +179,9 @@ function Community() {
                 </div>
             </div>
         </div>
-            );
-            }
 
-            export default Community;
+    );
+
+}
+
+export default Community;

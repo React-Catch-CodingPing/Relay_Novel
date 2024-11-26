@@ -135,7 +135,11 @@ div .post-meta {
     color: #333;
     text-align: left;
     margin-top: 8px;
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘친 텍스트를 ...으로 표시 */
+    display: block; /* 블록 요소로 표시 */
 }
+
 
 
 .author-image {
