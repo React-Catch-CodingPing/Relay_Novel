@@ -23,6 +23,7 @@
     flex-direction: column; /* 세로 정렬 */
     justify-content: space-between; /* 콘텐츠 간 간격 조정 */
     position: relative; /* 하위 요소의 절대 위치를 기준으로 설정 */
+    border: 2px solid #ff99aa;
 }
 
 .post-detail-card:hover {
@@ -52,7 +53,7 @@
     font-size: 1rem; /* 저자 크기 */
     color: #777;
     margin-bottom: 20px; /* 작성자와 구분선 간격 */
-    border-bottom: 1px solid #5a6268; /* 작성자 아래 구분선 */
+    border-bottom: 1px solid #ff99aa; /* 작성자 아래 구분선 */
     padding-bottom: 20px; /* 작성자와 구분선 간격 */
 }
 
@@ -145,8 +146,8 @@
 /* 뒤로 가기 버튼 */
 .back-button {
     margin-top: 20px;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #f897d1;
+    color: white;
     padding: 8px 16px;
     border: 1px solid #ddd;
     border-radius: 4px;
