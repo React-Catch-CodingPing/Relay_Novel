@@ -125,7 +125,10 @@ function PostDetail() {
         <div className="post-detail-container">
             <div className="post-detail-card">
                 <h2>{post.title}</h2>
-                <p>작성자: {post.author}</p>
+
+                {/* 작성자 정보와 구분선을 분리 */}
+                <div className="author">{post.author}</div>
+                <div className="divider"></div> {/* 구분선 추가 */}
 
                 {editMode ? (
                     <textarea

@@ -5,19 +5,24 @@
     align-items: center;
     min-height: 100vh; /* 최소 높이를 100vh로 설정 */
     padding: 20px;
-    background-color: #f8f9fa; /* 배경색 추가 */
+    background-color: #fce4ec; /* 배경색 추가 */
 }
 
 /* 게시물 카드 */
 .post-detail-card {
     width: 100%;
-    max-width: 600px;
+    max-width: 800px; /* 최대 너비 설정 */
+    min-height: 600px; /* 최소 높이를 늘려서 크기를 키움 */
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); /* 더 부드러운 그림자 */
     text-align: left;
     transition: transform 0.2s ease-in-out; /* 카드 호버 시 효과 */
+    display: flex; /* Flexbox 활성화 */
+    flex-direction: column; /* 세로 정렬 */
+    justify-content: space-between; /* 콘텐츠 간 간격 조정 */
+    position: relative; /* 하위 요소의 절대 위치를 기준으로 설정 */
 }
 
 .post-detail-card:hover {
@@ -26,19 +31,31 @@
 
 /* 제목 스타일 */
 .post-detail-card h2 {
-    font-size: 2rem; /* 제목 크기 증가 */
-    margin-bottom: 16px;
+    font-size: 2rem; /* 제목 크기 */
+    margin-bottom: 20px; /* 제목과 구분선 간격 */
     font-weight: bold;
     color: #333;
+
 }
 
 /* 일반 텍스트 스타일 */
 .post-detail-card p {
+    margin-top: 16px; /* 구분선과 본문 간격 */
     margin-bottom: 16px;
     line-height: 1.6; /* 더 넉넉한 줄 간격 */
     color: #555;
+    font-size: 1.5rem;
     word-break: break-word; /* 긴 단어 줄바꿈 처리 */
 }
+
+.post-detail-card .author {
+    font-size: 1rem; /* 저자 크기 */
+    color: #777;
+    margin-bottom: 20px; /* 작성자와 구분선 간격 */
+    border-bottom: 1px solid #5a6268; /* 작성자 아래 구분선 */
+    padding-bottom: 20px; /* 작성자와 구분선 간격 */
+}
+
 
 /* 수정 텍스트 영역 */
 .edit-textarea {
@@ -135,6 +152,10 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+
+    align-self: flex-start; /* 버튼을 하단으로 정렬 */
+    margin-top: auto; /* 하단으로 밀리게 설정 */
+    text-align: center;
 }
 
 .back-button:hover {
