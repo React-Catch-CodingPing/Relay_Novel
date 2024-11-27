@@ -32,7 +32,8 @@ export const getAuthors = async () => {
         const usersSnapshot = await getDocs(collection(firestore, "users"));
         const authors = [];
         usersSnapshot.forEach((doc) => {
-            if (authorIds.has(doc.id)) { // userId가 소설 작성자 목록에 포함된 경우만 추가
+            const userData = doc.data();
+            if (authorIds.has(doc.id) && !userData.isAdmin ) { // userId가 소설 작성자 목록에 포함된 경우만 추가
                 authors.push({ id: doc.id, ...doc.data() });
             }
         });
@@ -52,7 +53,10 @@ export const getUsers = async () => {
         const usersSnapshot = await getDocs(collection(firestore, "users"));
         const users = [];
         usersSnapshot.forEach((doc) => {
-            users.push({ id: doc.id, ...doc.data() });
+            const userData = doc.data();
+            if (!userData.isAdmin) { // 어드민 계정을 제외
+                users.push({ id: doc.id, ...userData });
+            }
         });
 
         console.log("Fetched users:", users); // 디버깅용 로그

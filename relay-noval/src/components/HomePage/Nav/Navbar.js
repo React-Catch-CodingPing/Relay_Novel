@@ -53,9 +53,11 @@
                             <button onClick={handleLogout} className="logout-button">로그아웃</button>
                             {user ? (
                                 isAdmin ? (
-                                    <button onClick={handleAdminClick}>관리</button>
+                                    <button className="profile-button" onClick={handleAdminClick}>관리</button>
                                 ) : (
-                                    <Link to="/profile">프로필</Link>
+                                    <Link to="/profile">
+                                        <button className="profile-button">프로필</button>
+                                    </Link>
                                 )
                             ) : (
                                 <Link to="/signin">로그인</Link>
