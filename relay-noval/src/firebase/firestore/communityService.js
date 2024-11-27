@@ -116,3 +116,98 @@ export const incrementPostViews = async (postId, posts = []) => {
         throw new Error("조회수를 증가하는 중 오류가 발생했습니다.");
     }
 };
+
+
+/**
+ * -----------------------------------------------------------------------------------
+ */
+
+
+
+
+
+/**
+ * Firestore에서 댓글을 추가합니다.
+ * @param {string} postId - 댓글이 달릴 게시물의 ID
+ * @param {Object} newComment - 댓글 데이터 객체
+ * @returns {Promise<void>}
+ */
+export const addComment = async (postId, newComment) => {
+    try {
+        const postRef = doc(firestore, "communityPosts", postId);
+        const commentsRef = collection(postRef, "comments");
+        await addDoc(commentsRef, {
+            ...newComment,
+            createdAt: serverTimestamp(),
+        });
+    } catch (error) {
+        console.error("Error adding comment:", error);
+        throw new Error("댓글 추가 중 오류가 발생했습니다.");
+    }
+};
+
+
+
+/**
+ * Firestore에서 게시물의 댓글을 가져옵니다.
+ * @param {string} postId - 댓글을 가져올 게시물의 ID
+ * @returns {Promise<Array>} 댓글 데이터 배열
+ */
+export const getComments = async (postId) => {
+    try {
+        const postRef = doc(firestore, "communityPosts", postId);
+        const commentsRef = collection(postRef, "comments");
+        const commentsQuery = query(commentsRef, orderBy("createdAt", "asc"));
+        const querySnapshot = await getDocs(commentsQuery);
+        return querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+    } catch (error) {
+        console.error("Error fetching comments:", error);
+        throw new Error("댓글 가져오기 중 오류가 발생했습니다.");
+    }
+};
+
+
+
+/**
+ * Firestore에서 특정 댓글을 삭제합니다.
+ * @param {string} postId - 댓글이 달린 게시물의 ID
+ * @param {string} commentId - 삭제할 댓글의 ID
+ * @returns {Promise<void>}
+ */
+export const deleteComment = async (postId, commentId) => {
+    try {
+        const commentRef = doc(firestore, "communityPosts", postId, "comments", commentId);
+        await deleteDoc(commentRef); // Firestore에서 댓글 삭제
+    } catch (error) {
+        console.error("Error deleting comment:", error);
+        throw new Error("댓글 삭제 중 오류가 발생했습니다.");
+    }
+};
+
+
+
+/**
+ * Firestore에서 특정 댓글을 수정합니다.
+ * @param {string} postId - 댓글이 달린 게시물의 ID
+ * @param {string} commentId - 수정할 댓글의 ID
+ * @param {Object} updatedData - 수정할 데이터
+ * @returns {Promise<void>}
+ */
+export const updateComment = async (postId, commentId, updatedData) => {
+    try {
+        const commentRef = doc(firestore, "communityPosts", postId, "comments", commentId);
+        await updateDoc(commentRef, {
+            ...updatedData,
+            updatedAt: serverTimestamp(), // Firestore 서버 시간으로 업데이트
+        });
+    } catch (error) {
+        console.error("Error updating comment:", error);
+        throw new Error("댓글 수정 중 오류가 발생했습니다.");
+    }
+};
+
+
+
