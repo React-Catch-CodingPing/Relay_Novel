@@ -1,0 +1,79 @@
+.talks-section {
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    margin: 50px 0; /* 상단과 하단에 여백을 추가해 배경색이 보이도록 합니다. */
+}
+
+.talks-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.talks-list {
+    display: flex;
+    justify-content: center; /* 카드 중앙 정렬 */
+    gap: 30px; /* 카드 간 간격 넓게 설정 */
+    flex-wrap: wrap; /* 화면 크기에 따라 줄바꿈 */
+    padding: 20px; /* 전체 패딩 */
+}
+
+.talk-card {
+    background-color: #ffffff; /* 화이트 카드 */
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    width: 250px; /* 카드 크기 */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.talk-card h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 3px;
+    color: #333;
+    padding-bottom: 0px;
+}
+
+.talk-card:hover {
+    transform: translateY(-10px); /* 카드가 살짝 위로 이동하는 애니메이션 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 진하게 */
+}
+
+.talk-card p {
+    margin: 5px 0;
+}
+
+.view-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.view-button:hover {
+    background-color: #ff4081;
+}
+
+.talk-card p:first-of-type {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.talk-card p:last-of-type {
+    font-size: 16px;
+    color: #666;
+    margin: 20px 0;
+}

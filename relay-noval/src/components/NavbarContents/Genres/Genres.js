@@ -194,7 +194,7 @@ function Genres() {
                 <div className="filter-section">
                     <p>장르</p>
                     <div className="filter-tags">
-                        {['로맨스', '미스터리', '코믹', '액션', '스릴러', '판타지'].map((genre) => (
+                        {['로맨스', '미스터리', '코믹', '액션', '스릴러', '판타지','일상','공포'].map((genre) => (
                             <span
                                 key={genre}
                                 className={`tag ${selectedGenres.includes(genre) ? 'selected' : ''}`}

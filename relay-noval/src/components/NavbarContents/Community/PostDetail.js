@@ -124,8 +124,15 @@ function PostDetail() {
     return (
         <div className="post-detail-container">
             <div className="post-detail-card">
-                <h2>{post.title}</h2>
-                <p>작성자: {post.author}</p>
+                {/* 제목과 조회수 같은 줄에 배치 */}
+                <div className="title-row">
+                    <h2>{post.title}</h2>
+                    <span className="views">조회수: {post.views || 0}</span>
+                </div>
+                <div className="divider"></div>
+
+                <div className="author">{post.author}</div>
+
 
                 {editMode ? (
                     <textarea
@@ -161,6 +168,7 @@ function PostDetail() {
                         )}
                     </div>
                 )}
+
 
                 <button className="back-button" onClick={() => navigate("/community")}>
                     뒤로 가기
