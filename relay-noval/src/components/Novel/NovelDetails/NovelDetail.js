@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {doc, getDoc} from "firebase/firestore";
 import {firestore, auth} from "../../../firebase/firebase";
 import {
@@ -9,8 +9,11 @@ import {
     updateLineInNovel
 } from "../../../firebase/firestore/lineService";
 import "./NovelDetail.css";
+import {deleteNovel, updateNovel} from "../../../firebase/firestore/novelService";
 
 const NovelDetail = () => {
+    const navigate = useNavigate(); // 페이지 이동을 위해 사용
+
     const {novelId} = useParams(); // URL에서 novelId 가져오기
     const [novel, setNovel] = useState(null); // 선택된 소설 데이터
     const [lines, setLines] = useState([]); // 현재 소설의 모든 줄거리
@@ -18,6 +21,9 @@ const NovelDetail = () => {
     const [isSubmitting, setIsSubmitting] = useState(false); // 제출 중 상태
     const [authorName, setAuthorName] = useState("알 수 없는 사용자"); // 시작 저자 이름 상태 추가
     const [userCache, setUserCache] = useState({}); // 사용자 데이터를 캐싱하는 상태
+    const [isEditingNovel, setIsEditingNovel] = useState(false); // 소설 편집 모드
+    const [editedNovelTitle, setEditedNovelTitle] = useState(""); // 편집 중인 제목
+
 
     const user = auth.currentUser;
 
@@ -65,6 +71,7 @@ const NovelDetail = () => {
 
                     setNovel(novelData); // novel 상태 업데이트
 
+                    setEditedNovelTitle(novelData.title); // 편집용 제목 초기화
 
                     const fetchedAuthorName = await fetchAuthorName(docSnap.data().userId);
                     setAuthorName(fetchedAuthorName); // 시작 저자 이름 상태 업데이트
@@ -101,6 +108,36 @@ const NovelDetail = () => {
         fetchNovel();
         fetchLines();
     }, [novelId]);
+
+// 소설 삭제 핸들러
+    const handleDeleteNovel = async () => {
+        if (!window.confirm("정말로 이 소설을 삭제하시겠습니까?")) return;
+
+        try {
+            await deleteNovel(novelId); // Firestore에서 소설 삭제
+            alert("소설이 성공적으로 삭제되었습니다.");
+            navigate("/"); // 홈으로 이동
+        } catch (error) {
+            console.error("Error deleting novel:", error);
+        }
+    };
+
+    // 소설 제목 수정 핸들러
+    const handleSaveNovelEdit = async () => {
+        if (!editedNovelTitle.trim()) {
+            alert("제목을 입력해주세요.");
+            return;
+        }
+
+        try {
+            await updateNovel(novelId, { title: editedNovelTitle }); // Firestore 업데이트
+            setNovel((prevNovel) => ({ ...prevNovel, title: editedNovelTitle })); // UI 업데이트
+            setIsEditingNovel(false); // 편집 모드 종료
+        } catch (error) {
+            console.error("Error updating novel:", error);
+        }
+    };
+
 
     const handleAddLine = async () => {
         if (!newLine.trim()) {
@@ -188,7 +225,35 @@ const NovelDetail = () => {
                         e.target.src = "/images/art-icon.png"; // 기본 이미지로 대체
                     }}
                 />
-                <h1 className="novel-title">{novel.title}</h1>
+                {isEditingNovel ? (
+                    <div className="novel-edit-container">
+                        <input
+                            type="text"
+                            value={editedNovelTitle}
+                            onChange={(e) => setEditedNovelTitle(e.target.value)}
+                            className="novel-edit-input"
+                        />
+                        <button onClick={handleSaveNovelEdit} className="save-novel-button">
+                            저장
+                        </button>
+                        <button onClick={() => setIsEditingNovel(false)} className="cancel-novel-button">
+                            취소
+                        </button>
+                    </div>
+                ) : (
+                    <h1 className="novel-title">{novel.title}</h1>
+                )}
+                {novel.userId === user.uid && (
+                    <div className="novel-actions">
+                        <button onClick={() => setIsEditingNovel(true)} className="edit-novel-button">
+                            제목 수정
+                        </button>
+                        <button onClick={handleDeleteNovel} className="delete-novel-button">
+                            소설 삭제
+                        </button>
+                    </div>
+                )}
+                {/*<h1 className="novel-title">{novel.title}</h1>*/}
                 <p>장르 : {novel.genre || "미정"}</p>
                 <p>총 줄 수: {lines.length}/{novel.lineLimit || "제한 없음"}</p>
                 <p>
