@@ -1,6 +1,6 @@
 // 소설 줄 관련 로직.
 import {auth, firestore} from "../firebase";
-import {addDoc, collection, getDocs, serverTimestamp} from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, getDocs, serverTimestamp, updateDoc} from "firebase/firestore";
 
 
 // 특정 소설에 줄거리를 추가하는 함수
@@ -50,6 +50,32 @@ export const getLineCountForNovel = async (novelId) => {
         return querySnapshot.size; // 줄 수 반환
     } catch (error) {
         console.error("Error getting line count for novel: ", error);
+        throw error;
+    }
+};
+
+
+// 특정 소설의 특정 라인을 삭제하는 함수
+export const deleteLineFromNovel = async (novelId, lineId) => {
+    try {
+        const lineRef = doc(firestore, `novels/${novelId}/lines`, lineId);
+        await deleteDoc(lineRef);
+    } catch (error) {
+        console.error("Error deleting line:", error);
+        throw error;
+    }
+};
+
+// 특정 소설의 특정 라인을 업데이트하는 함수
+export const updateLineInNovel = async (novelId, lineId, updatedContent) => {
+    try {
+        const lineRef = doc(firestore, `novels/${novelId}/lines`, lineId);
+        await updateDoc(lineRef, {
+            content: updatedContent,
+            updatedAt: serverTimestamp(), // 수정 시간 저장
+        });
+    } catch (error) {
+        console.error("Error updating line:", error);
         throw error;
     }
 };
