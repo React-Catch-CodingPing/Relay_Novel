@@ -36,6 +36,7 @@ import ReportBoard from "./components/HomePage/Footer/ReportBoard";
 
 import WritePost from "./components/NavbarContents/Community/WritePost";
 import PostDetail from "./components/NavbarContents/Community/PostDetail";
+import Admin from "./components/Auth/Admin";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -103,6 +104,9 @@ const App = () => {
                         <Route path="/community/write" element={<WritePost />} />
                         <Route path="/community/:id" element={<PostDetail />} />
 
+
+                        {/* 관리자 계정 라우트 */}
+                        <Route path="/admin" element={<Admin />} />
 
                     </Routes>
                 </div>
