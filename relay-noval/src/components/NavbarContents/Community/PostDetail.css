@@ -33,9 +33,11 @@
 /* 제목 스타일 */
 .post-detail-card h2 {
     font-size: 2rem; /* 제목 크기 */
-    margin-bottom: 20px; /* 제목과 구분선 간격 */
+    margin-bottom: 10px; /* 제목과 구분선 간격 */
     font-weight: bold;
     color: #333;
+
+    display: inline-block; /* Flexbox 안에서 한 줄에 배치되도록 설정 */
 
 }
 
@@ -55,8 +57,16 @@
     margin-bottom: 20px; /* 작성자와 구분선 간격 */
     border-bottom: 1px solid #ff99aa; /* 작성자 아래 구분선 */
     padding-bottom: 20px; /* 작성자와 구분선 간격 */
+
 }
 
+/* 조회수 스타일 */
+.title-row {
+    display: flex; /* Flexbox 활성화 */
+    justify-content: space-between; /* 제목 왼쪽, 조회수 오른쪽 */
+    align-items: center; /* 세로 중앙 정렬 */
+    margin-bottom: 10px; /* 아래 요소와 간격 */
+}
 
 /* 수정 텍스트 영역 */
 .edit-textarea {
