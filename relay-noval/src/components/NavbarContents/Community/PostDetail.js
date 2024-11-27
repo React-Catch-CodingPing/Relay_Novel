@@ -1,66 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
-import { auth, firestore } from "../../../firebase/firebase";
+import React, {useEffect, useState} from "react";
+import {useParams, useNavigate} from "react-router-dom";
+import {auth, firestore} from "../../../firebase/firebase";
 import "./PostDetail.css";
+import {deletePost, getPostById, updatePost} from "../../../firebase/firestore/communityService";
+import {doc, getDoc} from "firebase/firestore";
 
 function PostDetail() {
-    const { id } = useParams(); // URL에서 글 ID를 가져옴
+    const {id} = useParams(); // URL에서 글 ID를 가져옴
     const navigate = useNavigate();
     const [post, setPost] = useState(null); // 현재 글 정보
     const [isOwner, setIsOwner] = useState(false); // 수정/삭제 권한 여부
     const [editMode, setEditMode] = useState(false); // 수정 모드
     const [updatedContent, setUpdatedContent] = useState(""); // 수정 중인 내용 상태
+    const [loading, setLoading] = useState(true); // 로딩 상태 추가
+
 
     // Firestore에서 글 가져오기
     useEffect(() => {
-        const fetchPost = async () => {
+        const loadPost = async () => {
+            setLoading(true); // 로딩 상태 활성화
             try {
-                const docRef = doc(firestore, "communityPosts", id);
-                const docSnap = await getDoc(docRef);
+                const postData = await getPostById(id);
+                if (!postData) {
+                    throw new Error("게시물을 찾을 수 없습니다.");
+                }
+                setPost(postData);
 
-                if (docSnap.exists()) {
-                    const postData = docSnap.data();
-                    setPost(postData);
+                const currentUser = auth.currentUser;
+                if (currentUser && postData.authorUid === currentUser.uid) {
+                    setIsOwner(true); // UID로 작성자 식별
+                }
 
-                    // 현재 로그인한 사용자 정보 가져오기
-                    const currentUser = auth.currentUser;
-                    if (currentUser) {
-                        const fetchUserDetails = async () => {
-                            try {
-                                const userDocRef = doc(firestore, "users", currentUser.uid);
-                                const userDocSnap = await getDoc(userDocRef);
-
-                                if (userDocSnap.exists()) {
-                                    const userData = userDocSnap.data();
-
-                                    // Firestore의 author와 users의 name 또는 nickname 비교
-                                    if (
-                                        postData.author === userData.name ||
-                                        postData.author === userData.nickname
-                                    ) {
-                                        setIsOwner(true); // 권한 부여
-                                    }
-                                } else {
-                                    console.error("User document does not exist in Firestore.");
-                                }
-                            } catch (error) {
-                                console.error("Error fetching user details:", error);
-                            }
-                        };
-
-                        fetchUserDetails();
+// Firestore에서 작성자의 닉네임 또는 이름 불러오기
+                if (postData.authorUid) {
+                    const authorRef = doc(firestore, "users", postData.authorUid);
+                    const authorSnap = await getDoc(authorRef);
+                    if (authorSnap.exists()) {
+                        const authorData = authorSnap.data();
+                        setPost((prev) => ({
+                            ...prev,
+                            author: authorData.nickname || authorData.name || "알 수 없는 사용자",
+                        }));
                     }
-                } else {
-                    console.error("No such document!");
-                    navigate("/community"); // 문서가 없으면 커뮤니티로 리다이렉트
                 }
             } catch (error) {
                 console.error("Error fetching post:", error);
+                alert("게시물을 찾을 수 없습니다.");
+                navigate("/community");
+            } finally {
+                setLoading(false);
             }
         };
 
-        fetchPost();
+        loadPost();
     }, [id, navigate]);
 
     // 로그인 여부 확인 함수
@@ -80,8 +72,7 @@ function PostDetail() {
             const confirmDelete = window.confirm("정말로 이 글을 삭제하시겠습니까?");
             if (!confirmDelete) return;
 
-            const docRef = doc(firestore, "communityPosts", id);
-            await deleteDoc(docRef);
+            await deletePost(id);
             alert("글이 삭제되었습니다.");
             navigate("/community");
         } catch (error) {
@@ -99,12 +90,8 @@ function PostDetail() {
     // 수정 저장 버튼 클릭 시 Firestore에 업데이트
     const handleSave = async () => {
         try {
-            const docRef = doc(firestore, "communityPosts", id);
-            await updateDoc(docRef, {
-                content: updatedContent,
-                updatedAt: new Date(),
-            });
-            setPost((prev) => ({ ...prev, content: updatedContent }));
+            await updatePost(id, {content: updatedContent});
+            setPost((prev) => ({...prev, content: updatedContent}));
             setEditMode(false);
             alert("글이 수정되었습니다.");
         } catch (error) {
@@ -119,7 +106,10 @@ function PostDetail() {
         setUpdatedContent("");
     };
 
-    if (!post) return <p>Loading...</p>;
+    if (loading) return <p>Loading...</p>; // 로딩 상태 표시
+
+    if (!post) return <p>게시물을 찾을 수 없습니다.</p>; // 게시물이 없을 경우 메시지 표시
+
 
     return (
         <div className="post-detail-container">

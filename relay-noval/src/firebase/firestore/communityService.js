@@ -1,6 +1,6 @@
 // communityService.js
 import { collection, addDoc, getDocs, query, orderBy, doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
-import { firestore } from "../firebase";
+import {auth, firestore} from "../firebase";
 
 /**
  * Firestore에서 모든 게시물 데이터를 가져옵니다.
@@ -28,8 +28,10 @@ export const fetchPosts = async () => {
  */
 export const savePost = async (newPost) => {
     try {
+        const { uid } = auth.currentUser; // 현재 사용자 UID 가져오기
         await addDoc(collection(firestore, "communityPosts"), {
             ...newPost,
+            authorUid: uid, // UID 저장
             createdAt: serverTimestamp(), // Firestore 서버 시간
         });
     } catch (error) {
