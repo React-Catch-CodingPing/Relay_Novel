@@ -1,7 +1,7 @@
 // 로그인 화면 및 기능을 담당하는 컴포넌트.
 
 // src/components/Auth/SignIn.js
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../../store/authSlice";
 import { useNavigate, Link } from "react-router-dom"; // 리디렉션 기능
@@ -22,9 +22,11 @@ const SignIn = () => {
     };
 
     // 로그인 성공 시 HomePage 페이지로 이동
-    if (user) {
-        navigate("/"); // 로그인 후 홈 페이지로 리디렉션
-    }
+    useEffect(() => {
+        if (user) {
+            navigate("/"); // 로그인 성공 시 홈 페이지로 이동
+        }
+    }, [user, navigate]);
 
     return (
         <div className="signin-wrapper">
@@ -45,7 +47,9 @@ const SignIn = () => {
                         placeholder="비밀번호"
                         required
                     />
-                    <button type="submit" className="login-btn" disabled={loading}>로그인</button>
+                    <button type="submit" className="login-btn" disabled={loading}>
+                        {loading ? "로그인 중..." : "로그인"}
+                    </button>
                 </form>
                 {error && <p className="error-message">{error}</p>}
                 {/* 회원가입 링크 추가 */}
