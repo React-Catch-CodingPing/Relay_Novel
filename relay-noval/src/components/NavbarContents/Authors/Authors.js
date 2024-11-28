@@ -1,6 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import './Authors.css';
-import { getUsers, getAuthorLikeStatus, updateAuthorLike } from "../../../firebase/firestore/userService";
+import {
+    getUsers,
+    getAuthorLikeStatus,
+    updateAuthorLike,
+    getStartedNovels, getParticipatedNovels
+} from "../../../firebase/firestore/userService";
 import { auth } from "../../../firebase/firebase";
 import {Link, useNavigate} from "react-router-dom";
 
@@ -60,32 +65,53 @@ const Authors = () => {
                         )
                     );
 
-                    const authorsData = usersData.map((user, index) => ({
-                        id: user.id,
-                        name: user.name || "익명 저자",
-                        image: user.profileImage || "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png",
-                        participationCount: user.participationCount || 0,
-                        startedWorks: user.startedWorks || 0,
-                        hearts: user.likes || 0,
-                    }));
+                    const authorsWithStats = await Promise.all(
+                        usersData.map(async (user) => {
+                            const startedNovels = await getStartedNovels(user.id);
+                            const participatedNovels = await getParticipatedNovels(user.id);
+                            return {
+                                id: user.id,
+                                name: user.name || "익명 저자",
+                                profileImage: user.profileImage || "\thttps://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png",
+                                participationCount: participatedNovels.length || 0,
+                                startedWorks: startedNovels.length,
+                                hearts: user.likes || 0,
+                            };
+                        })
+                    );
+
+                    // const authorsData = usersData.map((user, index) => ({
+                    //     id: user.id,
+                    //     name: user.name || "익명 저자",
+                    //     image: user.profileImage || "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png",
+                    //     participationCount: user.participationCount || 0,
+                    //     startedWorks: user.startedWorks || 0,
+                    //     hearts: user.likes || 0,
+                    // }));
 
                     setLikedByUser(
-                        authorsData
+                        authorsWithStats
                             .filter((_, index) => likedStatuses[index])
                             .map((author) => author.id)
                     );
 
-                    setAuthors(authorsData);
+                    setAuthors(authorsWithStats);
                 } else {
                     // 로그인하지 않은 경우 기본 데이터 표시
-                    const authorsData = usersData.map((user) => ({
-                        id: user.id,
-                        name: user.name || "익명 저자",
-                        image: user.profileImage || "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png",
-                        participationCount: user.participationCount || 0,
-                        startedWorks: user.startedWorks || 0,
-                        hearts: user.likes || 0,
-                    }));
+                    const authorsData = await Promise.all(
+                        usersData.map(async (user) => {
+                            const startedNovels = await getStartedNovels(user.id);
+                            const participatedNovels = await getParticipatedNovels(user.id);
+                            return {
+                                id: user.id,
+                                name: user.name || "익명 저자",
+                                profileImage: user.profileImage || "\thttps://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png",
+                                participationCount: participatedNovels.length || 0,
+                                startedWorks: startedNovels.length,
+                                hearts: user.likes || 0,
+                            };
+                        })
+                    );
                     setAuthors(authorsData);
                 }
             } catch (error) {
@@ -158,7 +184,7 @@ const Authors = () => {
                         className="author-card-link" // 스타일용 클래스 추가
                     >
                     <div key={author.id} className="author-card">
-                        <img src={author.image} alt={author.name} />
+                        <img src={author.profileImage} alt={author.name} />
                         <h3>{author.name}</h3>
                         <p>{author.participationCount}줄 참여 중</p>
                         <p>{author.startedWorks}작품 시작</p>
