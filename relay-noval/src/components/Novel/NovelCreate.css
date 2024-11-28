@@ -1,6 +1,7 @@
 /* src/components/Novel/NovelCreate.css */
 
-.container {
+.create-container {
+    font-family: Ownglyph_meetme-Rg;
     max-width: 800px;
     width: 90%;
     margin: 20px auto;
@@ -12,8 +13,9 @@
 
 .title {
     text-align: center;
+    font-size: 40px;
     color: #333;
-    margin-bottom: 10px;
+    margin: 0 auto;
 }
 
 .date {
@@ -59,13 +61,13 @@ input[type="file"]::before {
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    font-family: Ownglyph_meetme-Rg;
+    font-size: 18px;
 }
+
 input[type="file"]:hover::before {
-    background-color: rgba(0, 0, 0, 0.7);
-    border-color: black;
-    color: white;
+    color: #696969;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 .imagePreview {
 
@@ -84,6 +86,7 @@ input[type="file"]:hover::before {
 .input,
 .select,
 .textarea {
+    font-family: Ownglyph_meetme-Rg;
     margin-bottom: 15px;
     padding: 12px;
     border: 1px solid #ccc;
@@ -112,6 +115,7 @@ input[type="file"]:hover::before {
     color: #fff;
     border: none;
     border-radius: 4px;
+    font-family: Ownglyph_meetme-Rg;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;

@@ -89,7 +89,7 @@ const NovelCreate = () => {
    };
 
     return (
-        <div className="container">
+        <div className="create-container">
             <h1 className="title">소설 시작하기</h1>
             <p className="date">{getCurrentDate()} 시작</p>
 

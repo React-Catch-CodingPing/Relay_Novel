@@ -1,4 +1,5 @@
 .genres-container {
+    font-family: Ownglyph_meetme-Rg;
     display: flex;
     background-color: #fce4ec; /* 연한 핑크 배경 */
     padding: 20px;
@@ -75,14 +76,19 @@
     font-size: 1.8rem;
     color: #d81b60; /* 진한 핑크 */
 }
+.genres-sort-options {
+    display: flex;
+    font-family: Ownglyph_meetme-Rg;
+    gap: 1px;
+}
 
 .genres-sort-options button {
+    font-family: Ownglyph_meetme-Rg;
     background-color: #ffd1dc; /* 밝은 핑크 */
     border: none;
     border-radius: 8px;
     padding: 8px 15px;
     font-size: 0.9rem;
-    font-weight: bold;
     color: #d81b60;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
@@ -120,12 +126,18 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+.view-count {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+
 .novel-image {
-    width: 100%;
-    height: 150px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-bottom: 10px;
+    width: 100%;  /* 이미지 너비 카드에 맞게 */
+    height: 100%;
+    object-fit: cover;     /* 이미지 크기 조정 */
+    display: block;
+    background-color: #e0e0e0; /* 기본 배경 */
 }
 
 .novel-info h3 {

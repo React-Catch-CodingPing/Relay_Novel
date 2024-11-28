@@ -1,9 +1,14 @@
 /* src/components/Novel/NovelDetail.css */
 
 .novel-detail {
+    font-family: Ownglyph_meetme-Rg;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.novel-detail-container {
+    justify-content: center;
 }
 
 .novel-header {
@@ -13,12 +18,20 @@
 }
 
 .novel-image {
-    max-width: 100%;
-    height: auto;
+    width: 30%;
+    height: 30%;
     border-radius: 8px;
     margin-bottom: 16px;
     object-fit: cover; /* 이미지가 비율에 맞게 표시되도록 설정 */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+.lines-list {
+    list-style: none;
+}
+
+.line-item {
+    font-size: 30px;
 }
 
 .novel-info {
@@ -40,6 +53,8 @@
 }
 
 .add-line-input {
+    font-family: Ownglyph_meetme-Rg;
+    font-size: 18px;
     width: 100%;
     padding: 10px;
     margin-top: 10px;
@@ -48,6 +63,7 @@
 }
 
 .add-line-button {
+    font-family: Ownglyph_meetme-Rg;
     margin-top: 10px;
     padding: 10px;
     background-color: #333;
