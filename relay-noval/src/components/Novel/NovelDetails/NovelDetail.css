@@ -28,10 +28,25 @@
 
 .lines-list {
     list-style: none;
+    padding:0;
 }
 
 .line-item {
-    font-size: 20px;
+    font-size: 30px;
+    margin: 30px 2px;
+}
+
+.line-header {
+    font-size: 15px;
+}
+
+.line-content {
+    display: inline-block; /* 밑줄을 텍스트 너비에 맞추기 */
+    font-size: 2.5rem;
+    color: #000000; /* 텍스트 색상 */
+    border-bottom: 2px solid #000000; /* 밑줄 색상과 두께 */
+    margin: 2px;
+
 }
 
 .novel-info {
