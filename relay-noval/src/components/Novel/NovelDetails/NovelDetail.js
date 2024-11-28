@@ -26,6 +26,8 @@ const NovelDetail = () => {
 
 
 
+    const user = auth.currentUser;
+
     const fetchAuthorName = async (userId) => {
 
         if (!userId) return "알 수 없는 사용자"; // 유효하지 않은 userId 처리
@@ -51,7 +53,7 @@ const NovelDetail = () => {
         return "알 수 없는 사용자"; // 기본값
     };
 
-    const user = auth.currentUser;
+
 
     useEffect(() => {
         // 로그인 상태 확인

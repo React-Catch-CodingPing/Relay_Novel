@@ -16,10 +16,19 @@ function Genres() {
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [lineCounts, setLineCounts] = useState({});
     const [sortOption, setSortOption] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null); // 현재 사용자
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const itemsPerPage = 8; // 한 페이지에 표시할 항목 수
     const pagesPerGroup = 4; // 한 그룹에 표시할 페이지 수
     const navigate = useNavigate(); // 페이지 이동을 위한 훅
+
+    // Firebase 인증 상태 가져오기
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setCurrentUser(user);
+        });
+        return () => unsubscribe();
+    }, []);
 
     // 실시간 Firestore 데이터 구독
     useEffect(() => {
@@ -41,7 +50,7 @@ function Genres() {
 
     // 로그인 여부 확인 함수
     const ensureLoggedIn = () => {
-        if (!auth.currentUser) {
+        if (!currentUser) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
             navigate("/login"); // 로그인 페이지로 이동
             return false;
@@ -111,7 +120,8 @@ function Genres() {
         }
     };
 
-// 추천 클릭 핸들러
+
+    // 추천 클릭 핸들러
     const handleThumbsUpClick = async (event, novelId) => {
         event.stopPropagation();
 
@@ -237,7 +247,15 @@ function Genres() {
                                     <Link
                                         to={`/novels/${novel.id}`}
                                         className="novel-link"
-                                        onClick={(event) => handleViewCount(event, novel.id)}
+                                        onClick={async (event) => {
+                                            event.preventDefault(); // 기본 링크 이동 방지
+                                            try {
+                                                await incrementNovelViews(novel.id); // Firestore 조회수 증가
+                                                navigate(`/novels/${novel.id}`); // 페이지 이동
+                                            } catch (error) {
+                                                console.error("Error incrementing view count:", error);
+                                            }
+                                        }}
                                     >
                                         <img
                                             src={novel.coverImage || "/images/art-icon.png"}
@@ -254,7 +272,19 @@ function Genres() {
                                         </div>
                                     </Link>
                                     <div className="genres-actions-container">
-                                        <Link to={`/novels/${novel.id}`} className="genres-participate-button">
+                                        <Link
+                                            to={`/novels/${novel.id}`}
+                                            className="genres-participate-button"
+                                            onClick={async (event) => {
+                                                event.preventDefault(); // 기본 링크 이동 방지
+                                                try {
+                                                    await incrementNovelViews(novel.id); // Firestore 조회수 증가
+                                                    navigate(`/novels/${novel.id}`); // 페이지 이동
+                                                } catch (error) {
+                                                    console.error("Error incrementing view count:", error);
+                                                }
+                                            }}
+                                        >
                                             참여하기
                                         </Link>
                                         <div>
