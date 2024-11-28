@@ -2,6 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import {auth, firestore} from "../../../firebase/firebase";
 import "./PostDetail.css";
+import Slider from "react-slick"; // react-slick 사용
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import {
     getComments,
     addComment,
@@ -210,6 +213,19 @@ function PostDetail() {
                     <h2>{post.title}</h2>
                     <span className="views">조회수: {post.views || 0}</span>
                 </div>
+
+
+                <div className="divider"></div>
+                {post.images && post.images.length > 0 && (
+                    <Slider>
+                        {post.images.map((url, index) => (
+                            <div key={index}>
+                                <img src={url} alt={`Slide ${index}`} />
+                            </div>
+                        ))}
+                    </Slider>
+                )}
+
                 <div className="divider"></div>
 
                 <div className="author">{post.author}</div>

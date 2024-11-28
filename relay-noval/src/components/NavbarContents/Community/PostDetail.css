@@ -172,6 +172,14 @@ input[type="radio"] {
     accent-color: #ec407a; /* 라디오 버튼 색상 */
 }
 
+.slick-slide img {
+    display: block;
+    margin: auto;
+    max-height: 400px;
+    max-width: 100%;
+}
+
+
 
 
 

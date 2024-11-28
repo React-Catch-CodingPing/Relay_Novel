@@ -1,7 +1,7 @@
 // src/components/NavbarContents/Community/WritePost.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { savePost } from "../../../firebase/firestore/communityService";
+import { uploadPostImage, savePostWithImages } from "../../../firebase/firestore/communityService";
 import { auth, firestore } from "../../../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import "./WritePost.css";
@@ -12,6 +12,8 @@ function WritePost() {
     const [content, setContent] = useState(""); // 글 내용 상태
     const [authorType, setAuthorType] = useState("nickname"); // 작성자 선택 (닉네임 또는 이름)
     const [user, setUser] = useState({ nickname: "", name: "" }); // 사용자 정보 상태
+    const [images, setImages] = useState([]); // 업로드된 사진 URL 리스트
+    const [uploading, setUploading] = useState(false);
 
     // Firebase 인증 상태를 통해 로그인된 사용자 정보와 Firestore에서 프로필 데이터 가져오기
     useEffect(() => {
@@ -52,6 +54,20 @@ function WritePost() {
         return true;
     };
 
+    const handleImageUpload = async (e) => {
+        const files = Array.from(e.target.files);
+        setUploading(true);
+        try {
+            const urls = await Promise.all(files.map((file) => uploadPostImage(file)));
+            setImages((prev) => [...prev, ...urls]);
+        } catch (error) {
+            console.error("Image upload failed:", error);
+            alert("사진 업로드에 실패했습니다.");
+        } finally {
+            setUploading(false);
+        }
+    };
+
 
     // 글 저장 처리 함수
     const handleSavePost = async () => {
@@ -68,7 +84,7 @@ function WritePost() {
 
 
         try {
-            await savePost({ title, content, author, views: 0 });
+            await savePostWithImages({ title, content, author, views: 0 }, images);
             navigate("/community");
         } catch (error) {
             alert("글 저장에 실패했습니다. 다시 시도해주세요.");
@@ -95,6 +111,18 @@ function WritePost() {
 
                 {/* 내용 입력 */}
                 <div className="form-group">
+                    <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                    />
+                    {uploading && <p>사진 업로드 중...</p>}
+                    <div className="image-preview">
+                        {images.map((url, index) => (
+                            <img key={index} src={url} alt={`Uploaded ${index}`}/>
+                        ))}
+                    </div>
                     <label htmlFor="content">내용</label>
                     <textarea
                         id="content"
@@ -102,6 +130,7 @@ function WritePost() {
                         onChange={(e) => setContent(e.target.value)} // 입력값을 상태에 저장
                         placeholder="글 내용을 입력하세요"
                     ></textarea>
+
                 </div>
 
                 {/* 작성자 선택 */}

@@ -1,6 +1,7 @@
 // communityService.js
 import { collection, addDoc, getDocs, query, orderBy, doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import {auth, firestore} from "../firebase";
+import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 
 /**
  * Firestore에서 모든 게시물 데이터를 가져옵니다.
@@ -26,21 +27,41 @@ export const fetchPosts = async () => {
 };
 
 /**
- * Firestore에 새 게시물을 추가합니다.
- * @param {Object} newPost - 추가할 게시물 객체
- * @returns {Promise<void>} 성공적으로 추가되었을 경우 완료
+ * Firestore에 게시물 추가 (사진 포함)
+ * @param {Object} newPost - 게시물 데이터
+ * @param {Array<string>} imageUrls - 업로드된 사진의 URL 목록
+ * @returns {Promise<void>}
  */
-export const savePost = async (newPost) => {
+export const savePostWithImages = async (newPost, imageUrls) => {
     try {
         const { uid } = auth.currentUser; // 현재 사용자 UID 가져오기
         await addDoc(collection(firestore, "communityPosts"), {
             ...newPost,
-            authorUid: uid, // UID 저장
-            createdAt: serverTimestamp(), // Firestore 서버 시간
+            authorUid: uid,
+            createdAt: serverTimestamp(),
+            images: imageUrls || [], // 사진 URL 추가
         });
     } catch (error) {
-        console.error("Error saving post:", error);
+        console.error("Error saving post with images:", error);
         throw new Error("게시물을 저장하는 중 오류가 발생했습니다.");
+    }
+};
+
+
+/**
+ * Firebase Storage에 사진 업로드
+ * @param {File} file - 업로드할 파일
+ * @returns {Promise<string>} 업로드된 파일의 URL
+ */
+export const uploadPostImage = async (file) => {
+    try {
+        const storage = getStorage();
+        const storageRef = ref(storage, `communityImages/${Date.now()}_${file.name}`); // 고유 이름으로 저장
+        await uploadBytes(storageRef, file);
+        return getDownloadURL(storageRef);
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        throw new Error("사진 업로드 중 오류가 발생했습니다.");
     }
 };
 

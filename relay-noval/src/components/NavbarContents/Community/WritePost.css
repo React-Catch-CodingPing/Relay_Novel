@@ -79,6 +79,12 @@ input[type="radio"] {
     margin-right: 8px; /* 버튼과 텍스트 사이 간격 */
 }
 
+.image-preview img {
+    max-height: 100px;
+    margin-right: 10px;
+}
+
+
 /* 저장 버튼 */
 .save-button {
     /*margin-top: 10px;*/
