@@ -46,19 +46,19 @@
                         // 로그인한 경우: 사용자 이름과 로그아웃, 프로필 버튼 표시
                         <>
                             <span className="display-name">{displayName}님</span>
-                            <button onClick={handleLogout} className="logout-button">로그아웃</button>
+                            <button onClick={handleLogout} className="nav-logout-button">로그아웃</button>
                             <Link to="/profile">
-                                <button className="profile-button">프로필</button>
+                                <button className="nav-profile-button">프로필</button>
                             </Link>
                         </>
                     ) : (
                         // 비로그인 상태: 로그인 및 회원가입 버튼 표시
                         <>
                             <Link to="/login">
-                                <button className="login-button">로그인</button>
+                                <button className="nav-login-button">로그인</button>
                             </Link>
                             <Link to="/signup">
-                                <button className="signup-button">회원가입</button>
+                                <button className="nav-signup-button">회원가입</button>
                             </Link>
                         </>
                     )}
