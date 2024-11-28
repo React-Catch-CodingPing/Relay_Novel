@@ -14,6 +14,10 @@ export const fetchPosts = async () => {
         return querySnapshot.docs.map((doc) => ({
             id: doc.id, // 문서 ID
             ...doc.data(), // 문서 데이터
+            date: doc.data().createdAt
+                ? new Date(doc.data().createdAt.toDate()).toLocaleDateString("ko-KR") // Timestamp => 한국 날짜 형식 변환
+                : "날짜 없음", // `createdAt`이 없다면 기본값 설정
+
         }));
     } catch (error) {
         console.error("Error fetching posts:", error);
@@ -103,6 +107,13 @@ export const updatePost = async (postId, updatedData) => {
  */
 export const incrementPostViews = async (postId, posts = []) => {
     try {
+
+        // 인증 여부 확인
+        if (!auth.currentUser) {
+            throw new Error("로그인이 필요합니다.");
+        }
+
+
         const postRef = doc(firestore, "communityPosts", postId);
 
         // 현재 조회수 가져오기
