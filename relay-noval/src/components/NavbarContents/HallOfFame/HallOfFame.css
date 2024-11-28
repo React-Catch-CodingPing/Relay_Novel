@@ -1,5 +1,6 @@
 /* 전체 페이지 스타일 */
 .hall-of-fame-container {
+    font-family: "Ownglyph_meetme-Rg";
     text-align: center;
     padding: 40px;
     background-color: #fce4ec; /* 연한 핑크 배경 */
@@ -8,8 +9,9 @@
 
 /* 페이지 제목 스타일 */
 .hall-of-fame-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-weight: normal;
+    font-size: 50px;
+    margin: 10px 0;
     color: #ec407a; /* 핑크 메인 색상 */
 }
 

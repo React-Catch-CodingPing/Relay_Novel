@@ -41,10 +41,16 @@ function Community() {
                     orderBy("createdAt", "desc")
                 );
                 const querySnapshot = await getDocs(postsQuery);
-                const postsData = querySnapshot.docs.map((doc) => ({
-                    id: doc.id, // 문서 ID
-                    ...doc.data(), // 문서 데이터
-                }));
+                const postsData = querySnapshot.docs.map((doc) => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        ...data,
+                        date: data.createdAt
+                            ? new Date(data.createdAt.toDate()).toLocaleDateString("ko-KR") // Timestamp => 한국 날짜 형식 변환
+                            : "날짜 없음", // `createdAt`이 없다면 기본값 설정
+                    };
+                });
                 setPosts(postsData); // 상태에 저장
             } catch (error) {
                 console.error("Error fetching posts:", error); // 에러 처리
@@ -114,17 +120,17 @@ function Community() {
                             >
                                 {/* 작성자 표시 */}
                                 <div className="post-meta">
-                                    <p>{post.author}</p>
-                                    <p>{post.date}</p>
-                                    <p>조회수 : {post.views || 0} </p>
+                                    <div className="post-author">{post.author}</div>
+                                    <div className="post-date">{post.date}</div>
+                                    {/*<div>조회수 : {post.views || 0} </div>*/}
                                 </div>
 
                                 {/* 구분선 */}
-                                <hr className="post-divider"/>
+
 
                                 {/* 제목 */}
                                 <h3>{post.title}</h3>
-
+                                <hr className="post-divider"/>
                                 {/* 본문 */}
                                 <div className="post-content">
                                     <p>{truncateText(post.content, 45)}</p> {/* 글자를 제한함 */}

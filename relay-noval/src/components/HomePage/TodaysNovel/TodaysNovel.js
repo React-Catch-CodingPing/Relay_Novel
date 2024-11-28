@@ -65,18 +65,22 @@ function TodaysNovel() {
                     <div key={novel.id} className="novel-card">
                         {/* 왼쪽 이미지 */}
                         <div className="img-container">
-                        <img
-                            src={novel.coverImage || '/images/art-icon.png'} // 기본 이미지 처리
-                            alt={`${novel.title} 표지`}
-                        />
-                        </div >
+                            <img
+                                src={novel.coverImage || '/images/art-icon.png'} // 기본 이미지 처리
+                                alt={`${novel.title} 표지`}
+                            />
+                            <div className="img-text">{novel.lineCount}줄째</div>
+                            <div
+                                className={`img-genre genre-${novel.genre.toLowerCase() || "default"}`}>
+                                {novel.genre}
+                            </div>
+
+                        </div>
                         {/* 오른쪽 텍스트 및 버튼 */}
                         <div className="novel-card-content">
-                            <h3>{novel.title}</h3>
-                            <h5>시작 첫 줄 : {novel.firstLine}</h5>
-                            <p>{novel.genre}</p>
-                            <p>저자: {authors[novel.userId] || "익명 사용자"}</p>
-                            <p>{novel.lineCount}줄 째 진행 중...</p>
+                        <h3>{novel.title}</h3>
+                            <p className="card-userId">{authors[novel.userId] || "익명 사용자"}</p>
+                            {/*<p className="card-genre">{novel.genre}</p>*/}
                             <button
                                 className="participate-button"
                                 onClick={() => handleParticipateClick(novel.id)}

@@ -58,6 +58,7 @@
 }
 
 .novel-card .img-container {
+    position: relative;
     width: 100%;
     aspect-ratio: 4 / 3;
     border: 2px solid #f897d1; /* 핑크 테두리 */
@@ -77,11 +78,57 @@
     background-color: #e0e0e0; /* 기본 배경 */
 }
 
+.img-text {
+    position: absolute; /* 이미지 위에 텍스트 배치 */
+    bottom: 2px; /* 아래쪽 여백 */
+    right: 2px; /* 오른쪽 여백 */
+    color: white; /* 텍스트 색상 */
+    background-color: rgba(0, 0, 0, 0.3); /* 반투명 배경 */
+    padding: 5px 10px; /* 텍스트 주변 여백 */
+    font-size: 15px; /* 텍스트 크기 */
+    border-radius: 4px; /* 둥근 모서리 */
+}
+
+.img-genre {
+    position: absolute; /* 이미지 위에 텍스트 배치 */
+    bottom: 2px; /* 아래쪽 여백 */
+    left: 2px; /* 왼쪽 여백 */
+    padding: 5px 10px; /* 텍스트 주변 여백 */
+    font-size: 15px; /* 텍스트 크기 */
+    border-radius: 4px; /* 둥근 모서리 */
+
+}
+
+.genre-로맨스 {
+    background-color: #FFC1C1; /* 로맨스: 연한 분홍색 */
+}
+
+.genre-미스터리 {
+    background-color: #6A1B9A; /* 미스터리: 딥퍼플 */
+}
+
+.genre-코믹 {
+    background-color: #FFF59D; /* 코믹: 파스텔 노랑 */
+}
+
+.genre-액션 {
+    background-color: #FF7043; /* 액션: 밝은 주황 */
+}
+
+.genre-스릴러 {
+    background-color: #212121; /* 스릴러: 다크 그레이 */
+}
+
+.genre-판타지 {
+    background-color: #00ACC1; /* 판타지: 청록 */
+}
+
+
 
 .novel-card-content {
     font-family: 'Ownglyph_meetme-Rg';
     margin-bottom: 8px;
-    width: 220px;
+    width: 100%;
 }
 
 .novel-card-content h3 {
@@ -90,30 +137,28 @@
     margin: 10px 0;
 }
 
-.novel-card-content h5 {
-    font-size: 16px;
+.card-userId {
+    font-size: 25px;
     font-weight: 300;
-    color: #555;
-    margin-bottom: 8px;
+    color: #808080;
+    margin: 10px 0;
 }
 
-.novel-card-content p {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 10px;
+.card-genre {
+
 }
 
 .participate-button {
     background-color: #f897d1;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 30px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-family: Ownglyph_meetme-Rg;
+    letter-spacing: 1px;
+    font-size: 20px;
     transition: background-color 0.3s;
-    margin-top: 10px;
 }
 
 .participate-button:hover {
