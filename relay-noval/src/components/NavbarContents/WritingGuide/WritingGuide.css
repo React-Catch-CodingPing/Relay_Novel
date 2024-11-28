@@ -2,20 +2,21 @@
 
 /* 페이지 전체를 감싸는 컨테이너 스타일 */
 .writing-guide-container {
+    font-family: Ownglyph_meetme-Rg;
     padding: 20px;
     text-align: center;
 }
 
 /* 페이지 제목 스타일 */
 .writing-guide-container h1 {
-    font-size: 2.5rem;
+    font-size: 50px;
     color: #333;
     margin-bottom: 10px;
 }
 
 /* 페이지 설명 텍스트 스타일 */
 .writing-guide-container p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #555;
     margin-bottom: 30px;
 }
@@ -40,15 +41,16 @@
 
 .guide-card h3 {
     text-align: center; /* 제목을 가운데 정렬 */
-    margin-bottom: 10px; /* 제목 아래 여백 */
-    font-size: 20px; /* 적절한 제목 크기 */
+    margin: 0 auto; /* 제목 아래 여백 */
+    font-size: 30px; /* 적절한 제목 크기 */
     font-weight: bold; /* 강조된 글꼴 */
+    letter-spacing: 1px;
 }
 
 .guide-card p {
     text-align: left; /* 설명은 왼쪽 정렬 */
     font-size: 16px; /* 설명 글자 크기 */
-    line-height: 1.5; /* 줄 간격 */
+    line-height: 1.2; /* 줄 간격 */
 }
 
 /* 카드 마우스 오버 시 확대 효과 */

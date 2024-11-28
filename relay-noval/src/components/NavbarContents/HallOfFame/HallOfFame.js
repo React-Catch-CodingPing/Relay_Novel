@@ -55,7 +55,7 @@ function HallOfFame() {
 
     return (
         <section className="hall-of-fame-container">
-            <h1>👑 명예의 전당 👑</h1>
+            <h1>👑명예의 전당👑</h1>
             <p>가장 활발하게 활동한 사용자들을 만나보세요!</p>
 
             <div className="users-grid">

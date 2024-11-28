@@ -2,6 +2,7 @@
 
 /* 프로필 카드 전체를 감싸는 컨테이너로, 화면 중앙에 배치 */
 .author-profile-container {
+    font-family: Ownglyph_meetme-Rg;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,9 +12,11 @@
 
 /* 저자 프로필 카드 스타일 */
 .author-profile-card {
-    width: 320px;
+    width: 25%;
+    aspect-ratio: 5 / 3;
     background-color: #fff;
-    padding: 24px;
+    padding: 10px;
+    border: 1px solid #333;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -36,14 +39,22 @@
 /* 필드 라벨 스타일 (닉네임, 이메일 등) */
 .profile-label {
     font-weight: bold;
+    font-size: 1.7rem;
+    letter-spacing: 1px;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.profile-inform {
+
 }
 
 /* 일반 텍스트 값 스타일 */
 .profile-value {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    display: flex;
     color: #333;
+    gap: 5px;
 }
 
 /* 좋아요 하트 버튼 스타일 */

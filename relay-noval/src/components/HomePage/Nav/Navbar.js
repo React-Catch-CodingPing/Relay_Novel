@@ -67,10 +67,10 @@
                         // 비로그인 상태: 로그인 및 회원가입 버튼 표시
                         <>
                             <Link to="/login">
-                                <button className="login-button">로그인</button>
+                                <button className="nav-login-button">로그인</button>
                             </Link>
                             <Link to="/signup">
-                                <button className="signup-button">회원가입</button>
+                                <button className="nav-signup-button">회원가입</button>
                             </Link>
                         </>
                     )}

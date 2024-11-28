@@ -1,94 +1,163 @@
 .novels-section {
     padding: 40px 20px;
     background-color: #fce4ec; /* 섹션 배경색 */
+    font-family: 'Ownglyph_meetme-Rg';
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.novels-section > div {
+    width: 1340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .novels-h2 {
-    font-size: 28px;
-    color: white; /* 텍스트 색상을 화이트로 변경 */
+    font-weight: lighter;
+    font-size: 40px;
+    letter-spacing: 1px;
+    color: #333; /* 텍스트 색상을 화이트로 변경 */
     text-align: center;
     margin-bottom: 20px;
-    font-weight: bold;
-    display: inline-block;
-    padding: 10px 20px; /* 내부 여백 추가 */
-    border-radius: 12px; /* 둥근 모서리 */
-    background: linear-gradient(90deg, #ec407a, #ed62aa); /* 그라데이션 배경 */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-    border: 2px solid #ec407a; /* 얇고 깔끔한 테두리 */
-    letter-spacing: 1px; /* 글자 간격 */
-    transition: transform 0.3s, box-shadow 0.3s; /* 애니메이션 */
 }
 
+.novels-top {
+    font-size: 40px;
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+    margin: 10px 0 20px 20px;
+    width: 100%;
+}
 
 .novels-list {
-    display: flex;
-    flex-direction: column; /* 세로 정렬 */
-    gap: 20px;              /* 카드 간격 */
-    justify-content: center; /* 컨텐츠 좌우정렬 */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /*항상 요소 3개를 고정*/
+    gap: 20px; /* 카드 간격 */
+    justify-content: center; /* 가로 정렬 */
+    padding: 0 10px;
 }
 
 .novel-card {
     display: flex;          /* 가로 정렬 */
+    flex-direction: column; /* 세로 방향 배치 */
     align-items: center;    /* 세로 가운데 정렬 */
-    border: 1px solid #ddd;
-    width: 100%;            /* 카드 너비 전체 사용 */
-    border-radius: 12px;    /* 둥근 모서리 */
-    overflow: hidden;       /* 오버플로 방지 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
     transition: transform 0.3s, box-shadow 0.3s; /* 마우스 오버 효과 */
     background-color: white; /* 카드 배경 */
-    padding: 15px;          /* 카드 내부 패딩 */
-    margin-bottom: 20px;    /* 카드 간격 */
+    border-radius: 8px;
 }
 
 .novel-card:hover {
     transform: scale(1.05); /* 확대 효과 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.novel-card .img-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 2px solid #f897d1; /* 핑크 테두리 */
+    border-radius: 8px; /* 둥근 테두리 */
+    overflow: hidden; /* 이미지가 테두리를 넘지 않도록 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .novel-card img {
-    width: 250px;           /* 이미지 고정 너비 */
-    height: 250px;          /* 이미지 고정 높이 */
-    border-radius: 8px;     /* 이미지 모서리 둥글게 */
-    margin-right: 20px;     /* 이미지와 텍스트 간격 */
-    background-color: #e0e0e0; /* 기본 배경 추가 */
+    margin: 1px 0 1px 0;
+    width: 100%;  /* 이미지 너비 카드에 맞게 */
+    height: 100%;
+    object-fit: cover;     /* 이미지 크기 조정 */
     display: block;
-    object-fit: contain;
-    border: 2px solid #f897d1; /* 핑크 테두리 */
+    background-color: #e0e0e0; /* 기본 배경 */
+}
 
+.img-text {
+    position: absolute; /* 이미지 위에 텍스트 배치 */
+    bottom: 2px; /* 아래쪽 여백 */
+    right: 2px; /* 오른쪽 여백 */
+    color: white; /* 텍스트 색상 */
+    background-color: rgba(0, 0, 0, 0.3); /* 반투명 배경 */
+    padding: 5px 10px; /* 텍스트 주변 여백 */
+    font-size: 15px; /* 텍스트 크기 */
+    border-radius: 4px; /* 둥근 모서리 */
+}
+
+.img-genre {
+    position: absolute; /* 이미지 위에 텍스트 배치 */
+    bottom: 2px; /* 아래쪽 여백 */
+    left: 2px; /* 왼쪽 여백 */
+    padding: 5px 10px; /* 텍스트 주변 여백 */
+    font-size: 15px; /* 텍스트 크기 */
+    border-radius: 4px; /* 둥근 모서리 */
+
+}
+
+.genre-로맨스 {
+    background-color: #FFC1C1; /* 로맨스: 연한 분홍색 */
+}
+
+.genre-미스터리 {
+    background-color: #6A1B9A; /* 미스터리: 딥퍼플 */
+}
+
+.genre-코믹 {
+    background-color: #FFF59D; /* 코믹: 파스텔 노랑 */
+}
+
+.genre-액션 {
+    background-color: #FF7043; /* 액션: 밝은 주황 */
+}
+
+.genre-스릴러 {
+    background-color: #212121; /* 스릴러: 다크 그레이 */
+}
+
+.genre-판타지 {
+    background-color: #00ACC1; /* 판타지: 청록 */
+}
+
+
+
+.novel-card-content {
+    font-family: 'Ownglyph_meetme-Rg';
+    margin-bottom: 8px;
+    width: 100%;
 }
 
 .novel-card-content h3 {
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 37px;
     color: #333;
-    margin-bottom: 8px;
+    margin: 10px 0;
 }
 
-.novel-card-content h5 {
-    font-size: 16px;
-    font-weight: 400;
-    color: #555;
-    margin-bottom: 8px;
+.card-userId {
+    font-size: 25px;
+    font-weight: 300;
+    color: #808080;
+    margin: 10px 0;
 }
 
-.novel-card-content p {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 10px;
+.card-genre {
+
 }
 
 .participate-button {
     background-color: #f897d1;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 30px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-family: Ownglyph_meetme-Rg;
+    letter-spacing: 1px;
+    font-size: 20px;
     transition: background-color 0.3s;
-    margin-top: 10px;
 }
 
 .participate-button:hover {

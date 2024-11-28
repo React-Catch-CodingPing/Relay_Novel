@@ -103,15 +103,15 @@ function AuthorProfile() {
                 <div className="author-profile-info">
                     <div className="profile-field">
                         <span className="profile-label">닉네임</span>
-                        <span className="profile-value">{author.nickname}</span>
+                        <span className="profile-inform">{author.nickname}</span>
                     </div>
                     <div className="profile-field">
                         <span className="profile-label">이름</span>
-                        <span className="profile-value">{author.name}</span>
+                        <span className="profile-inform">{author.name}</span>
                     </div>
                     <div className="profile-field">
                         <span className="profile-label">이메일</span>
-                        <span className="profile-value">{author.email}</span>
+                        <span className="profile-inform">{author.email}</span>
                     </div>
                     <div className="profile-field">
                         <span className="profile-label">좋아요 수</span>

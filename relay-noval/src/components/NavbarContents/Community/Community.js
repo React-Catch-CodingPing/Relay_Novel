@@ -93,17 +93,17 @@ function Community() {
                             >
                                 {/* 작성자 표시 */}
                                 <div className="post-meta">
-                                    <p>{post.author}</p>
-                                    <p>{post.date}</p>
-                                    <p>조회수 : {post.views || 0} </p>
+                                    <div className="post-author">{post.author}</div>
+                                    <div className="post-date">{post.date}</div>
+                                    {/*<div>조회수 : {post.views || 0} </div>*/}
                                 </div>
 
                                 {/* 구분선 */}
-                                <hr className="post-divider"/>
+
 
                                 {/* 제목 */}
                                 <h3>{post.title}</h3>
-
+                                <hr className="post-divider"/>
                                 {/* 본문 */}
                                 <div className="post-content">
                                     <p>{truncateText(post.content, 45)}</p> {/* 글자를 제한함 */}
