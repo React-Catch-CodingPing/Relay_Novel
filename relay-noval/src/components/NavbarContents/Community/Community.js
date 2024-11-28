@@ -87,6 +87,12 @@ function Community() {
                                 key={post.id}
                                 className="post-card"
                                 onClick={async () => {
+                                    if (!auth.currentUser) {
+                                        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                                        navigate("/login");
+                                        return;
+                                    }
+
                                     await incrementPostViews(post.id, posts); // Service 함수 호출
                                     navigate(`/community/${post.id}`);
                                 }}

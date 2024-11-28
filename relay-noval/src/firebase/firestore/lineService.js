@@ -28,7 +28,9 @@ export const getLinesFromNovel = async (novelId) => {
             id: doc.id,
             ...doc.data(),
 
+
             createdAt: doc.data().createdAt?.toDate() || "작성 시간 없음", // 시간 변환 추가
+            updatedAt: doc.data().updatedAt?.toDate() || null, // 업데이트 시간 처리
         }));
         return lines;
     } catch (error) {

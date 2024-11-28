@@ -25,7 +25,6 @@ const NovelDetail = () => {
     const [editedNovelTitle, setEditedNovelTitle] = useState(""); // 편집 중인 제목
 
 
-    const user = auth.currentUser;
 
     const fetchAuthorName = async (userId) => {
 
@@ -52,8 +51,16 @@ const NovelDetail = () => {
         return "알 수 없는 사용자"; // 기본값
     };
 
-    // 소설 데이터와 사용자 정보 가져오기
+    const user = auth.currentUser;
+
     useEffect(() => {
+        // 로그인 상태 확인
+        if (!user) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login");
+            return;
+        }
+
         const fetchNovel = async () => {
             try {
                 // Firestore에서 소설 정보 가져오기
@@ -142,6 +149,12 @@ const NovelDetail = () => {
     const handleAddLine = async () => {
         if (!newLine.trim()) {
             alert("줄거리를 입력하세요.");
+            return;
+        }
+
+        // 현재 줄 수가 제한을 초과하는지 확인
+        if (novel.lineLimit && lines.length >= novel.lineLimit) {
+            alert(`이 소설은 ${novel.lineLimit}줄로 제한되어 있습니다.`);
             return;
         }
 
@@ -336,6 +349,12 @@ const NovelDetail = () => {
                     placeholder="새로 추가할 문장을 입력하세요..."
                     rows="2"
                     disabled={isSubmitting}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault(); // 기본 Enter 키 동작(줄바꿈) 방지
+                            handleAddLine(); // 줄 추가 함수 호출
+                        }
+                    }}
                 ></textarea>
                 <button className="add-line-button" onClick={handleAddLine} disabled={isSubmitting}>
                     {isSubmitting ? "추가 중..." : "내용 추가"}

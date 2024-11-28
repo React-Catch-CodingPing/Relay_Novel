@@ -30,6 +30,9 @@ function PostDetail() {
         const loadPostAndComments = async () => {
             setLoading(true); // 로딩 상태 활성화
             try {
+
+                if (!ensureLoggedIn()) return;
+
                 const postData = await getPostById(id);
                 if (!postData) {
                     throw new Error("게시물을 찾을 수 없습니다.");
@@ -133,6 +136,8 @@ function PostDetail() {
             alert("댓글을 입력해주세요.");
             return;
         }
+
+        if (!ensureLoggedIn()) return;
 
         try {
             const currentUser = auth.currentUser;

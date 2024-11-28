@@ -245,7 +245,9 @@ function Genres() {
                                 </div>
                             </Link>
                             <div className="genres-actions-container">
-                                <button className="genres-participate-button">참여하기</button>
+                                <Link to={`/novels/${novel.id}`} className="genres-participate-button">
+                                    참여하기
+                                </Link>
                                 <div>
                                     <button
                                         className="genres-heart-button"
