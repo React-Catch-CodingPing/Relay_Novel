@@ -1,15 +1,24 @@
-/* 전체 컨테이너를 화면 중앙에 정렬 */
-.write-post-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
+
+/* 전체 컨테이너 스타일 */
+.write-post-wrapper {
+    display: flex; /* Flexbox 활성화 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    min-height: 100vh; /* 화면 전체 높이 */
     background-color: #fce4ec; /* 연한 핑크 배경 */
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
 }
+
+/* 카드 컨테이너 스타일 */
+.write-post-container {
+    width: 50%; /* 화면의 50% 크기 */
+    max-width: 600px; /* 최대 너비 */
+    background-color: #fff; /* 흰색 배경 */
+    border: 2px solid #f48fb1; /* 핑크 테두리 */
+    border-radius: 16px; /* 모서리 둥글게 */
+    padding: 20px; /* 내부 여백 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
 
 /* 헤더 스타일 */
 .write-post-header {
@@ -29,6 +38,10 @@
     display: flex;
     flex-direction: column; /* 요소를 세로 정렬 */
     gap: 10px; /* 요소 간격 추가 */
+
+}
+input{
+    border: 1px solid #f48fb1; /* 핑크 테두리 */
 }
 
 label {
@@ -42,6 +55,7 @@ label {
 textarea {
     height: 200px;
     resize: none; /* 크기 조정 비활성화 */
+    border: 1px solid #f48fb1; /* 핑크 테두리 */
 }
 
 /* 작성자 선택 */

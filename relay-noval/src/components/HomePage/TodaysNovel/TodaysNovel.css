@@ -34,7 +34,6 @@
     width: 100%;
 }
 
-
 .novels-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /*항상 요소 3개를 고정*/

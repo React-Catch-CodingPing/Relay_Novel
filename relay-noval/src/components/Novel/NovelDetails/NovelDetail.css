@@ -73,6 +73,32 @@
     cursor: pointer;
 }
 
+.line-actions {
+    margin-top: 8px;
+}
+
+.edit-line-button,
+.delete-line-button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    margin-right: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 4px;
+}
+
+.edit-line-button:hover {
+    background-color: #e0f7fa;
+}
+
+.delete-line-button:hover {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+
+
 .related-novels {
     margin-top: 40px;
 }

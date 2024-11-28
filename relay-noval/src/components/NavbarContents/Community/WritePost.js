@@ -1,8 +1,9 @@
 // src/components/NavbarContents/Community/WritePost.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore"; // Firestore 관련 함수
-import { auth, firestore } from "../../../firebase/firebase"; // Firebase 초기화 파일에서 가져온 객체들
+import { savePost } from "../../../firebase/firestore/communityService";
+import { auth, firestore } from "../../../firebase/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import "./WritePost.css";
 
 function WritePost() {
@@ -62,79 +63,67 @@ function WritePost() {
 
         if (!ensureLoggedIn()) return; // 로그인 확인
 
-
         // 선택한 작성자 정보를 설정
         const author = authorType === "nickname" ? user.nickname : user.name;
 
-        // 새로운 글 데이터를 생성
-        const newPost = {
-            title, // 제목
-            content, // 내용
-            author, // 작성자 (닉네임 또는 이름)
-            views: 0, // 조회수 기본값
-            createdAt: serverTimestamp(), // Firestore의 서버 시간을 저장
-        };
 
         try {
-            // Firestore의 communityPosts 컬렉션에 새 문서 추가
-            await addDoc(collection(firestore, "communityPosts"), newPost);
-
-            // 저장 성공 시 알림 및 커뮤니티 페이지로 이동
-            //alert("글이 성공적으로 저장되었습니다!");
+            await savePost({ title, content, author, views: 0 });
             navigate("/community");
         } catch (error) {
-            console.error("Error saving post to Firestore:", error);
             alert("글 저장에 실패했습니다. 다시 시도해주세요.");
         }
     };
 
     return (
-        <div className="write-post-container">
-            {/* 헤더 영역 */}
-            <h2 className="write-post-header">새 글 작성</h2>
+        <div className="write-post-wrapper">
+            <div className="write-post-container">
+                {/* 헤더 영역 */}
+                <h2 className="write-post-header">새 글 작성</h2>
 
-            {/* 제목 입력 */}
-            <div className="form-group">
-                <label htmlFor="title">제목</label>
-                <input
-                    id="title"
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)} // 입력값을 상태에 저장
-                    placeholder="글 제목을 입력하세요"
-                />
-            </div>
-
-            {/* 내용 입력 */}
-            <div className="form-group">
-                <label htmlFor="content">내용</label>
-                <textarea
-                    id="content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)} // 입력값을 상태에 저장
-                    placeholder="글 내용을 입력하세요"
-                ></textarea>
-            </div>
-
-            {/* 작성자 선택 */}
-            <div className="form-group">
-                <label>작성자 표시 설정</label>
-                <div className="author-select">
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={authorType === "nickname"} // 닉네임 선택 여부
-                            onChange={() => setAuthorType(authorType === "nickname" ? "" : "nickname")} // 상태 업데이트
-                        />
-                        닉네임으로 표시하기 ({user.nickname || "로그인 필요"}) {/* Firestore에서 가져온 닉네임 */}
-                    </label>
+                {/* 제목 입력 */}
+                <div className="form-group">
+                    <label htmlFor="title">제목</label>
+                    <input
+                        id="title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)} // 입력값을 상태에 저장
+                        placeholder="글 제목을 입력하세요"
+                    />
                 </div>
-            </div>
 
-            {/* 저장 버튼 */}
-            <button className="save-button" onClick={handleSavePost}>
-                저장
-            </button>
+                {/* 내용 입력 */}
+                <div className="form-group">
+                    <label htmlFor="content">내용</label>
+                    <textarea
+                        id="content"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)} // 입력값을 상태에 저장
+                        placeholder="글 내용을 입력하세요"
+                    ></textarea>
+                </div>
+
+                {/* 작성자 선택 */}
+                <div className="form-group">
+                    <label>작성자 표시 설정</label>
+                    <div className="author-select">
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={authorType === "nickname"} // 닉네임 선택 여부
+                                onChange={() => setAuthorType(authorType === "nickname" ? "" : "nickname")} // 상태 업데이트
+                            />
+                            닉네임으로 표시하기 ({user.nickname || "로그인 필요"}) {/* Firestore에서 가져온 닉네임 */}
+                        </label>
+                    </div>
+                </div>
+
+                {/* 저장 버튼 */}
+                <button className="save-button" onClick={handleSavePost}>
+                    저장
+                </button>
+            </div>
         </div>
     );
 }

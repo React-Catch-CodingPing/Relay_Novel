@@ -19,6 +19,7 @@ import Navbar from "./components/HomePage/Nav/Navbar";
 import Footer from "./components/HomePage/Footer/Footer";
 import TodaysNovel from "./components/HomePage/TodaysNovel/TodaysNovel";
 import TodaysAuthors from "./components/HomePage/TodaysAuthors/TodaysAuthors";
+import TodaysTalk from "./components/HomePage/TodaysTalk/TodaysTalk";
 
 // 추가한 페이지 컴포넌트들
 import HallOfFame from "./components/NavbarContents/HallOfFame/HallOfFame";
@@ -35,6 +36,7 @@ import ReportBoard from "./components/HomePage/Footer/ReportBoard";
 
 import WritePost from "./components/NavbarContents/Community/WritePost";
 import PostDetail from "./components/NavbarContents/Community/PostDetail";
+import Admin from "./components/Auth/Admin";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -92,14 +94,21 @@ const App = () => {
 
                         <Route path="/novels-section" element={<TodaysNovel />} />
                         <Route path="/novels/:novelId" element={<NovelDetail />} />
+
+                        {/* 오늘의 수다 페이지 추가 */}
+                        <Route path="/todays-talk" element={<TodaysTalk />} />
+
                         {/* 신고 게시판 라우트 */}
                         <Route path="/report" element={<ReportBoard />} />
-
 
                         <Route path="/community/write" element={<WritePost />} />
                         <Route path="/community/:id" element={<PostDetail />} />
 
-                  </Routes>
+
+                        {/* 관리자 계정 라우트 */}
+                        <Route path="/admin" element={<Admin />} />
+
+                    </Routes>
                 </div>
                 {/* 하단 Footer */}
                 <Footer />
