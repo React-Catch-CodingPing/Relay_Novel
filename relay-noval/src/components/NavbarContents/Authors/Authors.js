@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import './Authors.css';
 import { getUsers, getAuthorLikeStatus, updateAuthorLike } from "../../../firebase/firestore/userService";
 import { auth } from "../../../firebase/firebase";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Authors = () => {
     const [authors, setAuthors] = useState([]);
@@ -148,6 +148,15 @@ const Authors = () => {
             {/* 저자 카드 슬라이더 */}
             <div className="authors-slider" ref={containerRef}>
                 {filteredAuthors.map((author) => (
+                    <Link
+                        key={author.id}
+                        style={{
+                            textDecoration: 'none', // 밑줄 제거
+                            color: 'inherit', // 부모 색상 상속
+                        }}
+                        to={`/authors/${author.id}`}
+                        className="author-card-link" // 스타일용 클래스 추가
+                    >
                     <div key={author.id} className="author-card">
                         <img src={author.image} alt={author.name} />
                         <h3>{author.name}</h3>
@@ -163,6 +172,7 @@ const Authors = () => {
                             <span className="count">{author.hearts}</span>
                         </div>
                     </div>
+                    </Link>
                 ))}
             </div>
         </div>

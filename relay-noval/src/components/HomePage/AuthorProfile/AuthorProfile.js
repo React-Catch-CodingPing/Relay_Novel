@@ -96,7 +96,7 @@ function AuthorProfile() {
         <div className="author-profile-container">
             <div className="author-profile-card">
                 <img
-                    src={author.profileImage || "/path/to/default-image.jpg"}
+                    src={author.profileImage || "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png"}
                     alt={author.name}
                     className="author-profile-image"
                 />
