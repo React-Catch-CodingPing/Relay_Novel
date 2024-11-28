@@ -85,36 +85,38 @@
     display: flex;
     gap: 10px; /* 버튼 간 간격 */
     margin-top: 16px;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center;
 }
 
 /* 수정 버튼 */
-.edit-button {
-    background-color: #007bff;
+.community-post-edit-button {
+    background-color: #ff99aa;
     color: white;
 }
 
-.edit-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+.community-post-edit-button:hover {
+    background-color: #ec407a; /* 진한 핑크 */
+    transform: translateY(-2px); /* 살짝 위로 이동 수정 필요수정 필요수정 필요수정 필요수정 필요 */
 }
 
 /* 삭제 버튼 */
-.delete-button {
-    background-color: #dc3545;
+.community-post-delete-button {
+    background-color: #ff99aa;
     color: white;
 }
 
-.delete-button:hover {
+.community-post-delete-button:hover {
     background-color: #a71d2a;
     transform: translateY(-2px);
 }
 
-/* 저장 버튼 */
-.save-button,
-.cancel-button {
-    background-color: #ff99aa; /* 밝은 핑크 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 */
 
-    background-color: #ffb6c1; /* 저장 버튼 색 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요*/
+/* 저장 버튼 */
+.community-post-save-button,
+.community-post-cancel-button {
+    background-color: #ff99aa; /* 밝은 핑크 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 */
+    /* 저장 버튼 색 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요 수정 필요*/
 
     color: white;
     border: none;
@@ -128,29 +130,19 @@
 }
 
 /* 호버 효과 */
-.save-button:hover {
+.community-post-save-button:hover {
     background-color: #ec407a; /* 진한 핑크 */
     transform: translateY(-2px); /* 살짝 위로 이동 수정 필요수정 필요수정 필요수정 필요수정 필요 */
 }
 
-.save-button:active {
+.community-post-save-button:active {
     background-color: #d81b60; /* 더 진한 핑크 */
     transform: translateY(0); /* 원래 위치로 복귀 수정 필요수정 필요수정 필요수정 필요수정 필요수정 필요수정 필요*/
 
-
 }
 
-.cancel-button:hover {
+.community-post-cancel-button:hover {
     background-color: #5a6268;
-}
-
-/* 저장/취소 버튼을 포함한 영역 */
-.owner-actions {
-    display: flex;
-    gap: 10px; /* 버튼 간 간격 */
-    margin-top: 16px;
-    justify-content: flex-start; /* 왼쪽 정렬 */
-    align-items: center;
 }
 
 /* 뒤로 가기 버튼 */
@@ -179,6 +171,8 @@ input[type="radio"] {
     margin-right: 8px; /* 버튼과 텍스트 사이 간격 */
     accent-color: #ec407a; /* 라디오 버튼 색상 */
 }
+
+
 
 
 .comments-section {
@@ -224,7 +218,6 @@ input[type="radio"] {
     height: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;

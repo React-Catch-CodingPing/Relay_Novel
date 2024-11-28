@@ -17,9 +17,9 @@
     margin-bottom: 30px;
 }
 
-.novel-image {
-    width: 30%;
-    height: 30%;
+.novel-detail-image {
+    width: 50%;
+    height: 50%;
     border-radius: 8px;
     margin-bottom: 16px;
     object-fit: cover; /* 이미지가 비율에 맞게 표시되도록 설정 */
@@ -31,7 +31,7 @@
 }
 
 .line-item {
-    font-size: 30px;
+    font-size: 20px;
 }
 
 .novel-info {
@@ -84,7 +84,7 @@
     padding: 4px 8px;
     margin-right: 4px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.5em;
     border-radius: 4px;
 }
 

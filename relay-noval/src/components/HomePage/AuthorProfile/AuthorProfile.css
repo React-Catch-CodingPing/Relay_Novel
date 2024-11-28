@@ -54,6 +54,7 @@
     font-size: 1.2rem;
     display: flex;
     color: #333;
+    justify-content: center;
     gap: 5px;
 }
 

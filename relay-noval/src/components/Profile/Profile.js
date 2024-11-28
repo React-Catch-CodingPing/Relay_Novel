@@ -287,8 +287,8 @@ function Profile() {
                     <div className="profile-buttons">
                         {editMode ? (
                             <>
-                                <button className="save-button" onClick={handleSave}>저장</button>
-                                <button className="cancel-button" onClick={handleCancel}>취소</button>
+                                <button className="profile-save-button" onClick={handleSave}>저장</button>
+                                <button className="profile-cancel-button" onClick={handleCancel}>취소</button>
                             </>
                         ) : (
                             <>

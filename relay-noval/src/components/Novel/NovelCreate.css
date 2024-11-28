@@ -32,7 +32,8 @@
     margin-bottom: 20px;
 
 }
-input[type="file"] {
+
+.imageUpload input[type="file"] {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,13 +46,13 @@ input[type="file"] {
     font-size: 14px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-input[type="file"]::after{
+.imageUpload input[type="file"]::after{
     display: none;
 }
-input[type="file"]::-webkit-file-upload-button {
+.imageUpload input[type="file"]::-webkit-file-upload-button {
     visibility: hidden;
 }
-input[type="file"]::before {
+.imageUpload input[type="file"]::before {
     content: '파일 업로드';
     display: flex;
     justify-content: center;
@@ -65,7 +66,7 @@ input[type="file"]::before {
     font-size: 18px;
 }
 
-input[type="file"]:hover::before {
+.imageUpload input[type="file"]:hover::before {
     color: #696969;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }

@@ -230,19 +230,19 @@ function PostDetail() {
                     <div className="owner-actions">
                         {editMode ? (
                             <>
-                                <button className="save-button" onClick={handleSave}>
+                                <button className="community-post-save-button" onClick={handleSave}>
                                     저장
                                 </button>
-                                <button className="cancel-button" onClick={handleCancel}>
+                                <button className="community-post-cancel-button" onClick={handleCancel}>
                                     취소
                                 </button>
                             </>
                         ) : (
                             <>
-                                <button className="edit-button" onClick={handleEdit}>
+                                <button className="community-post-edit-button" onClick={handleEdit}>
                                     수정
                                 </button>
-                                <button className="delete-button" onClick={handleDelete}>
+                                <button className="community-post-delete-button" onClick={handleDelete}>
                                     삭제
                                 </button>
                             </>

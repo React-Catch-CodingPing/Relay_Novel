@@ -232,7 +232,7 @@ const NovelDetail = () => {
                 <img
                     src={novel.coverImage || "/images/art-icon.png"}
                     alt={novel.title}
-                    className="novel-image"
+                    className="novel-detail-image"
                     onError={(e) => {
                         e.target.onerror = null; // 무한 루프 방지
                         e.target.src = "/images/art-icon.png"; // 기본 이미지로 대체
