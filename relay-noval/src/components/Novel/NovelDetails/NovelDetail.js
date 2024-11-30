@@ -10,6 +10,7 @@ import {
 } from "../../../firebase/firestore/lineService";
 import "./NovelDetail.css";
 import {deleteNovel, updateNovel} from "../../../firebase/firestore/novelService";
+import genrePrompts from "./genrePrompts";
 
 const NovelDetail = () => {
     const navigate = useNavigate(); // 페이지 이동을 위해 사용
@@ -19,6 +20,7 @@ const NovelDetail = () => {
     const [lines, setLines] = useState([]); // 현재 소설의 모든 줄거리
     const [newLine, setNewLine] = useState(""); // 추가할 줄거리
     const [isSubmitting, setIsSubmitting] = useState(false); // 제출 중 상태
+    const [placeholder, setPlaceholder] = useState("새로 추가할 문장을 입력하세요...");
     const [authorName, setAuthorName] = useState("알 수 없는 사용자"); // 시작 저자 이름 상태 추가
     const [userCache, setUserCache] = useState({}); // 사용자 데이터를 캐싱하는 상태
     const [isEditingNovel, setIsEditingNovel] = useState(false); // 소설 편집 모드
@@ -56,12 +58,15 @@ const NovelDetail = () => {
 
 
     useEffect(() => {
-        // 로그인 상태 확인
-        if (!user) {
-            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate("/login");
-            return;
-        }
+
+        // const user = auth.currentUser;
+        //
+        // // 로그인 상태 확인
+        // if (!user) {
+        //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        //     navigate("/login");
+        //     return;
+        // }
 
         const fetchNovel = async () => {
             try {
@@ -118,7 +123,7 @@ const NovelDetail = () => {
         fetchLines();
     }, [novelId]);
 
-// 소설 삭제 핸들러
+    // 소설 삭제 핸들러
     const handleDeleteNovel = async () => {
         if (!window.confirm("정말로 이 소설을 삭제하시겠습니까?")) return;
 
@@ -203,7 +208,7 @@ const NovelDetail = () => {
         }
     };
 
-// 수정 핸들러
+    // 수정 핸들러
     const handleEditLine = async (lineId, newContent) => {
         if (!newContent.trim()) {
             alert("내용을 입력해주세요.");
@@ -220,6 +225,18 @@ const NovelDetail = () => {
         } catch (error) {
             console.error("Error updating line:", error);
         }
+    };
+
+
+    const handleRecommendClick = () => {
+        if (!novel || !novel.genre || !genrePrompts[novel.genre]) {
+            setPlaceholder("추천할 내용을 찾을 수 없습니다.");
+            return;
+        }
+
+        const prompts = genrePrompts[novel.genre];
+        const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        setPlaceholder(randomPrompt);
     };
 
 
@@ -348,7 +365,7 @@ const NovelDetail = () => {
                     className="add-line-input"
                     value={newLine}
                     onChange={(e) => setNewLine(e.target.value)}
-                    placeholder="새로 추가할 문장을 입력하세요..."
+                    placeholder={placeholder}
                     rows="2"
                     disabled={isSubmitting}
                     onKeyDown={(e) => {
@@ -361,6 +378,13 @@ const NovelDetail = () => {
                 <button className="add-line-button" onClick={handleAddLine} disabled={isSubmitting}>
                     {isSubmitting ? "추가 중..." : "내용 추가"}
                 </button>
+                <button
+                    className="recommend-line-button"
+                    onClick={handleRecommendClick}
+                >
+                    내용 추천
+                </button>
+
             </div>
         </div>
     );

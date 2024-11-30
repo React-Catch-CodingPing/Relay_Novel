@@ -258,7 +258,7 @@ function Profile() {
                                     className="modal-button"
                                     onClick={() => setShowParticipatedNovelsModal(true)}
                                 >
-                                    {participatedNovels.length} 줄 참여 중...
+                                    {participatedNovels.length} 작품 참여 중...
                                 </button>
                                 {/* 시작한 소설 모달 버튼 */}
                                 <button
