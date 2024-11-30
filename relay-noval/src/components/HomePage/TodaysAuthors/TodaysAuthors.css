@@ -9,6 +9,8 @@
 }
 
 .authors-section > div {
+    background-color: white;
+
     width: 1340px;
     display: flex;
     flex-direction: column;
