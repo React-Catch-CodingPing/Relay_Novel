@@ -28,10 +28,10 @@
 }
 
 /* 페이지 설명 텍스트 스타일 */
-.hall-of-fame-container p {
-    font-size:   1.2rem;
+.hall-of-fame-container .subtitle {
+    font-size: 1.5rem;
     color: #ad1457; /* 짙은 핑크 색상 */
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 /* 사용자 카드 그리드 레이아웃 */

@@ -2,10 +2,18 @@
 .authors-container {
     font-family: Ownglyph_meetme-Rg;
     width: 100%;
-    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px 0 40px 0;
     text-align: center;
     margin: 0 auto;
+}
+
+.authors-container .authors-slider {
+    width: 1340px;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 검색창 스타일 */

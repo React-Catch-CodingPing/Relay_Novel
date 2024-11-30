@@ -114,6 +114,7 @@ const handleKeyDown = (event) => {
     );
     return (
         <div className="authors-container">
+            <div className="list-container">
             {/* 검색창 */}
             <div className="search-container">
                 <span className="search-icon">
@@ -148,6 +149,7 @@ const handleKeyDown = (event) => {
                         </div>
                     </div>
                 ))}
+            </div>
             </div>
         </div>
     );
