@@ -1,6 +1,6 @@
 /* 전체 컨테이너 */
 .authors-container {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     width: 100%;
     display: flex;
     align-items: center;
@@ -8,12 +8,21 @@
     padding: 20px 0 40px 0;
     text-align: center;
     margin: 0 auto;
+    overflow-x: hidden;
 }
+
+
 
 .authors-container .authors-slider {
     width: 1340px;
     justify-content: center;
     align-items: center;
+    display: flex;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 10px;
+
 }
 
 /* 검색창 스타일 */
@@ -24,7 +33,7 @@
     border-radius: 8px;
     padding: 5px;
     max-width: 400px;
-    margin: 20px auto; /* 중앙 정렬 */
+    margin: 20px auto 30px; /* 중앙 정렬 */
     background-color: #fff; /* 흰색 배경 */
 }
 
@@ -35,7 +44,7 @@
 }
 
 .search-input {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     width: 80%;
     max-width: 600px;
     font-size: 18px;
@@ -64,15 +73,6 @@
 .search-bar input:focus {
     border-color: #ec407a;
     box-shadow: 0 0 5px rgba(236, 64, 122, 0.5);
-}
-
-/* 슬라이더 컨테이너 */
-.authors-slider {
-    display: flex;
-    overflow-x: auto; /*가로 스크롤 허용*/
-    scroll-behavior: smooth;
-    gap: 20px; /* 카드 간격 */
-    padding: 10px;
 }
 
 .authors-slider::-webkit-scrollbar {
@@ -105,7 +105,7 @@
     object-fit: cover;
     border-radius: 50%; /* 원형 이미지 */
     margin-bottom: 10px;
-    border: 3px solid #ff99aa; /* 핑크 테두리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
 }
 
 /* 카드 텍스트 */

@@ -68,7 +68,7 @@
 .modal-button,
 .edit-button,
 .logout-button {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     flex: 1 1 calc(48% - 10px); /* 버튼이 48% 너비를 가지며 간격 유지 */
     padding: 12px;
     font-size: 1rem;
@@ -175,7 +175,7 @@
 
 /* 프로필 편집 버튼 스타일 */
 .profile-edit-button {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     width: 50%;
     background-color: #ffb6c1; /* 핑크 버튼 */
     color: white;

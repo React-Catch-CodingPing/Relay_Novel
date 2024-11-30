@@ -1,8 +1,6 @@
 /* src/components/Footer.css */
 
 .footer {
-    justify-content: space-between;
-    align-items: flex-start; /* 상단 정렬 */
     border-top: 1px solid #ddd;
     margin-top: auto;
     background-color: #222;

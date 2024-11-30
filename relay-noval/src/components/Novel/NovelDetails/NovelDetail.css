@@ -1,7 +1,7 @@
 /* src/components/Novel/NovelDetail.css */
 
 .novel-detail {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
@@ -17,25 +17,12 @@
     margin-bottom: 30px;
 }
 
-.novel-image {
-    width: 30%;
-    height: 30%;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    object-fit: cover; /* 이미지가 비율에 맞게 표시되도록 설정 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-}
-
 .lines-list {
     list-style: none;
 }
 
 .line-item {
     font-size: 30px;
-}
-
-.novel-info {
-    flex: 1;
 }
 
 .novel-status {
@@ -53,7 +40,7 @@
 }
 
 .add-line-input {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 18px;
     width: 100%;
     padding: 10px;
@@ -63,7 +50,7 @@
 }
 
 .add-line-button {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     margin-top: 10px;
     padding: 10px;
     background-color: #333;

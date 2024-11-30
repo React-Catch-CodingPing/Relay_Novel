@@ -2,9 +2,21 @@
 
 /* 페이지 전체를 감싸는 컨테이너 스타일 */
 .writing-guide-container {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     padding: 20px;
     text-align: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.writing-guide-container > div {
+    width: 1340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }
 
 /* 페이지 제목 스타일 */
@@ -12,6 +24,7 @@
     font-size: 50px;
     color: #333;
     margin-bottom: 10px;
+    margin-top: 15px;
 }
 
 /* 페이지 설명 텍스트 스타일 */

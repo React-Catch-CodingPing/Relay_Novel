@@ -125,16 +125,17 @@ const NovelCreate = () => {
                 <select value={genre} onChange={(e) => setGenre(e.target.value)} className="select">
                     <option value="로맨스">로맨스</option>
                     <option value="판타지">판타지</option>
-                    <option value="일상">일상</option>
-                    <option value="공포">공포</option>
-                    <option value="개그">개그</option>
+                    <option value="액션">액션</option>
+                    <option value="스릴러">스릴러</option>
+                    <option value="코믹">코믹</option>
+                    <option value="미스터리">미스터리</option>
                 </select>
                 <textarea
                     value={firstLine}
                     onChange={(e) => setFirstLine(e.target.value)}
                     placeholder="첫 줄거리"
                     required
-                    className="textarea"
+                    className="create-textarea"
                 />
                 <label className="label">
                     <input

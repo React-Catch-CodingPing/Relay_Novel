@@ -41,8 +41,9 @@ function WritingGuide() {
 
     return (
         <section className="writing-guide-container">
-            <h1>창작 가이드 💡</h1>
-            <p>한 줄 소설 창작에 도움이 되는 다양한 팁을 확인해보세요</p>
+            <div>
+            <h1>창작 가이드💡</h1>
+            <p>한 줄 소설 창작에 도움이 되는 다양한 팁을 확인해보세요.</p>
 
             <div className="guide-cards">
                 {guides.map((guide, index) => (
@@ -51,6 +52,7 @@ function WritingGuide() {
                         <p>{guide.description}</p>
                     </div>
                 ))}
+            </div>
             </div>
         </section>
     );

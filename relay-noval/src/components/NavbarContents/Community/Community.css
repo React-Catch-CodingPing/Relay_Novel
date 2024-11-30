@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: "Ownglyph_meetme-Rg", sans-serif;
+    font-family: omyu_pretty;
 }
 
 /* 헤더 스타일 */
@@ -43,7 +43,7 @@
     position: relative;
     right: 12%;
     padding: 10px 20px; /* 내부 여백 */
-    font-family: Ownglyph_meetme-Rg, sans-serif;
+    font-family: omyu_pretty;
     background-color: #ff69b4; /* 메인 핑크색 */
     color: white;
     border: none;

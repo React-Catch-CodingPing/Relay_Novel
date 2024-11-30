@@ -29,7 +29,7 @@
 
 /* 헤더에 들어가는 텍스트 스타일 */
 .header-text {
-    font-family: 'Ownglyph_meetme-Rg';
+    font-family: omyu_pretty;
     font-size: 50px;
     color: #ec407a; /* 핑크 계열 색상 */
     text-align: center;

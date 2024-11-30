@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: "Ownglyph_meetme-Rg";
+    font-family: omyu_pretty;
     text-align: center;
     padding: 20px 0 50px;
     background-color: #fce4ec; /* 연한 핑크 배경 */
@@ -66,6 +66,7 @@
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
 }
 
 /* 사용자 이름 스타일 */

@@ -1,7 +1,7 @@
 .novels-section {
     padding: 40px 20px;
     background-color: #fce4ec; /* 섹션 배경색 */
-    font-family: 'Ownglyph_meetme-Rg';
+    font-family: 'omyu_pretty';
     width: 100%;
     display: flex;
     align-items: center;
@@ -125,7 +125,7 @@
 
 
 .novel-card-content {
-    font-family: 'Ownglyph_meetme-Rg';
+    font-family: 'omyu_pretty';
     margin-bottom: 8px;
     width: 100%;
 }
@@ -154,7 +154,7 @@
     padding: 10px 30px;
     border-radius: 8px;
     cursor: pointer;
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     letter-spacing: 1px;
     font-size: 20px;
     transition: background-color 0.3s;
