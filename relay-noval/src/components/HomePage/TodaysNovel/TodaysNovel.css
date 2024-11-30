@@ -61,7 +61,6 @@
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 3;
-    border: 2px solid #f897d1; /* 핑크 테두리 */
     border-radius: 8px; /* 둥근 테두리 */
     overflow: hidden; /* 이미지가 테두리를 넘지 않도록 */
     display: flex;
@@ -134,7 +133,7 @@
 .novel-card-content h3 {
     font-size: 37px;
     color: #333;
-    margin: 10px 0;
+    margin: 20px 0 10px;
 }
 
 .card-userId {
