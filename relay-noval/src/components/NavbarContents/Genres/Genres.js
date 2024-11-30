@@ -245,10 +245,12 @@ function Genres() {
                                 <div key={novel.id} className="genres-novel-card">
                                     <div className="view-count">조회수: {novel.views}</div>
                                     <Link
+
                                         to={`/novels/${novel.id}`}
                                         className="novel-link"
                                         onClick={async (event) => {
                                             event.preventDefault(); // 기본 링크 이동 방지
+                                            if (!ensureLoggedIn()) return; // 로그인 확인
                                             try {
                                                 await incrementNovelViews(novel.id); // Firestore 조회수 증가
                                                 navigate(`/novels/${novel.id}`); // 페이지 이동
@@ -277,6 +279,7 @@ function Genres() {
                                             className="genres-participate-button"
                                             onClick={async (event) => {
                                                 event.preventDefault(); // 기본 링크 이동 방지
+                                                if (!ensureLoggedIn()) return; // 로그인 확인
                                                 try {
                                                     await incrementNovelViews(novel.id); // Firestore 조회수 증가
                                                     navigate(`/novels/${novel.id}`); // 페이지 이동
