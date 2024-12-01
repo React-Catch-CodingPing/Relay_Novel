@@ -21,6 +21,13 @@
             navigate("/admin");
         };
 
+        const handleMenuClick = (path) => {
+            navigate(path); // React Router를 이용한 페이지 이동
+            setTimeout(() => {
+                window.location.reload(); // 페이지 이동 후 새로고침
+            }, 10); // 짧은 지연 시간 후 새로고침
+        };
+
         // 표시할 사용자 이름 결정: useNickname 값에 따라 닉네임 또는 이름 선택
         const displayName = user ? (user.useNickname ? user.nickname : user.name) : "";
 
@@ -29,19 +36,19 @@
                 {/* 왼쪽: 홈으로 이동하는 로고 아이콘 */}
                 <div className="navbar-left">
                     <Link to="/" className="navbar-logo">
-                        <img src="/images/home-icon.png" alt="홈 아이콘" className="home-icon" /> {/* 홈 아이콘 이미지 */}
+                        <img src="/images/home-icon.png" alt="홈 아이콘" className="home-icon"/> {/* 홈 아이콘 이미지 */}
                     </Link>
                 </div>
 
-            {/* 중앙 메뉴: 커뮤니티, 명예의 전당 등 각 페이지로의 링크 */}
-            <ul className="navbar-menu">
-                <li><Link to="/community">커뮤니티</Link></li>
-                <li><Link to="/hall-of-fame">명예의 전당</Link></li>
-                <li><Link to="/authors">저자별 모아보기</Link></li>
-                <li><Link to="/genres">소설 모아보기</Link></li>
-                <li><Link to="/novel-create">소설 시작하기</Link></li>
-                <li><Link to="/writing-guide">창작 가이드</Link></li>
-            </ul>
+                {/* 중앙 메뉴: 커뮤니티, 명예의 전당 등 각 페이지로의 링크 */}
+                <ul className="navbar-menu">
+                    <li onClick={() => handleMenuClick("/community")}>커뮤니티</li>
+                    <li onClick={() => handleMenuClick("/hall-of-fame")}>명예의 전당</li>
+                    <li onClick={() => handleMenuClick("/authors")}>저자별 모아보기</li>
+                    <li onClick={() => handleMenuClick("/genres")}>소설 모아보기</li>
+                    <li onClick={() => handleMenuClick("/novel-create")}>소설 시작하기</li>
+                    <li onClick={() => handleMenuClick("/writing-guide")}>창작 가이드</li>
+                </ul>
 
 
                 {/* 오른쪽: 로그인/회원가입 또는 로그아웃/프로필 버튼 */}
@@ -77,7 +84,7 @@
                 </div>
             </nav>
         );
-        
+
     }
 
     export default Navbar;

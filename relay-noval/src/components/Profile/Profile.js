@@ -166,6 +166,9 @@ function Profile() {
             setProfile(editProfile);
             dispatch(setUser(editProfile));
             setEditMode(false);
+
+            // 화면 새로고침
+            window.location.reload();
         } catch (error) {
             console.error("프로필 업데이트 실패:", error);
             alert("프로필 업데이트에 실패했습니다. 다시 시도해주세요.");
