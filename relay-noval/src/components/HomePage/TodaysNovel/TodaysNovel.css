@@ -2,7 +2,7 @@
     padding: 40px 20px;
     background-color: #fce4ec; /* 섹션 배경색 */
     font-family: 'omyu_pretty';
-    width: 100%;
+    /*width: 100%;*/
     display: flex;
     align-items: center;
     justify-content: center;

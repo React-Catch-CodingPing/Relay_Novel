@@ -1,8 +1,8 @@
 .talks-section {
-    padding: 40px;
+    padding: 150px;
     background-color: #f9f9f9;
-    border-radius: 15px;
-    margin: 50px 0; /* 상단과 하단에 여백을 추가해 배경색이 보이도록 합니다. */
+    border-radius: 50%;
+    margin: 80px 0; /* 상단과 하단에 여백을 추가해 배경색이 보이도록 합니다. */
 }
 
 .talks-section h2 {
