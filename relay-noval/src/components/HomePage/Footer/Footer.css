@@ -18,11 +18,11 @@
 .heart-icon {
     font-size: 24px;
     color: #ff69b4; /* 하트 아이콘 색상 */
+    margin: 10px;
 }
 
 /* 하트 아이콘 바로 오른쪽에 footer-contact 배치 */
 .footer-contact {
-    margin-left: 20px; /* 하트 아이콘과의 간격 */
     text-align: center;
 }
 

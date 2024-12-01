@@ -274,6 +274,7 @@ function Genres() {
                                             <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}
                                         </div>
                                     </Link>
+
                                     <div className="genres-actions-container">
                                         <Link
                                             to={`/novels/${novel.id}`}
@@ -310,6 +311,7 @@ function Genres() {
                                             <span className="count">{novel.recommendations}</span>
                                         </div>
                                     </div>
+
                                 </div>
                             ))}
                         </div>

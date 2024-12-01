@@ -136,13 +136,14 @@
 .genres-novel-card {
     display: flex; /* 카드 내부 Flexbox 설정 */
     flex-direction: column; /* 세로 방향 정렬 */
+    justify-content: space-between; /* 위아래 간격 균등 분배 */
     align-items: center; /* 가로 중앙 정렬 */
     background-color: #fdd8e8; /* 배경 색상 */
     border-radius: 12px; /* 모서리를 둥글게 */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 그림자 추가 */
     padding: 20px; /* 내부 여백 */
     width: 200px; /* 카드 너비 */
-    height: 350px; /* 카드 높이 */
+    height: 400px; /* 카드 높이 */
     text-align: center; /* 텍스트 중앙 정렬 */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 효과를 위한 트랜지션*/
 }
@@ -154,7 +155,8 @@
 
 .novel-link {
     text-decoration: none; /* 밑줄 제거 */
-    height: 50%;
+    height: 45%;
+    margin-bottom: 20px;
 }
 
 .view-count {
@@ -193,6 +195,7 @@
 }
 
 .genres-participate-button {
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     background-color: #ec407a;
     color: white;
     border: none;
