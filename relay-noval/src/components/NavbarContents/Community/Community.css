@@ -1,10 +1,10 @@
 /* 커뮤니티 페이지 전체 컨테이너 */
 .community-container {
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: "Ownglyph_meetme-Rg", sans-serif;
-    color: #333; /* 텍스트는 대비를 위해 어두운 색 */
+    font-family: omyu_pretty;
 }
 
 /* 헤더 스타일 */
@@ -28,23 +28,24 @@
     margin: 0;
 }
 
-/* 페이지네이션과 글쓰기 버튼을 묶는 컨테이너 */
-.footer-container {
+ /*페이지네이션과 글쓰기 버튼을 묶는 컨테이너*/
+.pagination-container {
     display: flex;
-    flex-direction: column; /* 수직 정렬 */
+    justify-content: space-between; /* 좌우로 영역 배치 */
     align-items: center; /* 가로 중앙 정렬 */
-    margin-bottom: 20px;
-    width: 100%; /* 부모 컨테이너 크기와 동일하게 설정 */
+    width: 100%;
+    margin-bottom: 30px;
+    box-sizing: border-box;
 }
 
 /* 글쓰기 버튼 스타일 */
 .write-button {
-    font-family: Ownglyph_meetme-Rg, sans-serif;
     position: relative;
-    left: 545px;
+    right: 12%;
+    padding: 10px 20px; /* 내부 여백 */
+    font-family: omyu_pretty;
     background-color: #ff69b4; /* 메인 핑크색 */
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -59,7 +60,7 @@
 
 /* 게시물 리스트 영역 */
 .community-main {
-    width: 80%;
+    width: 77%;
     margin-top: 32px;
     display: flex;
     flex-wrap: wrap;
@@ -77,19 +78,19 @@
 .posts-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 카드 */
-    gap: 16px; /* 카드 간의 간격 */
+    gap: 30px; /* 카드 간의 간격 */
     width: 100%;
-    max-width: 1200px;
 }
 
 /* 게시물 카드 스타일 */
 .post-card {
+    text-align: left;
     padding: 10px;
     margin: 10px;
     border: 1px solid #ff99aa; /* 카드 경계선을 핑크로 변경 */
     border-radius: 8px;
     background-color: #fff; /* 카드 배경은 흰색으로 대비 */
-    box-shadow: 0px 4px 8px rgba(255, 105, 180, 0.3); /* 핑크빛 그림자 */
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3); /* 핑크빛 그림자 */
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 
@@ -119,7 +120,7 @@
 /* 제목 스타일 */
 .post-card h3 {
     font-size: 38px;
-    font-weight: bold;
+    font-weight: 500;
     letter-spacing: 1px;
     margin: 0;
     color: #333;
@@ -145,7 +146,6 @@
 }
 
 
-
 .author-image {
     width: 40px;
     height: 40px;
@@ -155,10 +155,14 @@
 
 /* 페이지네이션 스타일 */
 .pagination {
-    display: flex;
-    gap: 8px;
-    margin-top: 5px;
-    justify-content: center; /* 중앙 정렬 */
+        display: flex; /* Flexbox로 설정 */
+        gap: 8px; /* 페이지 버튼 간 간격 */
+        justify-content: center; /* 가로 가운데 정렬 */
+        align-items: center; /* 수직 가운데 정렬 */
+        position: relative;
+        left: 50%; /* 가로 중앙으로 이동 */
+        transform: translateX(-50%); /* 정확한 가운데 정렬 */
+        padding: 10px 20px; /* 내부 여백 */
 }
 
 .pagination-button {
@@ -202,21 +206,11 @@
 
 /* 버튼 기본 스타일 */
 button {
+    font-weight: 600;
     padding: 10px 20px;
     font-size: 1rem;
-    font-weight: bold;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
-/* 푸터 스타일 */
-.community-footer {
-    width: 100%;
-    padding: 32px;
-    background-color: #f8f8f8;
-    text-align: center;
-    margin-top: 32px;
-}
-

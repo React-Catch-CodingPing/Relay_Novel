@@ -156,6 +156,7 @@ const Authors = () => {
 
     return (
         <div className="authors-container">
+            <div className="list-container">
             {/* 검색창 */}
             <div className="search-container">
                 <span className="search-icon">
@@ -200,6 +201,7 @@ const Authors = () => {
                     </div>
                     </Link>
                 ))}
+            </div>
             </div>
         </div>
     );

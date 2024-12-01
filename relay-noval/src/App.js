@@ -6,6 +6,7 @@ import { setUser } from "./store/authSlice";
 import { auth, firestore } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import './App.css'
 
 // 기존에 추가된 컴포넌트들
 import Home from "./components/HomePage/Home";

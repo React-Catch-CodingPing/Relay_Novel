@@ -45,7 +45,7 @@ function TodaysAuthors() {
     return (
         <section className="authors-section">
             <div>
-            <h2>✨ 오늘의 저자 ✨</h2>
+            <h2>✨오늘의 저자✨</h2>
             <div className="authors-list">
                 {authors.map((author) => (
                     <ProfileCard

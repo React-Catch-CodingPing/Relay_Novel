@@ -1,7 +1,7 @@
 /* src/components/Novel/NovelDetail.css */
 
 .novel-detail {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
@@ -49,10 +49,6 @@
 
 }
 
-.novel-info {
-    flex: 1;
-}
-
 .novel-status {
     margin-top: 10px;
 }
@@ -68,7 +64,7 @@
 }
 
 .add-line-input {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 18px;
     width: 100%;
     padding: 10px;
@@ -78,7 +74,7 @@
 }
 
 .add-line-button {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     margin-top: 10px;
     padding: 10px;
     background-color: #333;

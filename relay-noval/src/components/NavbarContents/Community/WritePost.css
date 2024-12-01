@@ -53,6 +53,8 @@ label {
 }
 
 textarea {
+    font-size: 1rem;
+    font-family: omyu_pretty;
     height: 200px;
     resize: none; /* 크기 조정 비활성화 */
     border: 1px solid #f48fb1; /* 핑크 테두리 */

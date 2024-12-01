@@ -1,8 +1,14 @@
 @font-face {
-  font-family: 'Ownglyph_meetme-Rg';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+  font-family: 'omyu_pretty';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 body {
@@ -14,6 +20,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 code {

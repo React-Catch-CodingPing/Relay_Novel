@@ -198,8 +198,9 @@ function Genres() {
     };
 
     return (
-        <div className="genres-container">
-            <aside className="sidebar">
+        <div className="genres-outer-container">
+            <div className="genres-inner-container">
+                <aside className="sidebar">
                 <h2>추가된 필터</h2>
                 <div className="filter-section">
                     <p>장르</p>
@@ -337,6 +338,7 @@ function Genres() {
                     )}
                 </div>
             </main>
+            </div>
         </div>
     );
 }

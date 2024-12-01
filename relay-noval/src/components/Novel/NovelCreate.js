@@ -150,7 +150,7 @@ const NovelCreate = () => {
                     onChange={(e) => setFirstLine(e.target.value)}
                     placeholder="첫 줄거리"
                     required
-                    className="textarea"
+                    className="create-textarea"
                 />
                 <label className="label">
                     <input

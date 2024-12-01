@@ -1,5 +1,5 @@
 .authors-section {
-    font-family: 'Ownglyph_meetme-Rg';
+    font-family: omyu_pretty;
     padding: 30px 20px 100px 20px; /* 섹션 상하좌우 여백 추가 */
     background-color: white;
     width: 100%;
@@ -9,6 +9,8 @@
 }
 
 .authors-section > div {
+    background-color: white;
+
     width: 1340px;
     display: flex;
     flex-direction: column;
@@ -20,7 +22,7 @@
 .authors-section h2 {
     font-weight: lighter;
     font-size: 40px;
-    margin-bottom: 20px;
+    margin: 40px 0;
     text-align: center; /* 제목 중앙 정렬 */
     color: #333; /* 제목 색상 */
 }
@@ -33,15 +35,5 @@
     padding: 20px; /* 전체 패딩 */
 }
 
-.author-card {
-    background-color: #ffffff; /* 화이트 카드 */
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    width: 250px; /* 카드 크기 */
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
 
 

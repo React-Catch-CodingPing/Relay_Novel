@@ -1,10 +1,10 @@
 /* src/components/Novel/NovelCreate.css */
 
 .create-container {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     max-width: 800px;
     width: 90%;
-    margin: 20px auto;
+    margin: 30px auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -62,7 +62,7 @@
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 18px;
 }
 
@@ -87,7 +87,7 @@
 .input,
 .select,
 .textarea {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     margin-bottom: 15px;
     padding: 12px;
     border: 1px solid #ccc;
@@ -95,11 +95,6 @@
     font-size: 16px;
     width: 100%;
     box-sizing: border-box;
-}
-
-.textarea {
-    resize: vertical;
-    min-height: 100px;
 }
 
 .label {
@@ -116,7 +111,7 @@
     color: #fff;
     border: none;
     border-radius: 4px;
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;

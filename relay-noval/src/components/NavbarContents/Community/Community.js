@@ -122,14 +122,8 @@ function Community() {
                     <p>데이터가 없습니다.</p>
                 )}
             </main>
-            <div className="footer-container">
-                {/* 글쓰기 버튼 */}
-                <button
-                    className="write-button"
-                    onClick={() => navigate("/community/write")}
-                >
-                    글쓰기
-                </button>
+            {/* 페이지네이션 및 글쓰기 버튼 영역 */}
+            <div className="pagination-container">
                 {/* 페이지네이션 영역 */}
                 <div className="pagination">
                     {/* 이전 버튼 */}
@@ -162,11 +156,18 @@ function Community() {
                         &raquo;
                     </button>
                 </div>
+                {/* 글쓰기 버튼 */}
+                <button
+                    className="write-button"
+                    onClick={() => navigate("/community/write")}
+                >
+                    글쓰기
+                </button>
             </div>
         </div>
 
-    );
+            );
 
-}
+            }
 
-export default Community;
+            export default Community;

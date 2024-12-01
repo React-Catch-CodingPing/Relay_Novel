@@ -41,7 +41,7 @@
 
 /* 메뉴 링크 스타일 */
 .navbar-menu li a {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 20px;
     font-weight: lighter;
     text-decoration: none; /* 밑줄 제거 */
@@ -59,7 +59,7 @@
 
 /* 사용자 이름 표시 스타일 */
 .display-name {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 30px;
     letter-spacing: 1px;
     font-weight: lighter;
@@ -69,7 +69,7 @@
 
 /* 네비게이션 바 버튼 스타일 */
 .nav-logout-button, .nav-profile-button, .nav-login-button, .nav-signup-button {
-    font-family: Ownglyph_meetme-Rg;
+    font-family: omyu_pretty;
     font-size: 20px;
     font-weight: lighter;
     padding: 8px 12px; /* 버튼 내부 여백 */

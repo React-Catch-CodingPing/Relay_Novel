@@ -54,10 +54,24 @@ function HallOfFame() {
         return <p>명예의 전당 데이터를 불러오는 중입니다...</p>;
     }
 
+    const getMedalEmoji = (rank) => {
+        switch (rank) {
+            case 1:
+                return '🥇'; // 금메달
+            case 2:
+                return '🥈'; // 은메달
+            case 3:
+                return '🥉'; // 동메달
+            default:
+                return '';
+        }
+    };
+
     return (
         <section className="hall-of-fame-container">
+            <div>
             <h1>👑명예의 전당👑</h1>
-            <p>가장 활발하게 활동한 사용자들을 만나보세요!</p>
+            <p className="subtitle">가장 활발하게 활동한 사용자들을 만나보세요!</p>
 
             <div className="users-grid">
                 {users.map((user) => (
@@ -76,12 +90,13 @@ function HallOfFame() {
                             className="user-image"
                         />
                         <h3>{user.name || '익명 사용자'}</h3>
-                        <p>🏅 순위: {user.rank}</p>
+                        <p>{getMedalEmoji(user.rank)} </p>
                         <p>참여 작품 수: {user.novelsParticipated}</p>
                         <p>시작한 작품 수: {user.novelsStarted}</p>
                         </Link>
                     </div>
                 ))}
+            </div>
             </div>
         </section>
     );
