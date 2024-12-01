@@ -1,3 +1,4 @@
+
 .genres-outer-container {
     box-sizing: border-box;
     width: 100%;
@@ -71,6 +72,7 @@
     border-radius: 12px;
     background-color: #fff; /* 화이트 배경 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
+    height: 100%;
 }
 
 .genres-header {
@@ -119,8 +121,16 @@
     flex-wrap: wrap; /* 카드가 여러 줄로 표시될 수 있도록 설정 */
     justify-content: center; /* 수평 중앙 정렬 */
     align-items: flex-start; /* 카드들이 상단에 정렬되도록 설정 */
-    gap: 20px; /* 카드 간격 */
+    flex-direction: column; /* 행 단위로 구성 */
+    gap: 16px; /* 행 간격 */
+    height: 100%;
+}
 
+.genres-novel-row {
+    display: flex;
+    justify-content: space-between; /* 카드 간 간격 균일화 */
+    gap: 16px; /* 카드 간격 */
+    height: 100%;
 }
 
 .genres-novel-card {
@@ -187,7 +197,7 @@
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 8px;
     font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s;

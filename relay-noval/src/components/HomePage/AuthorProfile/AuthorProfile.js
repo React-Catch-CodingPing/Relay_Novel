@@ -1,7 +1,7 @@
 // src/components/HomePage/AuthorProfile/AuthorProfile.js
 import React, { useEffect, useState } from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import { getAuthorLikeStatus, updateAuthorLike } from "../../../firebase/firestore/userService";
+import {getAuthorLikeStatus, getStartedNovels, updateAuthorLike} from "../../../firebase/firestore/userService";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../../../firebase/firebase";
 import './AuthorProfile.css';
@@ -12,6 +12,8 @@ function AuthorProfile() {
     const [author, setAuthor] = useState(null); // 저자 데이터 상태
     const [liked, setLiked] = useState(false); // 좋아요 상태
     const [loading, setLoading] = useState(true); // 로딩 상태
+    const [modalVisible, setModalVisible] = useState(false); // 모달 상태
+    const [startedNovels, setStartedNovels] = useState([]); // 저자가 시작한 소설 리스트
     const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
     const userId = auth.currentUser?.uid;
@@ -38,7 +40,13 @@ function AuthorProfile() {
                 const authorSnap = await getDoc(authorRef);
 
                 if (authorSnap.exists()) {
-                    setAuthor(authorSnap.data());
+                    const authorData = authorSnap.data();
+                    setAuthor(authorData);
+
+                    // 시작한 소설 가져오기
+                    const novels = await getStartedNovels(authorId);
+                    setStartedNovels(novels);
+
                 } else {
                     console.error("Author not found");
                 }
@@ -89,6 +97,14 @@ function AuthorProfile() {
         }
     };
 
+    const handleModalOpen = () => {
+        setModalVisible(true);
+    };
+
+    const handleModalClose = () => {
+        setModalVisible(false);
+    };
+
     if (loading) return <p>Loading...</p>;
     if (!author) return <p>Author not found.</p>;
 
@@ -96,7 +112,7 @@ function AuthorProfile() {
         <div className="author-profile-container">
             <div className="author-profile-card">
                 <img
-                    src={author.profileImage || "/path/to/default-image.jpg"}
+                    src={author.profileImage || "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png"}
                     alt={author.name}
                     className="author-profile-image"
                 />
@@ -114,6 +130,14 @@ function AuthorProfile() {
                         <span className="profile-inform">{author.email}</span>
                     </div>
                     <div className="profile-field">
+                        <span
+                            className="profile-label profile-clickable"
+                            onClick={handleModalOpen}
+                        >
+                            {startedNovels.length}개 작품 시작 중인 저자
+                        </span>
+                    </div>
+                    <div className="profile-field">
                         <span className="profile-label">좋아요 수</span>
                         <span className="profile-value">{author.likes || 0}</span>
                     </div>
@@ -126,6 +150,34 @@ function AuthorProfile() {
                     {liked ? "❤️" : "🤍"}
                 </button>
             </div>
+
+
+
+
+
+            {/* 모달 */}
+            {modalVisible && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>시작한 작품 목록</h3>
+                        <ul>
+                            {startedNovels.map((novel) => (
+                                <li key={novel.id}>
+                                    <span
+                                        className="novel-link"
+                                        onClick={() => navigate(`/novels/${novel.id}`)}
+                                    >
+                                        {novel.title}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                        <button className="close-modal-button" onClick={handleModalClose}>
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

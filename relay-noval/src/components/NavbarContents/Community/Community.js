@@ -1,9 +1,9 @@
 // src/components/NavbarContents/Community/Community.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, firestore } from "../../../firebase/firebase";
-import { collection, getDocs, query, orderBy, doc, updateDoc } from "firebase/firestore"; // updateDoc 추가
+import { auth } from "../../../firebase/firebase";
 import "./Community.css";
+import {fetchPosts, incrementPostViews} from "../../../firebase/firestore/communityService";
 
 function Community() {
     const navigate = useNavigate();
@@ -32,34 +32,19 @@ function Community() {
 
     // Firestore에서 커뮤니티 글 가져오기
     useEffect(() => {
-        const fetchPosts = async () => {
+        const loadPosts = async () => {
             setLoading(true); // 로딩 상태 시작
             try {
-                // Firestore에서 커뮤니티 글을 시간 역순으로 가져오기
-                const postsQuery = query(
-                    collection(firestore, "communityPosts"),
-                    orderBy("createdAt", "desc")
-                );
-                const querySnapshot = await getDocs(postsQuery);
-                const postsData = querySnapshot.docs.map((doc) => {
-                    const data = doc.data();
-                    return {
-                        id: doc.id,
-                        ...data,
-                        date: data.createdAt
-                            ? new Date(data.createdAt.toDate()).toLocaleDateString("ko-KR") // Timestamp => 한국 날짜 형식 변환
-                            : "날짜 없음", // `createdAt`이 없다면 기본값 설정
-                    };
-                });
-                setPosts(postsData); // 상태에 저장
+                const fetchedPosts = await fetchPosts(); // Service 함수 호출
+                setPosts(fetchedPosts);
             } catch (error) {
-                console.error("Error fetching posts:", error); // 에러 처리
+                console.error(error.message);
             } finally {
-                setLoading(false); // 로딩 상태 종료
+                setLoading(false);
             }
         };
 
-        fetchPosts();
+        loadPosts();
     }, []);
 
 
@@ -79,18 +64,6 @@ function Community() {
 
     const handlePageChange = (page) => {
         setCurrentPage(page); // 현재 페이지 상태 업데이트
-    };
-
-    // Firestore에서 조회수 증가 함수
-    const incrementViews = async (postId) => {
-        try {
-            const postRef = doc(firestore, "communityPosts", postId);
-            await updateDoc(postRef, {
-                views: (posts.find(post => post.id === postId)?.views || 0) + 1,
-            });
-        } catch (error) {
-            console.error("Error incrementing views:", error);
-        }
     };
 
     return (
@@ -114,8 +87,14 @@ function Community() {
                                 key={post.id}
                                 className="post-card"
                                 onClick={async () => {
-                                    await incrementViews(post.id); // 조회수 증가
-                                    navigate(`/community/${post.id}`); // 상세 페이지로 이동
+                                    if (!auth.currentUser) {
+                                        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                                        navigate("/login");
+                                        return;
+                                    }
+
+                                    await incrementPostViews(post.id, posts); // Service 함수 호출
+                                    navigate(`/community/${post.id}`);
                                 }}
                             >
                                 {/* 작성자 표시 */}

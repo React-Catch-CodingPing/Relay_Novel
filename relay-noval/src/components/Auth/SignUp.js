@@ -60,7 +60,9 @@ const SignUp = () => {
                         placeholder="비밀번호"
                         required
                     />
-                    <button type="submit" className="submit-btn" disabled={loading}>회원가입</button>
+                    <button type="submit" className="submit-btn" disabled={loading}>
+                        {name === "admin" && nickname === "admin" ? "관리자 계정 생성" : "회원가입"}
+                    </button>
                 </form>
                 {error && <p className="error-message">{error}</p>}
                 {user && <p>{user.email} 님 회원가입 성공입니다!</p>}

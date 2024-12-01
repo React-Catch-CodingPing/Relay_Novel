@@ -5,6 +5,7 @@ import React from "react";
 import Header from "./Header/Header";
 import TodaysNovel from "./TodaysNovel/TodaysNovel";
 import TodaysAuthors from "./TodaysAuthors/TodaysAuthors";
+import TodaysTalk from "./TodaysTalk/TodaysTalk";
 import "./Home.css";
 
 const Home = () => {
@@ -17,6 +18,7 @@ const Home = () => {
             <div className="content">
                 <TodaysNovel />
                 <TodaysAuthors />
+                <TodaysTalk />
             </div>
 
         </div>

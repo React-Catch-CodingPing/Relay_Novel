@@ -39,7 +39,7 @@ function Admin() {
 
     return (
         <div className="admin-page">
-            <h1>📋 어드민 신고 관리</h1>
+            <h1>📋 신고 관리 게시판</h1>
             {reports.length > 0 ? (
                 <ul className="report-list">
                     {reports.map((report) => (

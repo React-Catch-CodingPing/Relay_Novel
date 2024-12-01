@@ -16,10 +16,19 @@ function Genres() {
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [lineCounts, setLineCounts] = useState({});
     const [sortOption, setSortOption] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null); // 현재 사용자
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-    const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
+    const itemsPerPage = 8; // 한 페이지에 표시할 항목 수
     const pagesPerGroup = 4; // 한 그룹에 표시할 페이지 수
     const navigate = useNavigate(); // 페이지 이동을 위한 훅
+
+    // Firebase 인증 상태 가져오기
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setCurrentUser(user);
+        });
+        return () => unsubscribe();
+    }, []);
 
     // 실시간 Firestore 데이터 구독
     useEffect(() => {
@@ -41,7 +50,7 @@ function Genres() {
 
     // 로그인 여부 확인 함수
     const ensureLoggedIn = () => {
-        if (!auth.currentUser) {
+        if (!currentUser) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
             navigate("/login"); // 로그인 페이지로 이동
             return false;
@@ -111,7 +120,8 @@ function Genres() {
         }
     };
 
-// 추천 클릭 핸들러
+
+    // 추천 클릭 핸들러
     const handleThumbsUpClick = async (event, novelId) => {
         event.stopPropagation();
 
@@ -195,7 +205,7 @@ function Genres() {
                 <div className="filter-section">
                     <p>장르</p>
                     <div className="filter-tags">
-                        {['로맨스', '미스터리', '코믹', '액션', '스릴러', '판타지'].map((genre) => (
+                        {['로맨스', '미스터리', '코믹', '액션', '스릴러', '판타지','일상','공포'].map((genre) => (
                             <span
                                 key={genre}
                                 className={`tag ${selectedGenres.includes(genre) ? 'selected' : ''}`}
@@ -223,49 +233,85 @@ function Genres() {
                     </div>
                 </div>
                 <div className="genres-novels-grid">
-                    {currentItems.map((novel) => (
-                        <div key={novel.id} className="genres-novel-card">
-                            <div className="view-count">조회수: {novel.views}</div>
-                            <Link
-                                to={`/novels/${novel.id}`}
-                                className="novel-link"
-                                onClick={(event) => handleViewCount(event, novel.id)}
-                            >
-                                <img
-                                    src={novel.coverImage || "/images/art-icon.png"}
-                                    alt={novel.title}
-                                    className="novel-image"
-                                    onError={(e) => {
-                                        e.target.onerror = null; // 무한 루프 방지
-                                        e.target.src = "/images/art-icon.png"; // 기본 이미지로 대체
-                                    }}
-                                />
-                                <div className="novel-info">
-                                    <h3>{novel.title}</h3>
-                                    <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}
-                                </div>
-                            </Link>
-                            <div className="genres-actions-container">
-                                <button className="genres-participate-button">참여하기</button>
-                                <div>
-                                    <button
-                                        className="genres-heart-button"
-                                        onClick={(event) => handleHeartClick(event, novel.id)}
+                    {currentItems.reduce((rows, novel, index) => {
+                        const rowIndex = Math.floor(index / 4); // 4개씩 나누기
+                        if (!rows[rowIndex]) {
+                            rows[rowIndex] = []; // 새 행 생성
+                        }
+                        rows[rowIndex].push(novel);
+                        return rows;
+                    }, []).map((row, rowIndex) => (
+                        <div key={rowIndex} className="genres-novel-row">
+                            {row.map((novel) => (
+                                <div key={novel.id} className="genres-novel-card">
+                                    <div className="view-count">조회수: {novel.views}</div>
+                                    <Link
+
+                                        to={`/novels/${novel.id}`}
+                                        className="novel-link"
+                                        onClick={async (event) => {
+                                            event.preventDefault(); // 기본 링크 이동 방지
+                                            if (!ensureLoggedIn()) return; // 로그인 확인
+                                            try {
+                                                await incrementNovelViews(novel.id); // Firestore 조회수 증가
+                                                navigate(`/novels/${novel.id}`); // 페이지 이동
+                                            } catch (error) {
+                                                console.error("Error incrementing view count:", error);
+                                            }
+                                        }}
                                     >
-                                        {auth.currentUser ? (novel.likedBy?.includes(auth.currentUser.uid) ? '❤️' : '🤍') : '🤍'}
-                                    </button>
-                                    <span className="count">{novel.likes}</span>
+                                        <img
+                                            src={novel.coverImage || "/images/art-icon.png"}
+                                            alt={novel.title}
+                                            className="novel-image"
+                                            onError={(e) => {
+                                                e.target.onerror = null; // 무한 루프 방지
+                                                e.target.src = "/images/art-icon.png"; // 기본 이미지로 대체
+                                            }}
+                                        />
+                                        <div className="novel-info">
+                                            <h3>{novel.title}</h3>
+                                            <p>{lineCounts[novel.id] || 0}줄 째 진행 중...</p> {/* 줄 수 표시 */}
+                                        </div>
+                                    </Link>
+                                    <div className="genres-actions-container">
+                                        <Link
+                                            to={`/novels/${novel.id}`}
+                                            className="genres-participate-button"
+                                            onClick={async (event) => {
+                                                event.preventDefault(); // 기본 링크 이동 방지
+                                                if (!ensureLoggedIn()) return; // 로그인 확인
+                                                try {
+                                                    await incrementNovelViews(novel.id); // Firestore 조회수 증가
+                                                    navigate(`/novels/${novel.id}`); // 페이지 이동
+                                                } catch (error) {
+                                                    console.error("Error incrementing view count:", error);
+                                                }
+                                            }}
+                                        >
+                                            참여하기
+                                        </Link>
+                                        <div>
+                                            <button
+                                                className="genres-heart-button"
+                                                onClick={(event) => handleHeartClick(event, novel.id)}
+                                            >
+                                                {auth.currentUser ? (novel.likedBy?.includes(auth.currentUser.uid) ? '❤️' : '🤍') : '🤍'}
+                                            </button>
+                                            <span className="count">{novel.likes}</span>
+                                        </div>
+                                        <div>
+                                            <button
+                                                className="genres-thumbs-up-button"
+                                                onClick={(event) => handleThumbsUpClick(event, novel.id)}
+                                            >
+                                                {auth.currentUser ? (novel.recommendedBy?.includes(auth.currentUser.uid) ? '👍' : '👎') : '👎'}
+                                            </button>
+                                            <span className="count">{novel.recommendations}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <button
-                                        className="genres-thumbs-up-button"
-                                        onClick={(event) => handleThumbsUpClick(event, novel.id)}
-                                    >
-                                        {auth.currentUser ? (novel.recommendedBy?.includes(auth.currentUser.uid) ? '👍' : '👎') : '👎'}
-                                    </button>
-                                    <span className="count">{novel.recommendations}</span>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     ))}
                 </div>

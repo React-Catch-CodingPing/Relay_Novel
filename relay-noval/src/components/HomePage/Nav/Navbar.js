@@ -7,7 +7,7 @@
 
     function Navbar() {
         // Redux에서 사용자 로그인 상태 정보(user) 가져오기
-        const { user } = useSelector((state) => state.auth);
+        const { user, isAdmin } = useSelector((state) => state.auth);
         const dispatch = useDispatch();
         const navigate = useNavigate();
 
@@ -15,6 +15,10 @@
         const handleLogout = () => {
             dispatch(signOut()); // 로그아웃 액션 디스패치
             navigate("/"); // 로그아웃 후 메인 페이지로 리디렉션
+        };
+
+        const handleAdminClick = () => {
+            navigate("/admin");
         };
 
         // 표시할 사용자 이름 결정: useNickname 값에 따라 닉네임 또는 이름 선택
@@ -46,10 +50,18 @@
                         // 로그인한 경우: 사용자 이름과 로그아웃, 프로필 버튼 표시
                         <>
                             <span className="display-name">{displayName}님</span>
-                            <button onClick={handleLogout} className="nav-logout-button">로그아웃</button>
-                            <Link to="/profile">
-                                <button className="nav-profile-button">프로필</button>
-                            </Link>
+                            <button onClick={handleLogout} className="logout-button">로그아웃</button>
+                            {user ? (
+                                isAdmin ? (
+                                    <button className="profile-button" onClick={handleAdminClick}>관리</button>
+                                ) : (
+                                    <Link to="/profile">
+                                        <button className="profile-button">프로필</button>
+                                    </Link>
+                                )
+                            ) : (
+                                <Link to="/signin">로그인</Link>
+                            )}
                         </>
                     ) : (
                         // 비로그인 상태: 로그인 및 회원가입 버튼 표시

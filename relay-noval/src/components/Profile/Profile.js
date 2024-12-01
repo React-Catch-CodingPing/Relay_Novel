@@ -55,7 +55,7 @@ function Profile() {
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
                     setProfile(userData);
-                    setEditProfile(userData); // 편집 상태 초기화
+                    // setEditProfile(userData); // 편집 상태 초기화
                     dispatch(setUser(userData)); // Redux 상태 업데이트
                 }
             } catch (error) {
@@ -69,6 +69,7 @@ function Profile() {
             fetchNovelData();
             fetchLikedData();
         }
+
     }, [user]);
 
     // 프로필 이미지 기본값 처리 함수 추가
@@ -106,11 +107,11 @@ function Profile() {
         navigate('/signout');
     };
 
-    // 프로필 편집 모드 시작
     const handleEdit = () => {
-        setEditProfile(profile);
+        setEditProfile({ ...profile }); // 상태 초기화 시 명확히 복사
         setEditMode(true);
     };
+
 
     const handleProfileImageChange = async (e) => {
         const file = e.target.files[0];
@@ -137,17 +138,7 @@ function Profile() {
 
     // 변경 사항 저장 후 Firebase에 업데이트
     const handleSave = async () => {
-        if (!editProfile.email || editProfile.email.trim() === "") {
-            alert("이메일을 입력해주세요."); // 이메일이 비어 있으면 경고
-            return;
-        }
-
         try {
-            // Firebase Authentication 이메일 업데이트
-            if (auth.currentUser?.email !== editProfile.email) {
-                await auth.currentUser.updateEmail(editProfile.email);
-            }
-
             // Firebase Firestore에 사용자 프로필 업데이트
             const userRef = doc(firestore, 'users', auth.currentUser?.uid);
           
@@ -155,19 +146,14 @@ function Profile() {
                 profileImage: editProfile.profileImage || profile.profileImage || 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
                 nickname: editProfile.nickname || profile.nickname || "익명 사용자",
                 name: editProfile.name || profile.name || "",
-                email: editProfile.email || profile.email || "",
             });
 
             setProfile(editProfile);
             dispatch(setUser(editProfile));
             setEditMode(false);
         } catch (error) {
-            console.error('프로필 업데이트 실패:', error);
-            if (error.code === "auth/requires-recent-login") {
-                alert("민감한 정보 업데이트를 위해 다시 로그인해주세요.");
-            } else {
-                alert("프로필 업데이트에 실패했습니다. 다시 시도해주세요.");
-            }
+            console.error("프로필 업데이트 실패:", error);
+            alert("프로필 업데이트에 실패했습니다. 다시 시도해주세요.");
         }
     };
 
@@ -213,7 +199,7 @@ function Profile() {
                     </div>
                 ) : (
                     <img
-                        src={profile.profileImage || 'images/home-icon.png'}
+                        src={getProfileImage()}
                         alt="Profile"
                         className="profile-image"
                     />
@@ -228,12 +214,17 @@ function Profile() {
                         {editMode ? (
                             <input
                                 type="text"
-                                value={editProfile.nickname}
-                                onChange={(e) => setEditProfile({ ...editProfile, nickname: e.target.value })}
+                                value={editProfile.nickname || ""}
+                                onChange={(e) =>
+                                    setEditProfile((prev) => ({
+                                        ...prev,
+                                        nickname: e.target.value,
+                                    }))
+                                }
                                 className="profile-input"
                             />
                         ) : (
-                            <span className="profile-value">{profile.nickname}</span>
+                            <span className="profile-value">{profile.nickname || "익명 사용자"}</span>
                         )}
                     </div>
 
@@ -243,30 +234,17 @@ function Profile() {
                         {editMode ? (
                             <input
                                 type="text"
-                                value={editProfile.name}
-                                onChange={(e) => setEditProfile({ ...editProfile, name: e.target.value })}
+                                value={editProfile.name || ""}
+                                onChange={(e) =>
+                                    setEditProfile((prev) => ({
+                                        ...prev,
+                                        name: e.target.value,
+                                    }))
+                                }
                                 className="profile-input"
                             />
                         ) : (
-                            <span className="profile-value">{profile.name}</span>
-                        )}
-                    </div>
-
-                    {/* 이메일 */}
-                    <div className="profile-field">
-                        <span className="profile-label">이메일</span>
-                        {editMode ? (
-                            <input
-                                type="email"
-                                value={editProfile.email}
-                                onChange={(e) => setEditProfile({...editProfile, email: e.target.value})}
-                                className="profile-input"
-                                required
-                                onInvalid={(e) => e.target.setCustomValidity("유효한 이메일 주소를 입력해주세요.")}
-                                onInput={(e) => e.target.setCustomValidity("")} // 유효성 검사 메시지 초기화
-                            />
-                        ) : (
-                            <span className="profile-value">{profile.email}</span>
+                            <span className="profile-value">{profile.name || "이름 없음"}</span>
                         )}
                     </div>
 
@@ -280,7 +258,7 @@ function Profile() {
                                     className="modal-button"
                                     onClick={() => setShowParticipatedNovelsModal(true)}
                                 >
-                                    {participatedNovels.length} 줄 참여 중...
+                                    {participatedNovels.length} 작품 참여 중...
                                 </button>
                                 {/* 시작한 소설 모달 버튼 */}
                                 <button
@@ -309,13 +287,13 @@ function Profile() {
                     <div className="profile-buttons">
                         {editMode ? (
                             <>
-                                <button className="save-button" onClick={handleSave}>저장</button>
-                                <button className="cancel-button" onClick={handleCancel}>취소</button>
+                                <button className="profile-save-button" onClick={handleSave}>저장</button>
+                                <button className="profile-cancel-button" onClick={handleCancel}>취소</button>
                             </>
                         ) : (
                             <>
                                 <button className="profile-edit-button" onClick={handleEdit}>프로필 편집</button>
-                                <button className="logout-button" onClick={goToSignOut}>로그아웃</button>
+                                <button className="logout-button" onClick={() => navigate('/signout')}>로그아웃</button>
                             </>
                         )}
                     </div>

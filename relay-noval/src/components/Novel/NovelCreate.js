@@ -18,6 +18,7 @@ const NovelCreate = () => {
     const [imagePreview, setImagePreview] = useState(""); // 이미지 미리보기 URL
 
 
+
     const navigate = useNavigate(); // navigate 함수 정의
     const user = useSelector((state) => state.auth.user);
 
@@ -29,13 +30,15 @@ const NovelCreate = () => {
         return `${year}.${month}.${day}`;
     };
 
-   const handleImageChange = (e) => {
-       const file = e.target.files[0];
-       if (file) {
-           setCoverImage(file);
-           setImagePreview(URL.createObjectURL(file));
-       }
-   }
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith("image/")) {
+            alert("이미지 파일만 업로드 가능합니다.");
+            return;
+        }
+        setCoverImage(file);
+        setImagePreview(URL.createObjectURL(file));
+    };
 
    const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,6 +48,11 @@ const NovelCreate = () => {
             navigate("/login");
             return;
         }
+
+       if (!title.trim() || !firstLine.trim()) {
+           alert("제목과 첫 줄거리를 입력해주세요.");
+           return;
+       }
 
         let coverImageUrl = "";
        if (coverImage) {
@@ -58,11 +66,11 @@ const NovelCreate = () => {
        }
 
         const novelData = {
-            title,
-            genre,
-            firstLine,
+            title: title.trim(),
+            genre: genre.trim(),
+            firstLine: firstLine.trim(),
             lineLimit: lineLimit ? 100 : null,
-            coverImage: coverImageUrl, // 업로드된 이미지 URL 저장
+            coverImage: coverImageUrl,
             userId: user.uid,
             createdAt: new Date(),
         }
@@ -81,10 +89,16 @@ const NovelCreate = () => {
            await addLineToNovel(novelId, firstLineData);
            console.log("첫 줄거리가 추가되었습니다.");
 
+           // 메모리 정리
+           if (imagePreview) {
+               URL.revokeObjectURL(imagePreview);
+           }
+
            // 페이지 이동
            navigate(`/novels/${novelId}`);
        } catch (error) {
            console.error("소설 추가 중 오류:", error);
+           alert("소설 추가 중 문제가 발생했습니다. 다시 시도해주세요.");
        }
    };
 
@@ -105,7 +119,6 @@ const NovelCreate = () => {
                 )}
                 <input
                     type="file"
-                    placeholder="awefawe"
                     id="coverImage"
                     accept="image/*"
                     onChange={handleImageChange}
@@ -125,10 +138,12 @@ const NovelCreate = () => {
                 <select value={genre} onChange={(e) => setGenre(e.target.value)} className="select">
                     <option value="로맨스">로맨스</option>
                     <option value="판타지">판타지</option>
-                    <option value="액션">액션</option>
-                    <option value="스릴러">스릴러</option>
+                    <option value="일상">일상</option>
+                    <option value="공포">공포</option>
                     <option value="코믹">코믹</option>
                     <option value="미스터리">미스터리</option>
+                    <option value="액션">액션</option>
+                    <option value="스릴러">스릴러</option>
                 </select>
                 <textarea
                     value={firstLine}

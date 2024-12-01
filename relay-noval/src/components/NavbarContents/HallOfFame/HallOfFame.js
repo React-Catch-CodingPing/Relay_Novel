@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUsers, getStartedNovels, getParticipatedNovels } from "../../../firebase/firestore/userService"; // userService의 함수 사용
 import './HallOfFame.css';
+import {Link} from "react-router-dom";
 
 
 function HallOfFame() {
@@ -75,6 +76,14 @@ function HallOfFame() {
             <div className="users-grid">
                 {users.map((user) => (
                     <div key={user.id} className="user-card">
+                        <Link
+                            to={`/authors/${user.id}`}
+                            style={{
+                                textDecoration: 'none', // 밑줄 제거
+                                color: 'inherit', // 부모 색상 상속
+                            }}
+                            className="user-card-link">
+
                         <img
                             src={user.profileImage}
                             alt={user.name || '익명 사용자'}
@@ -84,6 +93,7 @@ function HallOfFame() {
                         <p>{getMedalEmoji(user.rank)} </p>
                         <p>참여 작품 수: {user.novelsParticipated}</p>
                         <p>시작한 작품 수: {user.novelsStarted}</p>
+                        </Link>
                     </div>
                 ))}
             </div>

@@ -10,10 +10,9 @@
 }
 
 /* 프로필 이미지 스타일 */
-/* 프로필 이미지 스타일 */
 .profile-image-preview {
-    width: 120px; /* 크기를 조정 */
-    height: 120px; /* 크기를 조정 */
+    width: 180px; /* 크기를 조정 */
+    height: 180px; /* 크기를 조정 */
     border-radius: 50%; /* 원형 이미지 */
     object-fit: cover; /* 이미지 비율 유지 */
     margin-bottom: 10px;
@@ -21,8 +20,8 @@
 }
 
 .profile-image {
-    width: 120px; /* 크기를 조정 */
-    height: 120px; /* 크기를 조정 */
+    width: 180px; /* 크기를 조정 */
+    height: 180px; /* 크기를 조정 */
     border-radius: 50%; /* 원형 이미지 */
     object-fit: cover; /* 이미지 비율 유지 */
     background-color: #f8c8d8; /* 배경색 */
@@ -36,7 +35,8 @@
 
 /* 프로필 정보 컨테이너 */
 .profile-info {
-    margin-bottom: 16px;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 /* 각 필드 라벨 스타일 */
@@ -90,23 +90,59 @@
     transform: scale(1.05);
 }
 
+.profile-card input[type="file"] {
+    /*display: flex;*/
+    flex-direction: column;
+    align-items: center;
+    color: transparent;
+    font-weight: bolder;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.profile-card input[type="file"]::after{
+    display: none;
+}
+.profile-card input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.profile-card input[type="file"]::before {
+    content: '파일 업로드';
+    display: flex;
+    justify-content: center;
+    color: black;
+    background-color: rgba(175, 173, 173, 0.36);
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Ownglyph_meetme-Rg;
+    font-size: 18px;
+}
+
+.profile-card input[type="file"]:hover::before {
+    color: #696969;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
 /* 저장 버튼 */
-.save-button {
+.profile-save-button {
     background-color: #ffb6c1;
     color: white;
 }
 
-.save-button:hover {
+.profile-save-button:hover {
     background-color: #ff91af;
 }
 
 /* 취소 버튼 */
-.cancel-button {
+.profile-cancel-button {
     background-color: #6c757d;
     color: white;
 }
 
-.cancel-button:hover {
+.profile-cancel-button:hover {
     background-color: #5a6268;
 }
 

@@ -17,12 +17,36 @@
     margin-bottom: 30px;
 }
 
+.novel-detail-image {
+    width: 50%;
+    height: 50%;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    object-fit: cover; /* 이미지가 비율에 맞게 표시되도록 설정 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
 .lines-list {
     list-style: none;
+    padding:0;
 }
 
 .line-item {
     font-size: 30px;
+    margin: 30px 2px;
+}
+
+.line-header {
+    font-size: 15px;
+}
+
+.line-content {
+    display: inline-block; /* 밑줄을 텍스트 너비에 맞추기 */
+    font-size: 2.5rem;
+    color: #000000; /* 텍스트 색상 */
+    border-bottom: 2px solid #000000; /* 밑줄 색상과 두께 */
+    margin: 2px;
+
 }
 
 .novel-status {
@@ -59,6 +83,32 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+.line-actions {
+    margin-top: 8px;
+}
+
+.edit-line-button,
+.delete-line-button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    margin-right: 4px;
+    cursor: pointer;
+    font-size: 0.5em;
+    border-radius: 4px;
+}
+
+.edit-line-button:hover {
+    background-color: #e0f7fa;
+}
+
+.delete-line-button:hover {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+
 
 .related-novels {
     margin-top: 40px;
