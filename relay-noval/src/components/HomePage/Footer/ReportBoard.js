@@ -46,7 +46,8 @@ function ReportBoard() {
             <div className="report-board">
                 <h1>🚨 신고 게시판</h1>
                 <form onSubmit={handleSubmit} className="report-form">
-                    <label htmlFor="reportText">신고 내용을 입력하세요:</label>
+                    <label htmlFor="reportText">신고 내용을 입력하세요 : </label>
+                    <label htmlFor="reportText">( 예 : 홍길동 유저가 지속적으로 장르와 상관 없는 불건전한 소설 한 줄을 적습니다. ) </label>
                     <textarea
                         id="reportText"
                         placeholder="신고 사유를 상세히 작성해주세요."
