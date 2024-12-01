@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom"; // useNavigate 추가
 import { useSelector } from "react-redux";
 import { addNovelLine } from "../../firebase/firestore/novelService";
 import { addLineToNovel } from "../../firebase/firestore/lineService";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Firebase Storage 관련 메서드 추가
-import { storage } from "../../firebase/firebase"; // Storage 객체 가져오기
 import "./NovelCreate.css";
 import {uploadImage} from "../../firebase/firestore/storageService"; // 일반 CSS 파일로 변경
 
@@ -16,11 +14,9 @@ const NovelCreate = () => {
     const [lineLimit, setLineLimit] = useState(true);
     const [coverImage, setCoverImage] = useState(null); // 이미지 파일 상태 추가
     const [imagePreview, setImagePreview] = useState(""); // 이미지 미리보기 URL
-
-
-
     const navigate = useNavigate(); // navigate 함수 정의
     const user = useSelector((state) => state.auth.user);
+
 
     const getCurrentDate = () => {
         const today = new Date();

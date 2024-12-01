@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {doc, getDoc, updateDoc} from 'firebase/firestore';
+import {doc, getDoc, onSnapshot, updateDoc} from 'firebase/firestore';
 import { auth, firestore } from '../../firebase/firebase';
 import {
     getStartedNovels,
@@ -17,6 +17,7 @@ import {
 import { setUser } from '../../store/authSlice';
 import './Profile.css';
 import {uploadImage} from "../../firebase/firestore/storageService";
+import {subscribeToAuthor} from "../../firebase/firestore/realTimeService";
 
 function Profile() {
     const navigate = useNavigate();
@@ -41,6 +42,20 @@ function Profile() {
     const [participatedNovels, setParticipatedNovels] = useState([]);
     const [likedAuthors, setLikedAuthors] = useState([]);
     const [likedNovels, setLikedNovels] = useState([]);
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        if (!auth.currentUser) return;
+
+        // 현재 사용자 ID로 실시간 구독
+        const unsubscribe = subscribeToAuthor(auth.currentUser.uid, (authorData) => {
+            setUserData(authorData);
+        });
+
+        return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
+    }, []);
+
+
 
     // 데이터 가져오는 useEffect 추가
     useEffect(() => {
