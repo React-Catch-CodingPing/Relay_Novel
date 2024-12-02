@@ -206,6 +206,7 @@
 
 /* 버튼 기본 스타일 */
 button {
+    font-family: omyu_pretty;
     font-weight: 600;
     padding: 10px 20px;
     font-size: 1rem;

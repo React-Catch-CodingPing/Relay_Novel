@@ -1,5 +1,6 @@
 /* 전체 컨테이너 중앙 정렬 */
 .post-detail-container {
+    font-family: omyu_pretty;
     display: flex;
     justify-content: center;
     align-items: center;
