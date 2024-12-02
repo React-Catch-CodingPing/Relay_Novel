@@ -25,6 +25,13 @@
 
 }
 
+.authors-header{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ed62aa; /* 헤더 텍스트는 밝은 색상으로 */
+
+}
+
 /* 검색창 스타일 */
 .search-container {
     display: flex;

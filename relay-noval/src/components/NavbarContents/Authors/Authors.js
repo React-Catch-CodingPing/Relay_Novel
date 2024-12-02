@@ -157,51 +157,54 @@ const Authors = () => {
     return (
         <div className="authors-container">
             <div className="list-container">
-            {/* 검색창 */}
-            <div className="search-container">
+                {/* 검색창 */}
+                <header className="authors-header">
+                    <h2> 저자별 모아보기 </h2>
+                </header>
+                <div className="search-container">
                 <span className="search-icon">
           <i className="fa fa-search"></i>
                  </span>
-                <input
-                    type="text"
-                    placeholder="저자 이름을 검색하세요..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="search-input"
-                />
-            </div>
+                    <input
+                        type="text"
+                        placeholder="저자 이름을 검색하세요..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        className="search-input"
+                    />
+                </div>
 
-            {/* 저자 카드 슬라이더 */}
-            <div className="authors-slider" ref={containerRef}>
-                {filteredAuthors.map((author) => (
-                    <Link
-                        key={author.id}
-                        style={{
-                            textDecoration: 'none', // 밑줄 제거
-                            color: 'inherit', // 부모 색상 상속
-                        }}
-                        to={`/authors/${author.id}`}
-                        className="author-card-link" // 스타일용 클래스 추가
-                    >
-                    <div key={author.id} className="author-card">
-                        <img src={author.profileImage} alt={author.name} />
-                        <h3>{author.name}</h3>
-                        <p>{author.participationCount}줄 참여 중</p>
-                        <p>{author.startedWorks}작품 시작</p>
-                        <div className="interaction">
-                            <button
-                                className="heart-button"
-                                onClick={() => handleHeartClick(author.id)}
-                            >
-                                {likedByUser.includes(author.id) ? '❤️' : '🤍'}
-                            </button>
-                            <span className="count">{author.hearts}</span>
-                        </div>
-                    </div>
-                    </Link>
-                ))}
-            </div>
+                {/* 저자 카드 슬라이더 */}
+                <div className="authors-slider" ref={containerRef}>
+                    {filteredAuthors.map((author) => (
+                        <Link
+                            key={author.id}
+                            style={{
+                                textDecoration: 'none', // 밑줄 제거
+                                color: 'inherit', // 부모 색상 상속
+                            }}
+                            to={`/authors/${author.id}`}
+                            className="author-card-link" // 스타일용 클래스 추가
+                        >
+                            <div key={author.id} className="author-card">
+                                <img src={author.profileImage} alt={author.name}/>
+                                <h3>{author.name}</h3>
+                                <p>{author.participationCount}줄 참여 중</p>
+                                <p>{author.startedWorks}작품 시작</p>
+                                <div className="interaction">
+                                    <button
+                                        className="heart-button"
+                                        onClick={() => handleHeartClick(author.id)}
+                                    >
+                                        {likedByUser.includes(author.id) ? '❤️' : '🤍'}
+                                    </button>
+                                    <span className="count">{author.hearts}</span>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );
